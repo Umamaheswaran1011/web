@@ -1,0 +1,42 @@
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Media uploads (user-uploaded content)
+media/
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Environment variables
+.env
+*.env
+
+# Byte-compiled files
+*.pyc

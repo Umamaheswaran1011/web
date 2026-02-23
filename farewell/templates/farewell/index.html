@@ -1,0 +1,156 @@
+{% extends 'farewell/base.html' %}
+
+{% block header_extra %}
+<div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+    <a href="{% url 'farewell:add_friend' %}" class="btn-add">
+        ✏️ Add Friend
+    </a>
+</div>
+
+<!-- Countdown Timer -->
+<div class="countdown-container animate-on-scroll fade-in" id="countdownContainer">
+    <div class="countdown-label">Farewell Day Countdown</div>
+    <div class="countdown-timer" id="countdownTimer">
+        <div class="countdown-item">
+            <span class="countdown-number" id="cdDays">00</span>
+            <span class="countdown-unit">Days</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+            <span class="countdown-number" id="cdHours">00</span>
+            <span class="countdown-unit">Hours</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+            <span class="countdown-number" id="cdMinutes">00</span>
+            <span class="countdown-unit">Minutes</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+            <span class="countdown-number" id="cdSeconds">00</span>
+            <span class="countdown-unit">Seconds</span>
+        </div>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="search-container animate-on-scroll fade-in">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search friends by name or nickname..."
+        autocomplete="off">
+</div>
+
+<!-- Random Memory Button -->
+<div style="margin-top: 1rem;">
+    <button class="btn-random" id="randomMemoryBtn" onclick="randomMemory()">🎲 Random Memory</button>
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="container" id="friendsGrid">
+    {% for friend in friends %}
+    <div class="card animate-on-scroll slide-up" data-name="{{ friend.name|lower }}"
+        data-nickname="{{ friend.nickname|lower }}" style="animation-delay: {{ forloop.counter0|divisibleby:1 }}s;">
+        <div class="card-image">
+            <a href="{% url 'farewell:friend_detail' friend.pk %}">
+                {% if friend.photo %}
+                <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" loading="lazy">
+                {% else %}
+                <img src="https://via.placeholder.com/350x400" alt="{{ friend.name }}" loading="lazy">
+                {% endif %}
+            </a>
+        </div>
+
+        <div class="card-content">
+            <div>
+                <h3>{{ friend.name }}</h3>
+                {% if friend.nickname %}
+                <p class="nickname">"{{ friend.nickname }}"</p>
+                {% endif %}
+
+                {% if friend.memory_text %}
+                <div class="memory">
+                    <p>{{ friend.memory_text }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if friend.future_goal %}
+            <div class="future-goal">
+                <span>🚀 {{ friend.future_goal }}</span>
+            </div>
+            {% endif %}
+
+            <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
+                onsubmit="return confirm('Are you sure you want to delete this friend?');"
+                style="margin-top: 0.8rem; align-self: flex-end;">
+                {% csrf_token %}
+                <button type="submit" class="btn-delete" title="Delete Friend">🗑️</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-friends">
+        <p>No friends added yet. Grab a pen and start adding! ✏️</p>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // === Countdown Timer ===
+    // SET YOUR FAREWELL DATE HERE (Year, Month-1, Day, Hour, Minute)
+    const farewellDate = new Date(2026, 3, 15, 10, 0, 0); // April 15, 2026 at 10:00 AM
+
+    function updateCountdown() {
+        const now = new Date();
+        const diff = farewellDate - now;
+        if (diff <= 0) {
+            document.getElementById('countdownContainer').innerHTML =
+                '<div class="countdown-label" style="font-size:1.5rem;">🎉 Farewell Day is Here! 🎉</div>';
+            return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
+        document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // === Search / Filter ===
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#friendsGrid .card');
+            let found = 0;
+            cards.forEach(function (card) {
+                const name = card.getAttribute('data-name') || '';
+                const nick = card.getAttribute('data-nickname') || '';
+                const match = name.includes(query) || nick.includes(query);
+                card.style.display = match ? '' : 'none';
+                if (match) found++;
+            });
+        });
+    }
+
+    // === Random Memory ===
+    function randomMemory() {
+        const cards = document.querySelectorAll('#friendsGrid .card');
+        const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
+        if (visibleCards.length === 0) return;
+        // Reset all highlights
+        cards.forEach(c => c.classList.remove('card-highlight'));
+        // Pick random
+        const random = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+        random.classList.add('card-highlight');
+        random.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function () { random.classList.remove('card-highlight'); }, 3000);
+    }
+</script>
+{% endblock %}

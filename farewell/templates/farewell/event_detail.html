@@ -1,0 +1,126 @@
+{% extends 'farewell/base.html' %}
+{% load static %}
+
+{% block meta_description %}{{ event.title }} - Photo Album{% endblock %}
+
+{% block extra_css %}
+<!-- Lightbox2 CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+<style>
+    .photo-delete-btn {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: rgba(244, 228, 188, 0.9);
+        border: 1px solid #d4a574;
+        color: #2c1810;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .masonry-item:hover .photo-delete-btn {
+        opacity: 1;
+    }
+
+    .photo-delete-btn:hover {
+        background: #e8b4b8;
+        border-color: #c0392b;
+        transform: scale(1.15);
+    }
+
+    .photo-download-btn {
+        position: absolute;
+        top: 14px;
+        right: 50px;
+        background: rgba(244, 228, 188, 0.9);
+        border: 1px solid #d4a574;
+        color: #2c1810;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 10;
+        text-decoration: none;
+    }
+
+    .masonry-item:hover .photo-download-btn {
+        opacity: 1;
+    }
+
+    .photo-download-btn:hover {
+        background: #c8e6c9;
+        border-color: #27ae60;
+        transform: scale(1.15);
+    }
+</style>
+{% endblock %}
+
+{% block header_extra %}
+<p class="gallery-subtitle">📅 {{ event.date|date:"F j, Y" }}
+    {% if event.description %} — {{ event.description }}{% endif %}
+</p>
+<div class="nav-bar">
+    <a href="{% url 'farewell:gallery' %}" class="btn-nav">← Back to Gallery</a>
+    <a href="{% url 'farewell:add_photos' event.pk %}" class="btn-add"
+        style="font-size: 1.2rem; padding: 0.7rem 1.5rem;">📸 Upload Photos</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="masonry-container">
+    <div class="masonry-grid">
+        {% for photo in photos %}
+        <div class="masonry-item animate-on-scroll slide-up">
+            <a href="{{ photo.image.url }}" data-lightbox="event-gallery" data-title="{{ photo.caption|default:'' }}">
+                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:'Event photo' }}" loading="lazy">
+                {% if photo.caption %}
+                <div class="masonry-caption">{{ photo.caption }}</div>
+                {% endif %}
+            </a>
+            <!-- Download Button -->
+            <a href="{{ photo.image.url }}" download class="photo-download-btn" title="Download Photo">💾</a>
+            <!-- Delete Button -->
+            <form action="{% url 'farewell:delete_photo' photo.pk %}" method="post"
+                onsubmit="return confirm('Delete this photo?');" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="photo-delete-btn" title="Delete Photo">🗑️</button>
+            </form>
+        </div>
+        {% empty %}
+        <div class="no-friends" style="grid-column: 1 / -1;">
+            <p>No photos in this album yet. Click "Upload Photos" above! 📸</p>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Lightbox2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+<script>
+    lightbox.option({
+        'resizeDuration': 300,
+        'wrapAround': true,
+        'fadeDuration': 200,
+        'imageFadeDuration': 200,
+        'alwaysShowNavOnTouchDevices': true,
+    });
+</script>
+{% endblock %}

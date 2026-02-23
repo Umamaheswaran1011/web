@@ -1,0 +1,60 @@
+from django import forms
+from .models import Friend, Event, EventPhoto
+
+
+class FriendForm(forms.ModelForm):
+    class Meta:
+        model = Friend
+        fields = ['name', 'nickname', 'photo', 'memory_text', 'future_goal']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nickname'}),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+            'memory_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Share a memory...', 'rows': 4}),
+            'future_goal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Future Goal (e.g. CEO)'}),
+        }
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['title', 'date', 'cover_image', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (e.g. Pongal Celebration)'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'cover_image': forms.FileInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe this event...', 'rows': 3}),
+        }
+
+
+class PhotoUploadForm(forms.Form):
+    """Form for photo upload. The actual file input is raw HTML in the template
+    to support multiple file selection across all Django versions."""
+    caption = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Optional caption for all uploaded photos',
+        }),
+        label='Caption (optional)'
+    )
+
+
+class SlamBookForm(forms.Form):
+    """Form for visitors to write slam book messages on a friend's profile."""
+    sender_name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Your Name',
+        }),
+        label='Your Name'
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Write something memorable...',
+            'rows': 4,
+        }),
+        label='Your Message'
+    )

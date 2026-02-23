@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <meta name="description"
+        content="{% block meta_description %}A farewell tribute to the Anti-Gravity Squad - Batch 2026{% endblock %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=5.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Special+Elite&family=Indie+Flower&family=Reenie+Beanie&display=swap">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- ===== Toast Notification Container ===== -->
+    <div id="toast-container"></div>
+
+    <!-- ===== Loading Splash ===== -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-title">The Anti-Gravity Squad</div>
+            <div class="splash-subtitle">Batch 2026 · Forever in Our Hearts</div>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
+    <!-- ===== Persistent Navigation ===== -->
+    <nav class="scrapbook-nav" id="mainNav">
+        <div class="nav-inner">
+            <a href="{% url 'farewell:index' %}" class="nav-brand">🚀 Anti-Gravity Squad</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="{% url 'farewell:index' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">🏠 Home</a>
+                <a href="{% url 'farewell:gallery' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'gallery' or request.resolver_match.url_name == 'event_detail' %}active{% endif %}">📸
+                    Gallery</a>
+                <a href="{% url 'farewell:timeline' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'timeline' %}active{% endif %}">🎓
+                    Timeline</a>
+                <a href="{% url 'farewell:awards' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'awards' %}active{% endif %}">🏆 Awards</a>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== Header ===== -->
+    <header>
+        <h1 class="animate-on-scroll fade-in">{{ page_title }}</h1>
+        {% block header_extra %}{% endblock %}
+    </header>
+
+    <!-- ===== Main Content ===== -->
+    {% block content %}{% endblock %}
+
+    <!-- ===== Footer ===== -->
+    <footer>
+        <p>&copy; 2026 The Anti-Gravity Squad | Forever in Our Hearts ❤️</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- ===== Global JS: Splash, Nav, Animations, Theme, Toast ===== -->
+    <script>
+        // === Splash Screen ===
+        window.addEventListener('load', function () {
+            const splash = document.getElementById('splashScreen');
+            if (splash) {
+                setTimeout(function () {
+                    splash.classList.add('splash-hide');
+                    setTimeout(function () { splash.style.display = 'none'; }, 600);
+                }, 800);
+            }
+        });
+
+        // === Mobile Nav Toggle ===
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        if (navToggle) {
+            navToggle.addEventListener('click', function () {
+                navLinks.classList.toggle('show');
+                navToggle.classList.toggle('active');
+            });
+        }
+
+        // === Scroll Animations ===
+        function initScrollAnimations() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            elements.forEach(function (el) { observer.observe(el); });
+        }
+        document.addEventListener('DOMContentLoaded', initScrollAnimations);
+
+        // === Dark/Light Theme Toggle ===
+        const themeToggle = document.getElementById('themeToggle');
+        function applyTheme(dark) {
+            document.body.classList.toggle('dark-theme', dark);
+            if (themeToggle) themeToggle.textContent = dark ? '☀️' : '🌙';
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+        // Load saved preference
+        applyTheme(localStorage.getItem('theme') === 'dark');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function () {
+                applyTheme(!document.body.classList.contains('dark-theme'));
+            });
+        }
+
+        // === Toast Notifications ===
+        function showToast(message, type) {
+            type = type || 'success';
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-' + type;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(function () { toast.classList.add('toast-show'); }, 10);
+            setTimeout(function () {
+                toast.classList.remove('toast-show');
+                setTimeout(function () { toast.remove(); }, 400);
+            }, 3000);
+        }
+
+        // Show toast from URL params (after redirect)
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const msg = params.get('msg');
+            if (msg) {
+                showToast(decodeURIComponent(msg));
+                // Clean URL
+                const url = new URL(window.location);
+                url.searchParams.delete('msg');
+                window.history.replaceState({}, '', url);
+            }
+        })();
+    </script>
+</body>
+
+</html>
