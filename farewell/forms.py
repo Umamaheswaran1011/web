@@ -1,5 +1,5 @@
 from django import forms
-from .models import Friend, Event, EventPhoto
+from .models import Friend, Event, EventPhoto, TimelineEvent
 
 
 class FriendForm(forms.ModelForm):
@@ -58,3 +58,28 @@ class SlamBookForm(forms.Form):
         }),
         label='Your Message'
     )
+
+
+class MilestoneForm(forms.ModelForm):
+    """Form for adding timeline milestones from the frontend."""
+    class Meta:
+        model = TimelineEvent
+        fields = ['title', 'date', 'description', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g., First Day of College...',
+            }),
+            'date': forms.DateInput(attrs={
+                'class': 'scrapbook-input',
+                'type': 'date',
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'What happened during this memory...',
+                'rows': 5,
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'scrapbook-input scrapbook-file',
+            }),
+        }

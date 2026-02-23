@@ -1,0 +1,294 @@
+{% extends 'farewell/base.html' %}
+{% load static %}
+
+{% block meta_description %}Add a milestone to the college timeline journey{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ===== Notebook Paper Container ===== */
+    .notebook-container {
+        max-width: 620px;
+        margin: 0 auto;
+        background: #faf3e0;
+        /* Ruled lines */
+        background-image:
+            repeating-linear-gradient(to bottom,
+                transparent 0px,
+                transparent 29px,
+                rgba(139, 109, 56, 0.12) 29px,
+                rgba(139, 109, 56, 0.12) 30px);
+        background-size: 100% 30px;
+        border-radius: 3px;
+        padding: 2.5rem 2.5rem 2rem;
+        border: 1px solid #e0d0b0;
+        box-shadow:
+            3px 4px 14px rgba(0, 0, 0, 0.12),
+            -1px 0 3px rgba(0, 0, 0, 0.04);
+        color: #2c1810;
+        position: relative;
+        min-height: 400px;
+    }
+
+    /* Red margin line */
+    .notebook-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 52px;
+        width: 2px;
+        background: rgba(220, 80, 80, 0.25);
+    }
+
+    /* Spiral holes on left side */
+    .notebook-container::after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 18px;
+        width: 14px;
+        height: calc(100% - 40px);
+        background-image:
+            repeating-linear-gradient(to bottom,
+                transparent 0px,
+                transparent 18px,
+                #c9a96e 18px,
+                #c9a96e 32px,
+                transparent 32px,
+                transparent 50px);
+        border-radius: 50%;
+        background-size: 14px 50px;
+        mask-image:
+            repeating-linear-gradient(to bottom,
+                transparent 0px,
+                transparent 18px,
+                black 18px,
+                black 32px,
+                transparent 32px,
+                transparent 50px);
+        -webkit-mask-image:
+            repeating-linear-gradient(to bottom,
+                transparent 0px,
+                transparent 18px,
+                black 18px,
+                black 32px,
+                transparent 32px,
+                transparent 50px);
+    }
+
+    /* ===== Page title inside notebook ===== */
+    .notebook-title {
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem;
+        color: #2c1810;
+        text-align: center;
+        margin-bottom: 1.8rem;
+        font-weight: 700;
+        padding-left: 20px;
+    }
+
+    /* ===== Form Group ===== */
+    .notebook-group {
+        margin-bottom: 1.6rem;
+        padding-left: 20px;
+    }
+
+    .notebook-group label {
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #5a4a3a;
+        font-family: 'Patrick Hand', cursive;
+        font-size: 1.1rem;
+        letter-spacing: 0.3px;
+    }
+
+    /* ===== Handwritten Input Fields ===== */
+    .scrapbook-input {
+        width: 100%;
+        padding: 0.6rem 0.4rem;
+        background: transparent;
+        border: none;
+        outline: none;
+        border-bottom: 2px dashed #8b5a2b;
+        border-radius: 0;
+        color: #2c1810;
+        font-family: 'Caveat', cursive;
+        font-size: 1.2rem;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+        line-height: 1.5;
+    }
+
+    .scrapbook-input:focus {
+        border-bottom-color: #4a6fa5;
+    }
+
+    .scrapbook-input::placeholder {
+        color: #b5a58a;
+        font-style: normal;
+    }
+
+    /* Textarea adjustments */
+    textarea.scrapbook-input {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* File input styling */
+    .scrapbook-file {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 1rem;
+        padding: 0.5rem 0;
+        border-bottom: 2px dashed rgba(139, 90, 43, 0.3);
+        cursor: pointer;
+    }
+
+    .scrapbook-file::-webkit-file-upload-button {
+        font-family: 'Special Elite', monospace;
+        background: #d4a574;
+        color: #2c1810;
+        border: 1px solid #b5895a;
+        padding: 0.4rem 1rem;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        margin-right: 0.8rem;
+        transition: background 0.2s ease;
+    }
+
+    .scrapbook-file::-webkit-file-upload-button:hover {
+        background: #c9965e;
+    }
+
+    /* File input label hint */
+    .file-hint {
+        display: block;
+        margin-top: 0.3rem;
+        font-family: 'Patrick Hand', cursive;
+        font-size: 0.9rem;
+        color: #8a7a6a;
+    }
+
+    /* ===== Error Messages ===== */
+    .field-error {
+        color: #c0392b;
+        font-size: 0.9rem;
+        margin-top: 4px;
+        font-family: 'Patrick Hand', cursive;
+    }
+
+    /* ===== "Save Memory" Button ===== */
+    .btn-save-memory {
+        font-family: 'Caveat', cursive;
+        background: #d4a574;
+        color: #2c1810;
+        border: 2px solid #b5895a;
+        padding: 0.9rem 2rem;
+        border-radius: 3px;
+        font-size: 1.4rem;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s ease;
+        font-weight: 700;
+        box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 0.8rem;
+        margin-left: 20px;
+        width: calc(100% - 20px);
+        letter-spacing: 0.5px;
+        position: relative;
+    }
+
+    .btn-save-memory:hover {
+        transform: translateY(-2px) rotate(-0.5deg);
+        box-shadow: 3px 5px 14px rgba(0, 0, 0, 0.18);
+        background: #c9965e;
+    }
+
+    .btn-save-memory:active {
+        transform: translateY(0);
+    }
+
+    /* ===== Back Link ===== */
+    .back-link-wrap {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-left: 20px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: #5a4a3a;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        font-family: 'Patrick Hand', cursive;
+        font-size: 1.1rem;
+        border-bottom: 1px dashed #d4a574;
+        padding-bottom: 2px;
+    }
+
+    .back-link:hover {
+        color: #2c1810;
+        border-bottom-color: #2c1810;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+        .notebook-container {
+            padding: 1.5rem 1.2rem 1.5rem 1.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .notebook-container::before {
+            left: 36px;
+        }
+
+        .notebook-container::after {
+            left: 10px;
+            width: 12px;
+        }
+
+        .notebook-group,
+        .notebook-title,
+        .back-link-wrap {
+            padding-left: 12px;
+        }
+
+        .btn-save-memory {
+            margin-left: 12px;
+            width: calc(100% - 12px);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container" style="display: block;">
+    <div class="notebook-container animate-on-scroll fade-in">
+        <div class="notebook-title">✏️ Write a New Milestone</div>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="notebook-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.name == 'image' %}
+                <span class="file-hint">📎 Attach a photo (optional)</span>
+                {% endif %}
+                {% for error in field.errors %}
+                <div class="field-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-save-memory">📝 Save Memory ✨</button>
+        </form>
+
+        <div class="back-link-wrap">
+            <a href="{% url 'farewell:timeline' %}" class="back-link">← Back to Timeline</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

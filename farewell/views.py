@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage
-from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm
+from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm, MilestoneForm
 
 
 def farewell_index(request):
@@ -234,6 +234,63 @@ def awards_view(request):
         'awards': awards,
         'page_title': '🏆 Fun Awards',
     })
+
+
+def add_milestone(request):
+    """
+    View to add a new timeline milestone from the frontend.
+    """
+    if request.method == 'POST':
+        form = MilestoneForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:timeline') + '?msg=Memory saved! ✨')
+    else:
+        form = MilestoneForm()
+
+    return render(request, 'farewell/add_milestone.html', {
+        'form': form,
+        'page_title': '📝 Add a Milestone',
+    })
+
+
+def edit_milestone(request, pk):
+    """
+    View to edit an existing timeline milestone.
+    """
+    milestone = get_object_or_404(TimelineEvent, pk=pk)
+    if request.method == 'POST':
+        form = MilestoneForm(request.POST, request.FILES, instance=milestone)
+        if form.is_valid():
+            form.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:timeline') + '?msg=Memory updated! ✏️')
+    else:
+        form = MilestoneForm(instance=milestone)
+
+    return render(request, 'farewell/edit_milestone.html', {
+        'form': form,
+        'milestone': milestone,
+        'page_title': f'✏️ Edit: {milestone.title}',
+    })
+
+
+def delete_milestone(request, pk):
+    """
+    View to delete a timeline milestone after POST confirmation.
+    """
+    milestone = get_object_or_404(TimelineEvent, pk=pk)
+    if request.method == 'POST':
+        milestone.delete()
+        from django.urls import reverse
+        return redirect(reverse('farewell:timeline') + '?msg=Memory removed 🗑️')
+
+    return render(request, 'farewell/delete_milestone.html', {
+        'milestone': milestone,
+        'page_title': f'Delete: {milestone.title}',
+    })
+
 
 
 def custom_page_not_found(request, exception):

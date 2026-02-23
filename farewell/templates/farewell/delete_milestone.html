@@ -1,0 +1,213 @@
+{% extends 'farewell/base.html' %}
+{% load static %}
+
+{% block meta_description %}Delete a milestone from the timeline{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ===== Crumpled / Torn Paper Confirmation Box ===== */
+    .confirm-wrapper {
+        max-width: 520px;
+        margin: 2rem auto;
+        position: relative;
+        z-index: 10;
+    }
+
+    .confirm-box {
+        background: #faf3e0;
+        padding: 2.5rem 2rem 2rem;
+        position: relative;
+        text-align: center;
+        border: 1px solid #e0d0b0;
+        box-shadow:
+            3px 4px 14px rgba(0, 0, 0, 0.12),
+            -2px 1px 6px rgba(0, 0, 0, 0.06);
+        /* Torn paper edges */
+        clip-path: polygon(0% 3%, 2% 0%, 6% 4%, 12% 0%, 18% 3%, 25% 1%, 32% 5%, 38% 0%,
+                45% 2%, 52% 0%, 58% 4%, 65% 1%, 72% 3%, 78% 0%, 85% 5%, 92% 1%,
+                97% 3%, 100% 0%,
+                100% 97%, 98% 100%, 93% 96%, 87% 100%, 80% 97%, 73% 100%, 67% 96%,
+                60% 100%, 53% 97%, 47% 100%, 40% 96%, 33% 100%, 27% 97%, 20% 100%,
+                13% 96%, 7% 100%, 2% 97%, 0% 100%);
+    }
+
+    /* Paper crumple texture */
+    .confirm-box::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 30% 20%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, rgba(0, 0, 0, 0.04) 0%, transparent 40%),
+            radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.02) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+    /* Pin on top */
+    .confirm-pin {
+        font-size: 1.6rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.2));
+    }
+
+    .confirm-title {
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem;
+        color: #2c1810;
+        margin-bottom: 0.8rem;
+        font-weight: 700;
+    }
+
+    .confirm-message {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 1.15rem;
+        color: #5a4a3a;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .confirm-event-name {
+        font-family: 'Caveat', cursive;
+        font-size: 1.4rem;
+        color: #c0392b;
+        font-weight: 700;
+        display: block;
+        margin-top: 0.3rem;
+    }
+
+    /* Preview of the event being deleted */
+    .confirm-preview {
+        background: rgba(244, 228, 188, 0.5);
+        border: 1px dashed #d4a574;
+        border-radius: 3px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .confirm-preview .preview-date {
+        font-family: 'Special Elite', monospace;
+        font-size: 0.8rem;
+        color: #8a7a6a;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .confirm-preview .preview-desc {
+        font-family: 'Patrick Hand', cursive;
+        font-size: 1rem;
+        color: #3d3d3d;
+        margin-top: 0.3rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* ===== Button Group ===== */
+    .confirm-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* Red Warning Stamp — Delete Button */
+    .btn-stamp-delete {
+        font-family: 'Special Elite', monospace;
+        background: #c0392b;
+        color: #faf3e0;
+        padding: 0.7rem 1.8rem;
+        border: 3px double #a93226;
+        border-radius: 2px;
+        font-size: 1rem;
+        cursor: pointer;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transform: rotate(-2deg);
+        box-shadow:
+            2px 3px 8px rgba(0, 0, 0, 0.2),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .btn-stamp-delete::after {
+        content: '';
+        position: absolute;
+        inset: 3px;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        pointer-events: none;
+    }
+
+    .btn-stamp-delete:hover {
+        transform: rotate(0deg) scale(1.05);
+        background: #e74c3c;
+        box-shadow:
+            3px 5px 14px rgba(192, 57, 43, 0.3),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Cancel — Handwritten text link */
+    .btn-cancel {
+        font-family: 'Patrick Hand', cursive;
+        background: none;
+        border: none;
+        color: #5a4a3a;
+        font-size: 1.15rem;
+        cursor: pointer;
+        text-decoration: none;
+        border-bottom: 1px dashed #d4a574;
+        padding-bottom: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        color: #2c1810;
+        border-bottom-color: #2c1810;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 520px) {
+        .confirm-box {
+            padding: 2rem 1.2rem 1.5rem;
+        }
+
+        .confirm-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container" style="display: block;">
+    <div class="confirm-wrapper animate-on-scroll fade-in">
+        <div class="confirm-box">
+            <span class="confirm-pin">📌</span>
+            <div class="confirm-title">Tear Out This Memory?</div>
+            <div class="confirm-message">
+                Are you sure you want to remove this milestone?
+                <span class="confirm-event-name">"{{ milestone.title }}"</span>
+            </div>
+
+            <!-- Preview of what's being deleted -->
+            <div class="confirm-preview">
+                <div class="preview-date">📅 {{ milestone.date|date:"F j, Y" }}</div>
+                <div class="preview-desc">{{ milestone.description|truncatewords:30 }}</div>
+            </div>
+
+            <div class="confirm-actions">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-stamp-delete">🗑️ Yes, Delete It</button>
+                </form>
+                <a href="{% url 'farewell:timeline' %}" class="btn-cancel">← No, Keep It</a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

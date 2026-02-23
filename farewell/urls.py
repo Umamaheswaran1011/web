@@ -16,6 +16,9 @@ urlpatterns = [
     path('gallery/<int:pk>/delete/', views.delete_event, name='delete_event'),
     path('gallery/<int:pk>/upload/', views.add_photos, name='add_photos'),
     path('photo/<int:pk>/delete/', views.delete_photo, name='delete_photo'),
+    path('timeline/add/', views.add_milestone, name='add_milestone'),
+    path('timeline/edit/<int:pk>/', views.edit_milestone, name='edit_milestone'),
+    path('timeline/delete/<int:pk>/', views.delete_milestone, name='delete_milestone'),
     path('timeline/', views.timeline_view, name='timeline'),
     path('awards/', views.awards_view, name='awards'),
 ]
