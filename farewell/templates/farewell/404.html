@@ -3,7 +3,7 @@
 {% block meta_description %}Page Not Found{% endblock %}
 
 {% block content %}
-<main>
+<div>
     <div class="error-page">
         <div class="error-code">404</div>
         <h2 class="error-message">Oops! This page floated away... 🚀</h2>
@@ -13,5 +13,5 @@
         </p>
         <a href="{% url 'farewell:index' %}" class="btn-add" style="font-size: 1.3rem;">← Back to the Squad</a>
     </div>
-</main>
+</div>
 {% endblock %}

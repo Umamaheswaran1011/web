@@ -8,365 +8,15 @@
     <title>{{ page_title }}</title>
     <meta name="description"
         content="{% block meta_description %}A farewell tribute to the Anti-Gravity Squad - Batch 2026{% endblock %}">
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=5.0">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=11.0">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Special+Elite&family=Indie+Flower&family=Reenie+Beanie&display=swap">
-    <!-- ===== Vintage Cassette Player CSS ===== -->
-    <style>
-        /* === Cassette Player Fixed Container === */
-        .cassette-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            transition: transform 0.3s ease;
-        }
-
-        .cassette-player:hover {
-            transform: scale(1.03);
-        }
-
-        /* === Cassette Body === */
-        .cassette-body {
-            width: 220px;
-            height: 140px;
-            background: linear-gradient(180deg, #d4935a 0%, #c47d3e 30%, #b5692e 100%);
-            border-radius: 10px 10px 6px 6px;
-            position: relative;
-            box-shadow:
-                0 4px 14px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.15);
-            border: 2px solid #8b5a2b;
-            overflow: hidden;
-        }
-
-        /* Plastic texture overlay */
-        .cassette-body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                repeating-linear-gradient(0deg,
-                    transparent 0px,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.03) 2px,
-                    rgba(255, 255, 255, 0.03) 3px);
-            pointer-events: none;
-            border-radius: 8px;
-        }
-
-        /* === Top screw holes === */
-        .cassette-screw {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: radial-gradient(circle, #4a3520 40%, #6b4c30 60%, #8b5a2b 100%);
-            border-radius: 50%;
-            top: 6px;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
-        }
-
-        .cassette-screw.left {
-            left: 10px;
-        }
-
-        .cassette-screw.right {
-            right: 10px;
-        }
-
-        /* === Label Area === */
-        .cassette-label {
-            position: absolute;
-            top: 18px;
-            left: 20px;
-            right: 20px;
-            height: 38px;
-            background: linear-gradient(180deg, #faf3e0 0%, #f0e6cc 100%);
-            border-radius: 3px;
-            border: 1px solid #d4a574;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
-        }
-
-        .cassette-label-title {
-            font-family: 'Special Elite', monospace;
-            font-size: 0.6rem;
-            color: #8a7a6a;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            line-height: 1;
-        }
-
-        .cassette-label-name {
-            font-family: 'Caveat', cursive;
-            font-size: 0.9rem;
-            color: #2c1810;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        /* === Tape Window (dark area with reels) === */
-        .cassette-window {
-            position: absolute;
-            top: 62px;
-            left: 25px;
-            right: 25px;
-            height: 42px;
-            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
-            border-radius: 4px;
-            border: 1px solid #333;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 15px;
-            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Tape film strip between reels */
-        .cassette-window::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 30px;
-            right: 30px;
-            height: 6px;
-            transform: translateY(-50%);
-            background: #1a0e06;
-            border-top: 1px solid rgba(80, 50, 20, 0.4);
-            border-bottom: 1px solid rgba(80, 50, 20, 0.4);
-            z-index: 0;
-        }
-
-        /* === Reels (circles) === */
-        .cassette-reel {
-            width: 28px;
-            height: 28px;
-            background: radial-gradient(circle, #faf3e0 20%, #d4a574 22%, #b5895a 60%, #8b5a2b 100%);
-            border-radius: 50%;
-            position: relative;
-            z-index: 1;
-            border: 2px solid #5a3a1a;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Reel spokes */
-        .cassette-reel::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 2px;
-            background: #3d2510;
-            transform: translate(-50%, -50%);
-        }
-
-        .cassette-reel::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 2px;
-            height: 20px;
-            background: #3d2510;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Center dot of reel */
-        .reel-center {
-            width: 6px;
-            height: 6px;
-            background: #2c1810;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-        }
-
-        /* === Spin Animation === */
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .cassette-reel.playing {
-            animation: spin 1.5s linear infinite;
-        }
-
-        /* === Bottom ridge details === */
-        .cassette-bottom {
-            position: absolute;
-            bottom: 4px;
-            left: 30px;
-            right: 30px;
-            height: 3px;
-            background: repeating-linear-gradient(90deg,
-                    #8b5a2b 0px, #8b5a2b 4px,
-                    #a06a3a 4px, #a06a3a 8px);
-            border-radius: 2px;
-        }
-
-        /* === Controls === */
-        .cassette-controls {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .cassette-btn {
-            font-family: 'Patrick Hand', cursive;
-            background: rgba(244, 228, 188, 0.85);
-            border: 1px dashed #b5895a;
-            color: #2c1810;
-            padding: 4px 14px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.25s ease;
-            box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .cassette-btn:hover {
-            background: #d4a574;
-            transform: translateY(-1px) rotate(-1deg);
-            box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .cassette-btn.active {
-            background: #d4a574;
-            border-style: solid;
-        }
-
-        /* === Toggle to collapse/expand === */
-        .cassette-toggle {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 24px;
-            height: 24px;
-            background: #faf3e0;
-            border: 1px solid #d4a574;
-            border-radius: 50%;
-            font-size: 0.7rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s ease;
-            z-index: 10;
-            padding: 0;
-            font-family: sans-serif;
-        }
-
-        .cassette-toggle:hover {
-            transform: scale(1.15);
-        }
-
-        .cassette-player.collapsed .cassette-body,
-        .cassette-player.collapsed .cassette-controls {
-            display: none;
-        }
-
-        .cassette-player.collapsed {
-            bottom: 15px;
-            right: 15px;
-        }
-
-        .cassette-collapsed-icon {
-            display: none;
-            font-family: 'Special Elite', monospace;
-            font-size: 0.75rem;
-            color: #5a4a3a;
-            background: rgba(244, 228, 188, 0.9);
-            padding: 5px 10px;
-            border: 1px dashed #b5895a;
-            border-radius: 3px;
-            cursor: pointer;
-            box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .cassette-player.collapsed .cassette-collapsed-icon {
-            display: block;
-        }
-
-        .cassette-player.collapsed .cassette-toggle {
-            display: none;
-        }
-
-        /* === Track Display — Retro LCD === */
-        .cassette-track-display {
-            text-align: center;
-            margin-top: 5px;
-        }
-
-        .track-lcd {
-            display: inline-block;
-            font-family: 'Special Elite', monospace;
-            font-size: 0.7rem;
-            color: #3d5a1e;
-            background: linear-gradient(180deg, #c8d8a0 0%, #b5c88a 100%);
-            padding: 3px 12px;
-            border-radius: 3px;
-            border: 1px solid #9aad6a;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            box-shadow:
-                inset 0 1px 2px rgba(0, 0, 0, 0.1),
-                0 1px 2px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Mobile: smaller cassette */
-        @media (max-width: 480px) {
-            .cassette-body {
-                width: 180px;
-                height: 115px;
-            }
-
-            .cassette-label {
-                top: 14px;
-                left: 16px;
-                right: 16px;
-                height: 32px;
-            }
-
-            .cassette-window {
-                top: 52px;
-                left: 20px;
-                right: 20px;
-                height: 34px;
-            }
-
-            .cassette-reel {
-                width: 22px;
-                height: 22px;
-            }
-
-            .cassette-player {
-                bottom: 12px;
-                right: 12px;
-            }
-        }
-    </style>
+    <!-- ===== HTMX for seamless page transitions ===== -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     {% block extra_css %}{% endblock %}
 </head>
 
-<body>
+<body hx-boost="true" hx-select="#main-content" hx-target="#main-content" hx-swap="innerHTML">
     <!-- ===== Toast Notification Container ===== -->
     <div id="toast-container"></div>
 
@@ -397,56 +47,36 @@
                     Timeline</a>
                 <a href="{% url 'farewell:awards' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'awards' %}active{% endif %}">🏆 Awards</a>
+                <a href="{% url 'farewell:squad_cards' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'squad_cards' %}active{% endif %}">🃏
+                    Cards</a>
+                <a href="{% url 'farewell:newspaper' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'newspaper' %}active{% endif %}">📰
+                    Times</a>
+                <button class="navbar-music-toggle" id="navbar-music-toggle" title="Toggle Music">🎵</button>
                 <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
             </div>
         </div>
     </nav>
 
-    <!-- ===== Header ===== -->
-    <header>
-        <h1 class="animate-on-scroll fade-in">{{ page_title }}</h1>
-        {% block header_extra %}{% endblock %}
-    </header>
+    <!-- ===== Main Content Area (HTMX swaps only this) ===== -->
+    <div id="main-content">
+        <!-- ===== Header ===== -->
+        <header>
+            <h1 class="animate-on-scroll fade-in">{{ page_title }}</h1>
+            {% block header_extra %}{% endblock %}
+        </header>
 
-    <!-- ===== Main Content ===== -->
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
 
-    <!-- ===== Vintage Cassette Music Player ===== -->
-    <div class="cassette-player" id="cassettePlayer">
-        <button class="cassette-toggle" id="cassetteToggle" title="Minimize player">✕</button>
-        <div class="cassette-collapsed-icon" id="cassetteExpand" title="Open music player">🎵 Music</div>
-        <div class="cassette-body">
-            <div class="cassette-screw left"></div>
-            <div class="cassette-screw right"></div>
-            <div class="cassette-label">
-                <span class="cassette-label-title">Side A</span>
-                <span class="cassette-label-name">Batch 2026 MixTape</span>
-            </div>
-            <div class="cassette-window">
-                <div class="cassette-reel" id="reelLeft">
-                    <div class="reel-center"></div>
-                </div>
-                <div class="cassette-reel" id="reelRight">
-                    <div class="reel-center"></div>
-                </div>
-            </div>
-            <div class="cassette-bottom"></div>
-        </div>
-        <div class="cassette-controls">
-            <button class="cassette-btn" id="btnPlay">▶️ Play</button>
-            <button class="cassette-btn" id="btnPause">⏸️ Pause</button>
-        </div>
-        <div class="cassette-track-display">
-            <span class="track-lcd" id="trackLcd">Track: 1 / 3</span>
-        </div>
-        <!-- Audio element — src set by JS playlist -->
-        <audio id="bg-music"></audio>
+        <!-- ===== Footer ===== -->
+        <footer>
+            <p>&copy; 2026 The Anti-Gravity Squad | Forever in Our Hearts ❤️</p>
+        </footer>
     </div>
 
-    <!-- ===== Footer ===== -->
-    <footer>
-        <p>&copy; 2026 The Anti-Gravity Squad | Forever in Our Hearts ❤️</p>
-    </footer>
+    <!-- ===== Audio element — outside #main-content so HTMX won't touch it ===== -->
+    <audio id="bg-music"></audio>
 
     {% block extra_js %}{% endblock %}
 
@@ -475,7 +105,7 @@
 
         // === Scroll Animations ===
         function initScrollAnimations() {
-            const elements = document.querySelectorAll('.animate-on-scroll');
+            const elements = document.querySelectorAll('.animate-on-scroll:not(.animated)');
             const observer = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
@@ -487,6 +117,8 @@
             elements.forEach(function (el) { observer.observe(el); });
         }
         document.addEventListener('DOMContentLoaded', initScrollAnimations);
+        // Re-init scroll animations after HTMX swaps new content in
+        document.addEventListener('htmx:afterSwap', initScrollAnimations);
 
         // === Dark/Light Theme Toggle ===
         const themeToggle = document.getElementById('themeToggle');
@@ -531,97 +163,99 @@
                 window.history.replaceState({}, '', url);
             }
         })();
-
-        // === Cassette Music Player — Playlist Mode ===
-        (function () {
-            const audio = document.getElementById('bg-music');
-            const btnPlay = document.getElementById('btnPlay');
-            const btnPause = document.getElementById('btnPause');
-            const reelLeft = document.getElementById('reelLeft');
-            const reelRight = document.getElementById('reelRight');
-            const cassetteToggle = document.getElementById('cassetteToggle');
-            const cassetteExpand = document.getElementById('cassetteExpand');
-            const cassettePlayer = document.getElementById('cassettePlayer');
-            const trackLcd = document.getElementById('trackLcd');
-
-            // Playlist — update these paths to your actual static mp3 files
-            const playlist = [
-                '/static/music/song1.mp3',
-                '/static/music/song2.mp3',
-                '/static/music/song3.mp3'
-            ];
-            var currentIndex = 0;
-
-            if (audio) audio.volume = 0.4;
-
-            function updateTrackDisplay() {
-                if (trackLcd) {
-                    trackLcd.textContent = 'Track: ' + (currentIndex + 1) + ' / ' + playlist.length;
+        // === Dynamic Navbar Active State for HTMX ===
+        function updateNavActiveState() {
+            var currentPath = window.location.pathname;
+            var navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(function (link) {
+                link.classList.remove('active');
+                // Compare the link's pathname with the current URL pathname
+                var linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath === linkPath) {
+                    link.classList.add('active');
                 }
-            }
+            });
+        }
+        // Update on HTMX swap completion
+        document.addEventListener('htmx:afterSettle', updateNavActiveState);
+        // Also handle browser back/forward navigation
+        window.addEventListener('popstate', function () {
+            setTimeout(updateNavActiveState, 50);
+        });
+    </script>
 
-            function loadTrack(index) {
-                if (!audio || !playlist.length) return;
-                audio.src = playlist[index];
-                audio.load();
-                updateTrackDisplay();
-            }
+    <!-- ===== Navbar Music Player JS ===== -->
+    <script>
+        if (!window.musicPlayerInitialized) {
+            window.musicPlayerInitialized = true;
+            (function () {
+                const audio = document.getElementById('bg-music');
+                const musicBtn = document.getElementById('navbar-music-toggle');
 
-            function startPlaying() {
-                if (!audio) return;
-                // If no src yet, load the current track
-                if (!audio.src || audio.src === window.location.href) {
-                    loadTrack(currentIndex);
+                // Playlist — update these paths to your actual static mp3 files
+                const playlist = [
+                    '/static/music/song1.mp3',
+                    '/static/music/song2.mp3',
+                    '/static/music/song3.mp3'
+                ];
+                var currentIndex = 0;
+                var isPlaying = false;
+
+                if (audio) audio.volume = 0.4;
+
+                function loadTrack(index) {
+                    if (!audio || !playlist.length) return;
+                    audio.src = playlist[index];
+                    audio.load();
                 }
-                audio.play().then(function () {
-                    reelLeft.classList.add('playing');
-                    reelRight.classList.add('playing');
-                    btnPlay.classList.add('active');
-                    btnPause.classList.remove('active');
-                }).catch(function () {
-                    // Browser blocked autoplay — user needs to interact first
-                });
-            }
 
-            function stopPlaying() {
-                if (!audio) return;
-                audio.pause();
-                reelLeft.classList.remove('playing');
-                reelRight.classList.remove('playing');
-                btnPause.classList.add('active');
-                btnPlay.classList.remove('active');
-            }
-
-            // Auto-advance to next song when current one ends
-            if (audio) {
-                audio.addEventListener('ended', function () {
-                    currentIndex = (currentIndex + 1) % playlist.length;
-                    loadTrack(currentIndex);
+                function play() {
+                    if (!audio) return;
+                    // If no src yet, load the current track
+                    if (!audio.src || audio.src === window.location.href) {
+                        loadTrack(currentIndex);
+                    }
                     audio.play().then(function () {
-                        reelLeft.classList.add('playing');
-                        reelRight.classList.add('playing');
-                    }).catch(function () { });
-                });
-            }
+                        isPlaying = true;
+                        if (musicBtn) musicBtn.classList.add('playing');
+                    }).catch(function () {
+                        // Browser blocked autoplay — user needs to interact first
+                    });
+                }
 
-            if (btnPlay) btnPlay.addEventListener('click', startPlaying);
-            if (btnPause) btnPause.addEventListener('click', stopPlaying);
+                function pause() {
+                    if (!audio) return;
+                    audio.pause();
+                    isPlaying = false;
+                    if (musicBtn) musicBtn.classList.remove('playing');
+                }
 
-            // Collapse / Expand toggle
-            if (cassetteToggle) {
-                cassetteToggle.addEventListener('click', function () {
-                    cassettePlayer.classList.add('collapsed');
-                });
-            }
-            if (cassetteExpand) {
-                cassetteExpand.addEventListener('click', function () {
-                    cassettePlayer.classList.remove('collapsed');
-                });
-            }
+                function togglePlayPause() {
+                    if (isPlaying) {
+                        pause();
+                    } else {
+                        play();
+                    }
+                }
 
-            // Initialize display
-            updateTrackDisplay();
-        })();
+                // Auto-advance to next song when current one ends
+                if (audio) {
+                    audio.addEventListener('ended', function () {
+                        currentIndex = (currentIndex + 1) % playlist.length;
+                        loadTrack(currentIndex);
+                        audio.play().then(function () {
+                            isPlaying = true;
+                            if (musicBtn) musicBtn.classList.add('playing');
+                        }).catch(function () { });
+                    });
+                }
+
+                // Click handler on the navbar toggle
+                if (musicBtn) {
+                    musicBtn.addEventListener('click', togglePlayPause);
+                }
+            })();
+        }
     </script>
 </body>
 

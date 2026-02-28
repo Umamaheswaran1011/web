@@ -5,6 +5,7 @@ app_name = 'farewell'
 
 urlpatterns = [
     path('', views.farewell_index, name='index'),
+    path('squad-cards/', views.squad_cards, name='squad_cards'),
     path('add/', views.add_friend, name='add_friend'),
     path('delete/<int:pk>/', views.delete_friend, name='delete_friend'),
     path('friend/<int:pk>/', views.friend_detail, name='friend_detail'),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('timeline/delete/<int:pk>/', views.delete_milestone, name='delete_milestone'),
     path('timeline/', views.timeline_view, name='timeline'),
     path('awards/', views.awards_view, name='awards'),
+    path('newspaper/', views.newspaper, name='newspaper'),
 ]

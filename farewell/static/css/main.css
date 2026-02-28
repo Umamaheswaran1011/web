@@ -28,6 +28,13 @@
     box-sizing: border-box;
 }
 
+/* ===== Global Image Constraint ===== */
+img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
 /* ===== Body — Crumpled Notebook Paper ===== */
 body {
     font-family: 'Patrick Hand', 'Caveat', cursive;
@@ -230,8 +237,9 @@ h1::after {
 .card-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
+    background-color: #fdf6e3;
     transition: transform 0.5s ease;
     filter: sepia(10%) saturate(90%);
     border-radius: 0;
@@ -905,6 +913,67 @@ footer::before {
     border-color: #2c1810;
 }
 
+/* ===== Navbar Music Toggle — Spinning Vinyl ===== */
+.navbar-music-toggle {
+    background: rgba(244, 228, 188, 0.85);
+    border: 2px solid #b5895a;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-left: 0.3rem;
+    position: relative;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-music-toggle:hover {
+    background: #d4a574;
+    transform: scale(1.1);
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-music-toggle.playing {
+    animation: spin 2s linear infinite;
+    background: #d4a574;
+    border-color: #8b5a2b;
+    box-shadow:
+        0 0 8px rgba(212, 165, 116, 0.4),
+        1px 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark theme music toggle */
+body.dark-theme .navbar-music-toggle {
+    background: rgba(42, 42, 74, 0.9);
+    border-color: #5050a0;
+}
+
+body.dark-theme .navbar-music-toggle:hover {
+    background: #3d3d6e;
+}
+
+body.dark-theme .navbar-music-toggle.playing {
+    background: #3d3d6e;
+    border-color: #7070c0;
+    box-shadow:
+        0 0 10px rgba(100, 100, 200, 0.4),
+        1px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
 /* Mobile Nav Toggle (Hamburger) */
 .nav-toggle {
     display: none;
@@ -968,6 +1037,10 @@ footer::before {
 
     .theme-toggle {
         margin: 0.5rem auto 0;
+    }
+
+    .navbar-music-toggle {
+        margin: 0.3rem auto 0;
     }
 }
 
@@ -1613,6 +1686,1699 @@ body.dark-theme .masonry-item:hover img {
 }
 
 /* ================================================
+   TIMELINE PAGE
+   ================================================ */
+
+/* ===== Timeline Container ===== */
+.timeline-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    padding: 2rem 0;
+}
+
+/* ===== Hand-drawn Ink Vertical Line ===== */
+.timeline-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background:
+        repeating-linear-gradient(to bottom,
+            #2c1810 0px,
+            #2c1810 10px,
+            transparent 10px,
+            transparent 15px);
+    opacity: 0.4;
+}
+
+/* ===== Timeline Item ===== */
+.timeline-item {
+    display: flex;
+    width: 100%;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.timeline-item:nth-child(odd) {
+    justify-content: flex-start;
+}
+
+.timeline-item:nth-child(even) {
+    justify-content: flex-end;
+}
+
+/* ===== Content Card — Torn Paper Note ===== */
+.timeline-content {
+    width: 42%;
+    background: rgba(244, 228, 188, 0.85);
+    border: 1px solid #e0d0b0;
+    border-radius: 3px;
+    padding: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-content:hover {
+    transform: translateY(-3px);
+    box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Tape on timeline cards */
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    width: 60px;
+    height: 22px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.5) 0%,
+            rgba(255, 255, 200, 0.3) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.25);
+    border-radius: 1px;
+    z-index: 5;
+    transform: rotate(-2deg);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.timeline-content h3 {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: #2c1810;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+}
+
+.timeline-date {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.85rem;
+    color: #8a7a6a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.timeline-content p {
+    font-family: 'Patrick Hand', cursive;
+    color: #3d3d3d;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.timeline-content img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 2px;
+    margin-top: 1rem;
+    border: 1px solid #e0d0b0;
+    filter: sepia(8%) saturate(92%);
+}
+
+/* ===== Ink Dot on the Line ===== */
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 1.8rem;
+    width: 14px;
+    height: 14px;
+    background: #2c1810;
+    border-radius: 50%;
+    z-index: 2;
+    border: 3px solid #f4e4bc;
+    box-shadow: 0 0 0 2px rgba(44, 24, 16, 0.3);
+}
+
+/* ===== Connector Lines — Dashed Ink ===== */
+.timeline-item:nth-child(odd) .timeline-content::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: 1.8rem;
+    width: 28px;
+    height: 2px;
+    background: repeating-linear-gradient(90deg,
+            #2c1810 0px,
+            #2c1810 5px,
+            transparent 5px,
+            transparent 8px);
+    opacity: 0.4;
+}
+
+.timeline-item:nth-child(even) .timeline-content::after {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 1.8rem;
+    width: 28px;
+    height: 2px;
+    background: repeating-linear-gradient(90deg,
+            #2c1810 0px,
+            #2c1810 5px,
+            transparent 5px,
+            transparent 8px);
+    opacity: 0.4;
+}
+
+/* ===== Edit / Delete Action Icons ===== */
+.card-actions {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+    opacity: 0.45;
+    transition: opacity 0.3s ease;
+}
+
+.timeline-content:hover .card-actions {
+    opacity: 1;
+}
+
+.card-actions a,
+.card-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: 1px dashed #b5895a;
+    background: rgba(244, 228, 188, 0.7);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    padding: 0;
+}
+
+.card-actions a:hover {
+    background: rgba(74, 111, 165, 0.15);
+    border-color: #4a6fa5;
+    transform: scale(1.15) rotate(-3deg);
+}
+
+.card-actions .btn-action-delete:hover {
+    background: rgba(192, 57, 43, 0.12);
+    border-color: #c0392b;
+    transform: scale(1.15) rotate(3deg);
+}
+
+/* ===== "+ Add Milestone" Button — Vintage Red Tape ===== */
+.add-milestone-wrap {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-top: 0.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+.btn-add-milestone {
+    font-family: 'Special Elite', monospace;
+    display: inline-block;
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 50%, #c0392b 100%);
+    color: #faf3e0;
+    padding: 0.85rem 2.5rem;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    border: none;
+    position: relative;
+    transform: rotate(-1.5deg);
+    box-shadow:
+        2px 3px 8px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+    clip-path: polygon(0% 5%, 3% 0%, 8% 6%, 15% 1%, 22% 4%, 30% 0%, 38% 5%, 45% 1%,
+            52% 3%, 60% 0%, 68% 4%, 75% 1%, 82% 5%, 90% 0%, 95% 3%, 100% 6%,
+            100% 94%, 97% 100%, 92% 95%, 85% 100%, 78% 96%, 70% 100%, 62% 95%,
+            55% 100%, 48% 97%, 40% 100%, 32% 96%, 25% 100%, 18% 95%, 10% 100%,
+            5% 97%, 0% 94%);
+}
+
+.btn-add-milestone::before {
+    content: '📌';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.btn-add-milestone:hover {
+    transform: rotate(0deg) translateY(-3px);
+    box-shadow:
+        3px 5px 14px rgba(0, 0, 0, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #e74c3c 100%);
+}
+
+/* ===== Empty State ===== */
+.timeline-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #5a4a3a;
+    font-size: 1.3rem;
+    font-family: 'Indie Flower', cursive;
+}
+
+.timeline-empty a {
+    color: #4a6fa5;
+    text-decoration: underline;
+}
+
+/* ===== Timeline Mobile Responsive ===== */
+@media (max-width: 768px) {
+    .timeline-wrapper::before {
+        left: 20px;
+    }
+
+    .timeline-item,
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        justify-content: flex-end;
+    }
+
+    .timeline-content {
+        width: calc(100% - 60px);
+    }
+
+    .timeline-dot {
+        left: 20px;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content::after,
+    .timeline-item:nth-child(even) .timeline-content::after {
+        left: -28px;
+        right: auto;
+        width: 24px;
+    }
+
+    .card-actions {
+        opacity: 1;
+    }
+}
+
+/* ================================================
+   AWARDS PAGE
+   ================================================ */
+
+.awards-header-sub {
+    color: #5a4a3a;
+    margin-top: 0.5rem;
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.2rem;
+}
+
+/* ===== Awards Grid ===== */
+.awards-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===== Award Card — Vintage Paper Note ===== */
+.award-card {
+    background-color: #fdf6e3;
+    border: 2px dashed #8b5a2b;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: visible;
+    text-align: center;
+}
+
+/* Tape on top of award cards */
+.award-card::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(1deg);
+    width: 80px;
+    height: 24px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.55) 0%,
+            rgba(255, 255, 200, 0.35) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    border-radius: 1px;
+    z-index: 5;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Random rotation for hand-placed feel */
+.award-card:nth-child(odd) {
+    transform: rotate(-1.5deg);
+}
+
+.award-card:nth-child(even) {
+    transform: rotate(1.5deg);
+}
+
+.award-card:nth-child(3n) {
+    transform: rotate(-0.8deg);
+}
+
+.award-card:nth-child(4n) {
+    transform: rotate(2deg);
+}
+
+.award-card:hover {
+    transform: rotate(0deg) scale(1.03) translateY(-5px) !important;
+    box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.18);
+    z-index: 20;
+}
+
+/* ===== Award Trophy Icon ===== */
+.award-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+/* ===== Award Title ===== */
+.award-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 1.3rem;
+    color: #2c1810;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    border-bottom: 1px dashed #d4a574;
+    padding-bottom: 0.8rem;
+}
+
+/* ===== Winner Photo — Polaroid Style ===== */
+.award-photo {
+    max-height: 300px;
+    max-width: 100%;
+    border: 10px solid white;
+    border-bottom: 35px solid white;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    transform: rotate(-2deg);
+    margin: 0 auto 1rem;
+    display: block;
+    object-fit: cover;
+    filter: sepia(8%) saturate(92%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.award-card:hover .award-photo {
+    filter: sepia(0%) saturate(100%);
+    transform: rotate(0deg);
+}
+
+/* ===== Winner Name ===== */
+.award-winner {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: #2c1810;
+    font-weight: 700;
+}
+
+.award-winner-label {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.95rem;
+    color: #8a7a6a;
+    margin-top: 0.3rem;
+}
+
+/* ===== Awards Empty State ===== */
+.awards-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #5a4a3a;
+    font-size: 1.3rem;
+    font-family: 'Indie Flower', cursive;
+    background: rgba(244, 228, 188, 0.7);
+    border: 2px dashed #d4a574;
+    border-radius: 4px;
+}
+
+/* ===== Awards Dark Theme Overrides ===== */
+body.dark-theme .award-card {
+    background-color: #1a1a2e;
+    border-color: #3d3d6e;
+}
+
+body.dark-theme .award-card::before {
+    background: linear-gradient(180deg,
+            rgba(100, 100, 140, 0.4) 0%,
+            rgba(80, 80, 120, 0.2) 100%);
+    border-color: rgba(100, 100, 140, 0.3);
+}
+
+body.dark-theme .award-title {
+    color: #e0d8c8;
+    border-bottom-color: #3d3d6e;
+}
+
+body.dark-theme .award-winner {
+    color: #e0d8c8;
+}
+
+body.dark-theme .award-winner-label {
+    color: #a0a0c0;
+}
+
+body.dark-theme .award-photo {
+    border-color: rgba(255, 255, 255, 0.9);
+    filter: brightness(0.95) saturate(90%);
+}
+
+body.dark-theme .award-photo:hover {
+    filter: brightness(1) saturate(100%);
+}
+
+body.dark-theme .awards-empty {
+    background: rgba(42, 42, 74, 0.7);
+    border-color: #3d3d6e;
+    color: #b0a8c0;
+}
+
+body.dark-theme .awards-header-sub {
+    color: #a0a0c0;
+}
+
+/* ===== Awards Responsive ===== */
+@media (max-width: 768px) {
+    .awards-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 2rem;
+    }
+
+    .award-photo {
+        max-height: 220px;
+    }
+}
+
+/* ================================================
+   FORM PAGES — Shared Styles
+   (add_friend, add_event, upload_photos)
+   ================================================ */
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #faf3e0;
+    background-image:
+        linear-gradient(rgba(139, 109, 56, 0.06) 1px, transparent 1px);
+    background-size: 100% 30px;
+    border-radius: 3px;
+    padding: 2rem;
+    border: 1px solid #e0d0b0;
+    box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.12);
+    color: #2c1810;
+    position: relative;
+}
+
+/* Red margin line like a notebook */
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50px;
+    width: 2px;
+    background: rgba(220, 80, 80, 0.2);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #5a4a3a;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-bottom: 2px solid #d4a574;
+    border-radius: 0;
+    color: #2c1810;
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    transition: border-color 0.3s ease, background 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-bottom-color: #4a6fa5;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.form-control::placeholder {
+    color: #b5a58a;
+}
+
+.btn-submit {
+    font-family: 'Caveat', cursive;
+    background: #d4a574;
+    color: #2c1810;
+    border: 2px solid #b5895a;
+    padding: 0.8rem 2rem;
+    border-radius: 3px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.15);
+    background: #c9965e;
+}
+
+.form-container .back-link,
+.back-link {
+    display: inline-block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #5a4a3a;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    border-bottom: 1px dashed #d4a574;
+    padding-bottom: 2px;
+}
+
+.form-container .back-link:hover,
+.back-link:hover {
+    color: #2c1810;
+    border-bottom-color: #2c1810;
+}
+
+/* ================================================
+   NOTEBOOK FORM — add_milestone & edit_milestone
+   ================================================ */
+
+.notebook-container {
+    max-width: 620px;
+    margin: 0 auto;
+    background: #faf3e0;
+    /* Ruled lines */
+    background-image:
+        repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 29px,
+            rgba(139, 109, 56, 0.12) 29px,
+            rgba(139, 109, 56, 0.12) 30px);
+    background-size: 100% 30px;
+    border-radius: 3px;
+    padding: 2.5rem 2.5rem 2rem;
+    border: 1px solid #e0d0b0;
+    box-shadow:
+        3px 4px 14px rgba(0, 0, 0, 0.12),
+        -1px 0 3px rgba(0, 0, 0, 0.04);
+    color: #2c1810;
+    position: relative;
+    min-height: 400px;
+}
+
+/* Red margin line */
+.notebook-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 52px;
+    width: 2px;
+    background: rgba(220, 80, 80, 0.25);
+}
+
+/* Spiral holes on left side */
+.notebook-container::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 18px;
+    width: 14px;
+    height: calc(100% - 40px);
+    background-image:
+        repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 18px,
+            #c9a96e 18px,
+            #c9a96e 32px,
+            transparent 32px,
+            transparent 50px);
+    border-radius: 50%;
+    background-size: 14px 50px;
+    mask-image:
+        repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 18px,
+            black 18px,
+            black 32px,
+            transparent 32px,
+            transparent 50px);
+    -webkit-mask-image:
+        repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 18px,
+            black 18px,
+            black 32px,
+            transparent 32px,
+            transparent 50px);
+}
+
+.notebook-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: #2c1810;
+    text-align: center;
+    margin-bottom: 1.8rem;
+    font-weight: 700;
+    padding-left: 20px;
+}
+
+.notebook-group {
+    margin-bottom: 1.6rem;
+    padding-left: 20px;
+}
+
+.notebook-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #5a4a3a;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+}
+
+/* ===== Handwritten Input Fields ===== */
+.scrapbook-input {
+    width: 100%;
+    padding: 0.6rem 0.4rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px dashed #8b5a2b;
+    border-radius: 0;
+    color: #2c1810;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+.scrapbook-input:focus {
+    border-bottom-color: #4a6fa5;
+}
+
+.scrapbook-input::placeholder {
+    color: #b5a58a;
+    font-style: normal;
+}
+
+textarea.scrapbook-input {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* File input styling */
+.scrapbook-file {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 2px dashed rgba(139, 90, 43, 0.3);
+    cursor: pointer;
+}
+
+.scrapbook-file::-webkit-file-upload-button {
+    font-family: 'Special Elite', monospace;
+    background: #d4a574;
+    color: #2c1810;
+    border: 1px solid #b5895a;
+    padding: 0.4rem 1rem;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    margin-right: 0.8rem;
+    transition: background 0.2s ease;
+}
+
+.scrapbook-file::-webkit-file-upload-button:hover {
+    background: #c9965e;
+}
+
+.file-hint {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.9rem;
+    color: #8a7a6a;
+}
+
+.field-error {
+    color: #c0392b;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    font-family: 'Patrick Hand', cursive;
+}
+
+/* Current image preview (edit_milestone) */
+.current-image-preview {
+    margin-top: 0.5rem;
+    padding-left: 20px;
+}
+
+.current-image-preview img {
+    max-width: 180px;
+    max-height: 120px;
+    object-fit: cover;
+    border: 1px solid #e0d0b0;
+    border-radius: 2px;
+    filter: sepia(8%) saturate(92%);
+}
+
+.current-image-preview span {
+    display: block;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.85rem;
+    color: #8a7a6a;
+    margin-top: 4px;
+}
+
+/* Save Memory Button */
+.btn-save-memory {
+    font-family: 'Caveat', cursive;
+    background: #d4a574;
+    color: #2c1810;
+    border: 2px solid #b5895a;
+    padding: 0.9rem 2rem;
+    border-radius: 3px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 0.8rem;
+    margin-left: 20px;
+    width: calc(100% - 20px);
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.btn-save-memory:hover {
+    transform: translateY(-2px) rotate(-0.5deg);
+    box-shadow: 3px 5px 14px rgba(0, 0, 0, 0.18);
+    background: #c9965e;
+}
+
+.btn-save-memory:active {
+    transform: translateY(0);
+}
+
+.back-link-wrap {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-left: 20px;
+}
+
+/* Notebook responsive */
+@media (max-width: 640px) {
+    .notebook-container {
+        padding: 1.5rem 1.2rem 1.5rem 1.5rem;
+        margin: 0 0.5rem;
+    }
+
+    .notebook-container::before {
+        left: 36px;
+    }
+
+    .notebook-container::after {
+        left: 10px;
+        width: 12px;
+    }
+
+    .notebook-group,
+    .notebook-title,
+    .back-link-wrap {
+        padding-left: 12px;
+    }
+
+    .btn-save-memory {
+        margin-left: 12px;
+        width: calc(100% - 12px);
+    }
+}
+
+/* ================================================
+   DELETE MILESTONE — Torn Paper Confirm Box
+   ================================================ */
+
+.confirm-wrapper {
+    max-width: 520px;
+    margin: 2rem auto;
+    position: relative;
+    z-index: 10;
+}
+
+.confirm-box {
+    background: #faf3e0;
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+    border: 1px solid #e0d0b0;
+    box-shadow:
+        3px 4px 14px rgba(0, 0, 0, 0.12),
+        -2px 1px 6px rgba(0, 0, 0, 0.06);
+    /* Torn paper edges */
+    clip-path: polygon(0% 3%, 2% 0%, 6% 4%, 12% 0%, 18% 3%, 25% 1%, 32% 5%, 38% 0%,
+            45% 2%, 52% 0%, 58% 4%, 65% 1%, 72% 3%, 78% 0%, 85% 5%, 92% 1%,
+            97% 3%, 100% 0%,
+            100% 97%, 98% 100%, 93% 96%, 87% 100%, 80% 97%, 73% 100%, 67% 96%,
+            60% 100%, 53% 97%, 47% 100%, 40% 96%, 33% 100%, 27% 97%, 20% 100%,
+            13% 96%, 7% 100%, 2% 97%, 0% 100%);
+}
+
+.confirm-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(0, 0, 0, 0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.02) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.confirm-pin {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.confirm-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: #2c1810;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.confirm-message {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.15rem;
+    color: #5a4a3a;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.confirm-event-name {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: #c0392b;
+    font-weight: 700;
+    display: block;
+    margin-top: 0.3rem;
+}
+
+.confirm-preview {
+    background: rgba(244, 228, 188, 0.5);
+    border: 1px dashed #d4a574;
+    border-radius: 3px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.confirm-preview .preview-date {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.8rem;
+    color: #8a7a6a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.confirm-preview .preview-desc {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1rem;
+    color: #3d3d3d;
+    margin-top: 0.3rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Red Warning Stamp — Delete Button */
+.btn-stamp-delete {
+    font-family: 'Special Elite', monospace;
+    background: #c0392b;
+    color: #faf3e0;
+    padding: 0.7rem 1.8rem;
+    border: 3px double #a93226;
+    border-radius: 2px;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transform: rotate(-2deg);
+    box-shadow:
+        2px 3px 8px rgba(0, 0, 0, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.btn-stamp-delete::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+}
+
+.btn-stamp-delete:hover {
+    transform: rotate(0deg) scale(1.05);
+    background: #e74c3c;
+    box-shadow:
+        3px 5px 14px rgba(192, 57, 43, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.btn-cancel {
+    font-family: 'Patrick Hand', cursive;
+    background: none;
+    border: none;
+    color: #5a4a3a;
+    font-size: 1.15rem;
+    cursor: pointer;
+    text-decoration: none;
+    border-bottom: 1px dashed #d4a574;
+    padding-bottom: 2px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    color: #2c1810;
+    border-bottom-color: #2c1810;
+}
+
+@media (max-width: 520px) {
+    .confirm-box {
+        padding: 2rem 1.2rem 1.5rem;
+    }
+
+    .confirm-actions {
+        flex-direction: column;
+    }
+}
+
+/* ================================================
+   UPLOAD PHOTOS — Upload Zone & Preview Grid
+   ================================================ */
+
+.upload-zone {
+    border: 2px dashed #d4a574;
+    border-radius: 4px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: rgba(212, 165, 116, 0.08);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-zone:hover {
+    border-color: #4a6fa5;
+    background: rgba(74, 111, 165, 0.05);
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.upload-hint {
+    color: #8a7a6a;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    font-family: 'Patrick Hand', cursive;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin-top: 1rem;
+}
+
+.preview-grid img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 4px solid #faf3e0;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+    filter: sepia(8%) saturate(92%);
+}
+
+.file-input-hidden {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+/* ================================================
+   FRIEND DETAIL — Profile, Memory, Scrapbook
+   ================================================ */
+
+.scrapbook-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+/* Profile Section — Polaroid + Details */
+.profile-section {
+    background: rgba(244, 228, 188, 0.7);
+    border: 2px dashed #d4a574;
+    border-radius: 4px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    position: relative;
+    box-shadow: 2px 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: url("data:image/svg+xml,%3Csvg width='400' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,4 Q10,0 20,4 T40,4 T60,4 T80,4 T100,4 T120,4 T140,4 T160,4 T180,4 T200,4 T220,4 T240,4 T260,4 T280,4 T300,4 T320,4 T340,4 T360,4 T380,4 T400,4 V8 H0 Z' fill='rgba(244,228,188,0.7)'/%3E%3C/svg%3E") repeat-x;
+}
+
+.left-col {
+    position: relative;
+}
+
+.polaroid-frame {
+    background: #faf3e0;
+    padding: 12px 12px 50px 12px;
+    box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    position: relative;
+    transform: rotate(-2deg);
+}
+
+.polaroid-frame img {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    background-color: #fdf6e3;
+    display: block;
+    filter: sepia(8%) saturate(92%);
+}
+
+.polaroid-frame::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    width: 90px;
+    height: 28px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.55) 0%,
+            rgba(255, 255, 200, 0.35) 40%,
+            rgba(255, 255, 210, 0.45) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    border-radius: 1px;
+    z-index: 5;
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.05),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.polaroid-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: #5a4a3a;
+    text-align: center;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Right Column — Details */
+.right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-name {
+    font-family: 'Caveat', cursive;
+    font-size: 3rem;
+    color: #2c1810;
+    line-height: 1.2;
+    word-break: break-word;
+    font-weight: 700;
+}
+
+.detail-nickname {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.4rem;
+    color: #4a6fa5;
+    font-style: normal;
+    margin-bottom: 1rem;
+}
+
+.detail-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8a7a6a;
+    margin-bottom: 0.3rem;
+    margin-top: 1rem;
+}
+
+.detail-text {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.15rem;
+    color: #3d3d3d;
+    line-height: 1.6;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0.8rem 1rem;
+    border-left: 3px solid #d4a574;
+    border-radius: 2px;
+}
+
+/* Memory — Handwritten Note */
+.memory-note-container {
+    margin-top: 1rem;
+}
+
+.memory-note-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8a7a6a;
+    margin-bottom: 0.5rem;
+}
+
+.memory-note {
+    position: relative;
+    background: #faf3e0;
+    background-image:
+        linear-gradient(rgba(139, 109, 56, 0.08) 1px, transparent 1px);
+    background-size: 100% 30px;
+    padding: 1.5rem;
+    border-radius: 2px;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0d0b0;
+    min-height: 120px;
+    transform: rotate(0.5deg);
+}
+
+.memory-note-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: #2c1810;
+    line-height: 1.95;
+    position: relative;
+    z-index: 1;
+    word-wrap: break-word;
+}
+
+.memory-note .pen-icon {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 1.5rem;
+    opacity: 0.5;
+    transform: rotate(-30deg);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-items: center;
+}
+
+.btn-edit {
+    font-family: 'Caveat', cursive;
+    background: #4a6fa5;
+    color: #faf3e0;
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 2px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    border: 1px solid #3d5a87;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
+    background: #3d5a87;
+}
+
+/* ORKUT SCRAPBOOK SECTION */
+.scrapbook-section {
+    background:
+        radial-gradient(ellipse at 30% 40%, rgba(180, 130, 70, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(160, 120, 60, 0.15) 0%, transparent 50%),
+        rgba(181, 137, 90, 0.4);
+    border-radius: 4px;
+    padding: 2rem;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.15), 2px 3px 10px rgba(0, 0, 0, 0.1);
+    border: 3px solid #a07850;
+}
+
+.scrapbook-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 2rem;
+    color: #2c1810;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.doodle-divider {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #d4a574;
+    margin-bottom: 1.5rem;
+    letter-spacing: 8px;
+    font-family: 'Indie Flower', cursive;
+}
+
+.scraps-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.scraps-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    min-height: 150px;
+}
+
+.scrap-note {
+    padding: 1.2rem 1.2rem 1rem;
+    border-radius: 2px;
+    position: relative;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease;
+}
+
+.scrap-note:hover {
+    transform: scale(1.02) !important;
+    z-index: 5;
+}
+
+.scrap-note:nth-child(4n+1) {
+    background: #fff9c4;
+    transform: rotate(-1.5deg);
+}
+
+.scrap-note:nth-child(4n+2) {
+    background: #f8bbd0;
+    transform: rotate(1deg);
+}
+
+.scrap-note:nth-child(4n+3) {
+    background: #bbdefb;
+    transform: rotate(-0.5deg);
+}
+
+.scrap-note:nth-child(4n) {
+    background: #c8e6c9;
+    transform: rotate(1.8deg);
+}
+
+.scrap-note::before {
+    content: '📌';
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    font-size: 1rem;
+    z-index: 3;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.scrap-note::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg,
+            transparent 50%,
+            rgba(0, 0, 0, 0.06) 50%);
+    border-radius: 0 0 2px 0;
+}
+
+.scrap-sender {
+    font-family: 'Special Elite', monospace;
+    font-weight: 400;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+    color: #5a4a3a;
+}
+
+.scrap-text {
+    font-family: 'Caveat', cursive;
+    color: #2c1810;
+    line-height: 1.5;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.scrap-time {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.7rem;
+    color: #8a7a6a;
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.scraps-empty {
+    text-align: center;
+    color: #5a4a3a;
+    padding: 2rem;
+    font-style: italic;
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.2rem;
+    grid-column: 1 / -1;
+}
+
+/* Scrap Form */
+.scrap-form-container {
+    background: #faf3e0;
+    background-image:
+        linear-gradient(rgba(139, 109, 56, 0.06) 1px, transparent 1px);
+    background-size: 100% 30px;
+    border: 1px solid #e0d0b0;
+    border-radius: 3px;
+    padding: 1.5rem;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.1);
+    transform: rotate(0.5deg);
+    position: relative;
+}
+
+.scrap-form-container::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 30px;
+    width: 70px;
+    height: 24px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.5) 0%,
+            rgba(255, 255, 200, 0.3) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.25);
+    border-radius: 1px;
+    z-index: 5;
+    transform: rotate(-3deg);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.scrap-form-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: #2c1810;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.scrap-form-container .form-group {
+    margin-bottom: 1rem;
+}
+
+.scrap-form-container label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #5a4a3a;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Patrick Hand', cursive;
+}
+
+.scrap-form-container .form-control {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-bottom: 2px solid #d4a574;
+    border-radius: 0;
+    color: #2c1810;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.scrap-form-container .form-control:focus {
+    outline: none;
+    border-bottom-color: #4a6fa5;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.scrap-form-container .form-control::placeholder {
+    color: #b5a58a;
+}
+
+.btn-scrap-submit {
+    font-family: 'Caveat', cursive;
+    background: #d4a574;
+    color: #2c1810;
+    border: 2px solid #b5895a;
+    padding: 0.7rem 1.8rem;
+    border-radius: 3px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.btn-scrap-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.15);
+    background: #c9965e;
+}
+
+/* Friend detail responsive */
+@media (max-width: 768px) {
+    .scrapbook-page {
+        padding: 0 1rem 2rem;
+    }
+
+    .profile-section {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .polaroid-frame {
+        transform: rotate(0deg);
+    }
+
+    .detail-name {
+        font-size: 2.2rem;
+    }
+
+    .scraps-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* ================================================
+   GALLERY — Event Card Actions
+   ================================================ */
+
+.event-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.event-card-actions .btn-icon {
+    background: rgba(244, 228, 188, 0.7);
+    border: 1px solid #d4a574;
+    color: #2c1810;
+    width: 34px;
+    height: 34px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-icon-edit:hover {
+    background: #d4a574;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-icon-delete:hover {
+    background: #e8b4b8;
+    border-color: #c0392b;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.event-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+/* ================================================
+   EVENT DETAIL — Photo Delete/Download Buttons
+   ================================================ */
+
+.photo-delete-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(244, 228, 188, 0.9);
+    border: 1px solid #d4a574;
+    color: #2c1810;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.masonry-item:hover .photo-delete-btn {
+    opacity: 1;
+}
+
+.photo-delete-btn:hover {
+    background: #e8b4b8;
+    border-color: #c0392b;
+    transform: scale(1.15);
+}
+
+.photo-download-btn {
+    position: absolute;
+    top: 14px;
+    right: 50px;
+    background: rgba(244, 228, 188, 0.9);
+    border: 1px solid #d4a574;
+    color: #2c1810;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+    text-decoration: none;
+}
+
+.masonry-item:hover .photo-download-btn {
+    opacity: 1;
+}
+
+.photo-download-btn:hover {
+    background: #c8e6c9;
+    border-color: #27ae60;
+    transform: scale(1.15);
+}
+
+/* ================================================
    CUSTOM 404 PAGE
    ================================================ */
 .error-page {
@@ -1644,4 +3410,629 @@ body.dark-theme .masonry-item:hover img {
     color: #5a4a3a;
     margin-bottom: 2rem;
     line-height: 1.6;
+}
+
+/* ================================================
+   RETRO TRADING CHARACTER CARDS — Squad / Home
+   ================================================ */
+
+.character-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== The Card Itself ===== */
+.character-card {
+    background: #fdf6e3;
+    border: 3px solid #8b5a2b;
+    border-radius: 10px;
+    padding: 0 0 12px;
+    box-shadow:
+        5px 5px 15px rgba(0, 0, 0, 0.2),
+        inset 0 0 30px rgba(212, 165, 116, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+/* Aged paper texture overlay */
+.character-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(212, 165, 116, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 90, 43, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Shimmer line across the card (foil effect) */
+.character-card::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -60%;
+    width: 30%;
+    height: 300%;
+    background: linear-gradient(105deg,
+            transparent 20%,
+            rgba(255, 252, 220, 0.25) 50%,
+            transparent 80%);
+    transition: left 0.6s ease, top 0.6s ease;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.character-card:hover::after {
+    left: 130%;
+}
+
+/* Pop-up hover effect */
+.character-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow:
+        8px 12px 25px rgba(0, 0, 0, 0.25),
+        0 0 0 1px #c9a96e;
+}
+
+/* Highlighted (Random Memory) */
+.character-card.card-highlight {
+    box-shadow:
+        0 0 0 3px #d4a574,
+        8px 12px 25px rgba(0, 0, 0, 0.25);
+    transform: translateY(-10px) scale(1.05);
+}
+
+/* ===== Top Header Band ===== */
+.card-header-band {
+    background: linear-gradient(90deg, #8b5a2b 0%, #b5895a 50%, #8b5a2b 100%);
+    padding: 5px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.card-edition {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    color: #fdf6e3;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.card-number {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.65rem;
+    color: #fdf6e3;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+/* ===== Photo — Polaroid ===== */
+.card-photo-wrap {
+    padding: 10px 10px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.card-photo-link {
+    display: block;
+    text-decoration: none;
+}
+
+.card-polaroid {
+    background: #fff;
+    padding: 6px 6px 28px;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.18);
+    border-radius: 1px;
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.character-card:hover .card-polaroid {
+    transform: rotate(0deg) scale(1.02);
+}
+
+/* Tape strip on polaroid */
+.card-polaroid::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 65px;
+    height: 20px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.55) 0%,
+            rgba(255, 255, 200, 0.35) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    border-radius: 1px;
+    z-index: 5;
+}
+
+.card-polaroid img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    background-color: #fdf6e3;
+    display: block;
+    filter: sepia(5%) saturate(90%);
+    transition: filter 0.3s ease;
+    border-radius: 1px;
+}
+
+.character-card:hover .card-polaroid img {
+    filter: sepia(0%) saturate(100%);
+}
+
+/* ===== Name & Nickname ===== */
+.card-identity {
+    padding: 10px 14px 6px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.card-name {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    color: #2c1810;
+    margin: 0 0 2px;
+    font-weight: 700;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.card-nickname {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1rem;
+    color: #4a6fa5;
+    margin: 0 0 4px;
+}
+
+.card-goal {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.85rem;
+    color: #7a6a5a;
+    margin: 0;
+    font-style: italic;
+}
+
+/* ===== Stats Panel ===== */
+.card-stats-panel {
+    background: rgba(139, 90, 43, 0.1);
+    border-top: 1px dashed #8b5a2b;
+    border-bottom: 1px dashed #8b5a2b;
+    padding: 10px 14px;
+    margin: 8px 0 4px;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+.stat-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    color: #8b5a2b;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    min-width: 48px;
+}
+
+.stat-value {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.9rem;
+    color: #2c1810;
+    line-height: 1.3;
+}
+
+.stat-dialogue {
+    margin-top: 8px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.5);
+    border-left: 3px solid #d4a574;
+    border-radius: 2px;
+}
+
+.dialogue-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: #2c1810;
+    line-height: 1.4;
+    font-style: italic;
+    quotes: "\201C" "\201D";
+}
+
+.dialogue-text::before {
+    content: open-quote;
+}
+
+.dialogue-text::after {
+    content: close-quote;
+}
+
+.stat-empty {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 0.9rem;
+    color: #b5a58a;
+    text-align: center;
+    padding: 6px 0;
+    font-style: italic;
+}
+
+/* ===== Footer Actions ===== */
+.card-footer-actions {
+    display: flex;
+    gap: 6px;
+    padding: 0 12px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.card-action-btn {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 2px;
+    border: 1px solid #b5895a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    background: none;
+}
+
+.card-btn-view {
+    background: #8b5a2b;
+    color: #fdf6e3;
+    flex: 1;
+    justify-content: center;
+    letter-spacing: 0.5px;
+}
+
+.card-btn-view:hover {
+    background: #6d4420;
+    color: #fdf6e3;
+}
+
+.card-btn-edit {
+    background: rgba(244, 228, 188, 0.7);
+    color: #2c1810;
+    font-size: 0.9rem;
+}
+
+.card-btn-edit:hover {
+    background: #d4a574;
+}
+
+.card-btn-delete {
+    background: rgba(244, 228, 188, 0.7);
+    color: #c0392b;
+    border-color: #e8b4b8;
+    font-size: 0.9rem;
+}
+
+.card-btn-delete:hover {
+    background: #e8b4b8;
+    border-color: #c0392b;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .character-cards-grid {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 20px;
+    }
+
+    .character-card:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .character-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ================================================
+   VINTAGE NEWSPAPER PAGE — The Anti-Gravity Times
+   ================================================ */
+
+.newspaper-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2.5rem 3rem;
+    background-color: #f4ebd0;
+    color: #2c241b;
+    font-family: 'Times New Roman', Times, serif;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        inset 0 0 80px rgba(180, 150, 90, 0.08);
+    border: 1px solid #c9b48a;
+    position: relative;
+}
+
+/* Aged paper crinkle on edges */
+.newspaper-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 0;
+}
+
+.newspaper-container>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== Top Strip ===== */
+.newspaper-top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #5a4a3a;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #2c241b;
+    margin-bottom: 10px;
+}
+
+/* ===== Masthead Title ===== */
+.newspaper-title {
+    font-family: 'Special Elite', 'Times New Roman', serif;
+    font-size: clamp(2.2rem, 7vw, 4.2rem);
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #1a1208;
+    line-height: 1.05;
+    margin: 10px 0;
+    padding: 8px 0;
+}
+
+.newspaper-rule-double {
+    border: none;
+    border-top: 5px double #2c241b;
+    margin: 6px 0;
+}
+
+.newspaper-rule-single {
+    border: none;
+    border-top: 1px solid #2c241b;
+    margin: 10px 0;
+}
+
+/* ===== Date Bar ===== */
+.newspaper-subheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #2c241b;
+    padding: 5px 0;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.newspaper-date {
+    font-weight: bold;
+}
+
+/* ===== Main Headline Block ===== */
+.newspaper-headline-block {
+    text-align: center;
+    padding: 14px 0 10px;
+}
+
+.newspaper-kicker {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #5a3a1a;
+    margin: 0 0 8px;
+    font-weight: bold;
+}
+
+.newspaper-headline {
+    font-family: 'Special Elite', 'Times New Roman', serif;
+    font-size: clamp(1.5rem, 4vw, 2.6rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.15;
+    color: #1a1208;
+    margin: 0 0 10px;
+}
+
+.newspaper-deck {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #3a2e1e;
+    max-width: 680px;
+    margin: 0 auto;
+    font-style: italic;
+}
+
+/* ===== Multi-Column Article Body ===== */
+.newspaper-columns {
+    column-count: 2;
+    column-gap: 40px;
+    column-rule: 1px solid #c9b48a;
+    text-align: justify;
+    hyphens: auto;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: #2c241b;
+    margin: 14px 0;
+}
+
+.newspaper-columns p {
+    margin: 0 0 10px;
+    break-inside: avoid;
+}
+
+/* Drop Cap on first paragraph */
+.newspaper-columns p:first-child::first-letter {
+    font-size: 4em;
+    float: left;
+    line-height: 0.75;
+    margin-right: 6px;
+    margin-top: 4px;
+    font-weight: bold;
+    font-family: 'Special Elite', 'Times New Roman', serif;
+    color: #1a1208;
+}
+
+.newspaper-columns ul.newspaper-list {
+    padding-left: 1.2rem;
+    margin: 8px 0 12px;
+    break-inside: avoid;
+}
+
+.newspaper-columns ul.newspaper-list li {
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+/* ===== Photo Box ===== */
+.newspaper-photo-box {
+    border: 1px solid #2c241b;
+    padding: 10px;
+    margin: 12px 0;
+    background: #ede6c8;
+    break-inside: avoid;
+    text-align: center;
+}
+
+.newspaper-photo-placeholder {
+    font-size: 0.82rem;
+    color: #5a4a3a;
+    font-style: italic;
+    line-height: 1.4;
+    padding: 10px;
+    background: #e8dfc0;
+    border: 1px dashed #9a8a6a;
+}
+
+.newspaper-photo-caption {
+    font-size: 0.78rem;
+    color: #5a4a3a;
+    margin: 6px 0 0;
+    font-style: italic;
+    text-align: center;
+}
+
+/* ===== Classifieds Section ===== */
+.newspaper-classifieds {
+    border: 2px solid #2c241b;
+    padding: 16px 20px;
+    margin: 16px 0 0;
+    background: #ede6c8;
+}
+
+.classifieds-title {
+    font-family: 'Special Elite', 'Times New Roman', serif;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #1a1208;
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2c241b;
+}
+
+.classifieds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.classified-ad {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #2c241b;
+    padding: 8px 10px;
+    background: #f4ebd0;
+    border: 1px solid #c9b48a;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.classified-ad strong {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    color: #1a1208;
+}
+
+/* ===== Newspaper Footer ===== */
+.newspaper-footer {
+    text-align: center;
+    font-size: 0.72rem;
+    color: #5a4a3a;
+    line-height: 1.5;
+    padding-top: 10px;
+    font-style: italic;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 700px) {
+    .newspaper-container {
+        padding: 1.5rem 1.2rem;
+    }
+
+    .newspaper-columns {
+        column-count: 1;
+    }
+
+    .newspaper-title {
+        letter-spacing: 2px;
+    }
+
+    .newspaper-subheader,
+    .newspaper-top-strip {
+        flex-direction: column;
+        text-align: center;
+        gap: 3px;
+    }
+
+    .classifieds-grid {
+        grid-template-columns: 1fr;
+    }
 }

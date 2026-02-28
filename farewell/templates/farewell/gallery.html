@@ -3,50 +3,6 @@
 
 {% block meta_description %}Memories Gallery - Our best moments captured forever{% endblock %}
 
-{% block extra_css %}
-<style>
-    .event-card-actions {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 0.8rem;
-    }
-
-    .event-card-actions .btn-icon {
-        background: rgba(244, 228, 188, 0.7);
-        border: 1px solid #d4a574;
-        color: #2c1810;
-        width: 34px;
-        height: 34px;
-        border-radius: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
-
-    .btn-icon-edit:hover {
-        background: #d4a574;
-        box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-icon-delete:hover {
-        background: #e8b4b8;
-        border-color: #c0392b;
-        box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .event-card-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: auto;
-    }
-</style>
-{% endblock %}
-
 {% block header_extra %}
 <p class="gallery-subtitle">Every photo tells a story we never want to forget ✨</p>
 <div class="nav-bar">
@@ -56,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="gallery-grid">
+<div class="gallery-grid">
     {% for event in events %}
     <div class="event-card animate-on-scroll slide-up">
         <div class="event-card-image">
@@ -94,5 +50,5 @@
         <p>No events added yet. Click "Add Event" to create your first album! 📸</p>
     </div>
     {% endfor %}
-</main>
+</div>
 {% endblock %}

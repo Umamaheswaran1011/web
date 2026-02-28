@@ -6,17 +6,26 @@ from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm, Milesto
 
 def farewell_index(request):
     """
-    View to display all friends on the farewell page.
-    Fetches all Friend objects and passes them to the template.
+    Home page — original scrapbook list of friends.
     """
     friends = Friend.objects.all()
-    
     context = {
         'friends': friends,
         'page_title': 'Farewell Batch 2026 - The Anti-Gravity Squad',
     }
-    
     return render(request, 'farewell/index.html', context)
+
+
+def squad_cards(request):
+    """
+    Squad Cards page — retro trading character cards for each friend.
+    """
+    friends = Friend.objects.all()
+    context = {
+        'friends': friends,
+        'page_title': '🃏 Squad Cards',
+    }
+    return render(request, 'farewell/character_cards.html', context)
 
 
 def add_friend(request):
@@ -291,6 +300,15 @@ def delete_milestone(request, pk):
         'page_title': f'Delete: {milestone.title}',
     })
 
+
+
+def newspaper(request):
+    """
+    Static Vintage Newspaper page — no database, just HTML/CSS.
+    """
+    return render(request, 'farewell/newspaper.html', {
+        'page_title': '📰 The Anti-Gravity Times',
+    })
 
 
 def custom_page_not_found(request, exception):

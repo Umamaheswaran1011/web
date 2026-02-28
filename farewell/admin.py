@@ -7,17 +7,21 @@ class FriendAdmin(admin.ModelAdmin):
     """
     Admin interface for managing Friend objects.
     """
-    list_display = ('name', 'nickname', 'created_at')
+    list_display = ('name', 'nickname', 'special_power', 'created_at')
     search_fields = ('name', 'nickname')
     list_filter = ('created_at',)
     readonly_fields = ('created_at', 'updated_at')
-    
+
     fieldsets = (
         ('Basic Information', {
             'fields': ('name', 'nickname', 'photo')
         }),
         ('Memory', {
-            'fields': ('memory_text',)
+            'fields': ('memory_text', 'future_goal')
+        }),
+        ('Trading Card Stats', {
+            'fields': ('special_power', 'weakness', 'signature_dialogue'),
+            'description': 'Fun stats shown on the collectable character card.',
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),

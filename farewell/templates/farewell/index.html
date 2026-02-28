@@ -2,9 +2,9 @@
 
 {% block header_extra %}
 <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-    <a href="{% url 'farewell:add_friend' %}" class="btn-add">
-        ✏️ Add Friend
-    </a>
+    <a href="{% url 'farewell:add_friend' %}" class="btn-add">✏️ Add Friend</a>
+    <a href="{% url 'farewell:squad_cards' %}" class="btn-add" style="background: #4a6fa5; border-color: #3d5a87;">🃏
+        View Squad Cards</a>
 </div>
 
 <!-- Countdown Timer -->
@@ -46,10 +46,11 @@
 {% endblock %}
 
 {% block content %}
-<main class="container" id="friendsGrid">
+<div class="container" id="friendsGrid">
     {% for friend in friends %}
     <div class="card animate-on-scroll slide-up" data-name="{{ friend.name|lower }}"
-        data-nickname="{{ friend.nickname|lower }}" style="animation-delay: {{ forloop.counter0|divisibleby:1 }}s;">
+        data-nickname="{{ friend.nickname|lower }}" style="animation-delay: {{ forloop.counter0 }}00ms;">
+
         <div class="card-image">
             <a href="{% url 'farewell:friend_detail' friend.pk %}">
                 {% if friend.photo %}
@@ -81,7 +82,7 @@
             {% endif %}
 
             <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
-                onsubmit="return confirm('Are you sure you want to delete this friend?');"
+                onsubmit="return confirm('Delete {{ friend.name }} from the squad?');"
                 style="margin-top: 0.8rem; align-self: flex-end;">
                 {% csrf_token %}
                 <button type="submit" class="btn-delete" title="Delete Friend">🗑️</button>
@@ -93,14 +94,13 @@
         <p>No friends added yet. Grab a pen and start adding! ✏️</p>
     </div>
     {% endfor %}
-</main>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
     // === Countdown Timer ===
-    // SET YOUR FAREWELL DATE HERE (Year, Month-1, Day, Hour, Minute)
-    const farewellDate = new Date(2026, 3, 15, 10, 0, 0); // April 15, 2026 at 10:00 AM
+    const farewellDate = new Date(2026, 3, 15, 10, 0, 0);
 
     function updateCountdown() {
         const now = new Date();
@@ -128,13 +128,10 @@
         searchInput.addEventListener('input', function () {
             const query = this.value.toLowerCase().trim();
             const cards = document.querySelectorAll('#friendsGrid .card');
-            let found = 0;
             cards.forEach(function (card) {
                 const name = card.getAttribute('data-name') || '';
                 const nick = card.getAttribute('data-nickname') || '';
-                const match = name.includes(query) || nick.includes(query);
-                card.style.display = match ? '' : 'none';
-                if (match) found++;
+                card.style.display = (name.includes(query) || nick.includes(query)) ? '' : 'none';
             });
         });
     }
@@ -144,13 +141,11 @@
         const cards = document.querySelectorAll('#friendsGrid .card');
         const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
         if (visibleCards.length === 0) return;
-        // Reset all highlights
         cards.forEach(c => c.classList.remove('card-highlight'));
-        // Pick random
         const random = visibleCards[Math.floor(Math.random() * visibleCards.length)];
         random.classList.add('card-highlight');
         random.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(function () { random.classList.remove('card-highlight'); }, 3000);
+        setTimeout(() => random.classList.remove('card-highlight'), 3000);
     }
 </script>
 {% endblock %}

@@ -30,7 +30,27 @@ class Friend(models.Model):
         blank=True,
         null=True
     )
-    
+
+    # ===== Trading Card Stats =====
+    special_power = models.CharField(
+        max_length=100,
+        help_text="Their superpower (e.g., Disappears when there's work)",
+        blank=True,
+        null=True
+    )
+    weakness = models.CharField(
+        max_length=100,
+        help_text="Their kryptonite (e.g., Cannot say no to food)",
+        blank=True,
+        null=True
+    )
+    signature_dialogue = models.CharField(
+        max_length=200,
+        help_text="Their iconic catchphrase or quote",
+        blank=True,
+        null=True
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

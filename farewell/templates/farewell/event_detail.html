@@ -6,68 +6,6 @@
 {% block extra_css %}
 <!-- Lightbox2 CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
-<style>
-    .photo-delete-btn {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-        background: rgba(244, 228, 188, 0.9);
-        border: 1px solid #d4a574;
-        color: #2c1810;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        cursor: pointer;
-        opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 10;
-    }
-
-    .masonry-item:hover .photo-delete-btn {
-        opacity: 1;
-    }
-
-    .photo-delete-btn:hover {
-        background: #e8b4b8;
-        border-color: #c0392b;
-        transform: scale(1.15);
-    }
-
-    .photo-download-btn {
-        position: absolute;
-        top: 14px;
-        right: 50px;
-        background: rgba(244, 228, 188, 0.9);
-        border: 1px solid #d4a574;
-        color: #2c1810;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        cursor: pointer;
-        opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 10;
-        text-decoration: none;
-    }
-
-    .masonry-item:hover .photo-download-btn {
-        opacity: 1;
-    }
-
-    .photo-download-btn:hover {
-        background: #c8e6c9;
-        border-color: #27ae60;
-        transform: scale(1.15);
-    }
-</style>
 {% endblock %}
 
 {% block header_extra %}
@@ -82,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="masonry-container">
+<div class="masonry-container">
     <div class="masonry-grid">
         {% for photo in photos %}
         <div class="masonry-item animate-on-scroll slide-up">
@@ -107,7 +45,7 @@
         </div>
         {% endfor %}
     </div>
-</main>
+</div>
 {% endblock %}
 
 {% block extra_js %}

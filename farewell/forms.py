@@ -5,13 +5,51 @@ from .models import Friend, Event, EventPhoto, TimelineEvent
 class FriendForm(forms.ModelForm):
     class Meta:
         model = Friend
-        fields = ['name', 'nickname', 'photo', 'memory_text', 'future_goal']
+        fields = [
+            'name', 'nickname', 'photo',
+            'memory_text', 'future_goal',
+            'special_power', 'weakness', 'signature_dialogue',
+        ]
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
-            'nickname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nickname'}),
-            'photo': forms.FileInput(attrs={'class': 'form-control'}),
-            'memory_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Share a memory...', 'rows': 4}),
-            'future_goal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Future Goal (e.g. CEO)'}),
+            # Basic info — notebook-line style
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Full Name',
+            }),
+            'nickname': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nickname (e.g. The Vanisher)',
+            }),
+            'photo': forms.FileInput(attrs={
+                'class': 'form-control',
+            }),
+            'memory_text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Share a memory...',
+                'rows': 4,
+            }),
+            'future_goal': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Future Goal (e.g. CEO)',
+            }),
+            # Trading card stats — scrapbook handwritten style
+            'special_power': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. Can sleep anywhere, anytime ⚡',
+            }),
+            'weakness': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. Cannot say no to food 🍕',
+            }),
+            'signature_dialogue': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. "Naan ready-aa, da!"',
+            }),
+        }
+        labels = {
+            'special_power': '⚡ Special Power',
+            'weakness': '💀 Weakness',
+            'signature_dialogue': '💬 Signature Dialogue',
         }
 
 
@@ -20,16 +58,27 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['title', 'date', 'cover_image', 'description']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (e.g. Pongal Celebration)'}),
-            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'cover_image': forms.FileInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe this event...', 'rows': 3}),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Event Name (e.g. Pongal Celebration)',
+            }),
+            'date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date',
+            }),
+            'cover_image': forms.FileInput(attrs={
+                'class': 'form-control',
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Describe this event...',
+                'rows': 3,
+            }),
         }
 
 
 class PhotoUploadForm(forms.Form):
-    """Form for photo upload. The actual file input is raw HTML in the template
-    to support multiple file selection across all Django versions."""
+    """Form for photo upload."""
     caption = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={

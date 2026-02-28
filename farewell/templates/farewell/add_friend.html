@@ -3,113 +3,8 @@
 
 {% block meta_description %}Add a new friend to the Anti-Gravity Squad{% endblock %}
 
-{% block extra_css %}
-<style>
-    .form-container {
-        max-width: 600px;
-        margin: 0 auto;
-        background: #faf3e0;
-        background-image:
-            linear-gradient(rgba(139, 109, 56, 0.06) 1px, transparent 1px);
-        background-size: 100% 30px;
-        border-radius: 3px;
-        padding: 2rem;
-        border: 1px solid #e0d0b0;
-        box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.12);
-        color: #2c1810;
-        position: relative;
-    }
-
-    /* Red margin line like a notebook */
-    .form-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 50px;
-        width: 2px;
-        background: rgba(220, 80, 80, 0.2);
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.4rem;
-        color: #5a4a3a;
-        font-family: 'Patrick Hand', cursive;
-        font-size: 1.1rem;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 0.7rem 0.8rem;
-        background: rgba(255, 255, 255, 0.5);
-        border: none;
-        border-bottom: 2px solid #d4a574;
-        border-radius: 0;
-        color: #2c1810;
-        font-family: 'Caveat', cursive;
-        font-size: 1.15rem;
-        transition: border-color 0.3s ease, background 0.3s ease;
-        box-sizing: border-box;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-bottom-color: #4a6fa5;
-        background: rgba(255, 255, 255, 0.8);
-    }
-
-    .form-control::placeholder {
-        color: #b5a58a;
-    }
-
-    .btn-submit {
-        font-family: 'Caveat', cursive;
-        background: #d4a574;
-        color: #2c1810;
-        border: 2px solid #b5895a;
-        padding: 0.8rem 2rem;
-        border-radius: 3px;
-        font-size: 1.3rem;
-        cursor: pointer;
-        width: 100%;
-        transition: all 0.3s ease;
-        font-weight: 700;
-        box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.15);
-        background: #c9965e;
-    }
-
-    .back-link {
-        display: inline-block;
-        text-align: center;
-        margin-top: 1.5rem;
-        color: #5a4a3a;
-        text-decoration: none;
-        transition: color 0.3s ease;
-        font-family: 'Patrick Hand', cursive;
-        font-size: 1.1rem;
-        border-bottom: 1px dashed #d4a574;
-        padding-bottom: 2px;
-    }
-
-    .back-link:hover {
-        color: #2c1810;
-        border-bottom-color: #2c1810;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<main class="container" style="display: block;">
+<div class="container" style="display: block;">
     <div class="form-container animate-on-scroll fade-in">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -120,7 +15,7 @@
                 {{ field }}
                 {% if field.help_text %}
                 <small style="color: #8a7a6a; display: block; margin-top: 5px; font-family: 'Patrick Hand', cursive;">{{
-                    field.help_text }}</small>
+                    field.help_text|safe }}</small>
                 {% endif %}
                 {% for error in field.errors %}
                 <div style="color: #c0392b; font-size: 0.9em; margin-top: 5px;">{{ error }}</div>
@@ -134,5 +29,5 @@
             <a href="{% url 'farewell:index' %}" class="back-link">← Back to Squad</a>
         </div>
     </div>
-</main>
+</div>
 {% endblock %}
