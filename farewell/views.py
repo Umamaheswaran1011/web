@@ -311,6 +311,17 @@ def newspaper(request):
     })
 
 
+def spin_bottle(request):
+    """
+    Dynamic Spin the Bottle mini-game page.
+    """
+    friends = Friend.objects.all()
+    return render(request, 'farewell/spin_bottle.html', {
+        'page_title': '🍾 Spin the Bottle',
+        'friends': friends,
+    })
+
+
 def custom_page_not_found(request, exception):
     """
     Custom 404 error page with scrapbook theme.

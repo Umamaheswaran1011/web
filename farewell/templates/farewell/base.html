@@ -53,6 +53,9 @@
                 <a href="{% url 'farewell:newspaper' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'newspaper' %}active{% endif %}">📰
                     Times</a>
+                <a href="{% url 'farewell:spin_bottle' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'spin_bottle' %}active{% endif %}">🍾
+                    Spin</a>
                 <button class="navbar-music-toggle" id="navbar-music-toggle" title="Toggle Music">🎵</button>
                 <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
             </div>

@@ -23,4 +23,5 @@ urlpatterns = [
     path('timeline/', views.timeline_view, name='timeline'),
     path('awards/', views.awards_view, name='awards'),
     path('newspaper/', views.newspaper, name='newspaper'),
+    path('spin-bottle/', views.spin_bottle, name='spin_bottle'),
 ]

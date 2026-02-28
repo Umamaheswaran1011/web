@@ -1,0 +1,111 @@
+{% extends 'farewell/base.html' %}
+
+{% block header_extra %}
+<div style="margin-top: 1rem;">
+    <p style="font-family: 'Patrick Hand', cursive; font-size: 1.1rem; color: #5a4a3a; opacity: 0.8;">
+        ✦ Hover to flip · Click to view profile ✦
+    </p>
+</div>
+
+<!-- Search -->
+<div class="search-container animate-on-scroll fade-in" style="margin-top: 1rem;">
+    <input type="text" id="cardsSearchInput" class="search-input" placeholder="🔍 Search cards by name or nickname..."
+        autocomplete="off">
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="character-cards-grid" id="cardsGrid">
+    {% for friend in friends %}
+    <div class="character-card animate-on-scroll slide-up" data-name="{{ friend.name|lower }}"
+        data-nickname="{{ friend.nickname|lower }}">
+
+        <!-- Gold Header Band -->
+        <div class="card-header-band">
+            <span class="card-edition">✦ LIMITED EDITION ✦</span>
+            <span class="card-number">#{{ forloop.counter|stringformat:"03d" }}</span>
+        </div>
+
+        <!-- Photo — Polaroid Style -->
+        <div class="card-photo-wrap">
+            <a href="{% url 'farewell:friend_detail' friend.pk %}" class="card-photo-link">
+                <div class="card-polaroid">
+                    {% if friend.photo %}
+                    <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" loading="lazy">
+                    {% else %}
+                    <img src="https://via.placeholder.com/300x320" alt="{{ friend.name }}" loading="lazy">
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+
+        <!-- Name + Nickname + Goal -->
+        <div class="card-identity">
+            <h3 class="card-name">{{ friend.name }}</h3>
+            {% if friend.nickname %}
+            <p class="card-nickname">"{{ friend.nickname }}"</p>
+            {% endif %}
+            {% if friend.future_goal %}
+            <p class="card-goal">🚀 {{ friend.future_goal }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="card-stats-panel">
+            {% if friend.special_power %}
+            <div class="stat-row">
+                <span class="stat-label">⚡ POWER</span>
+                <span class="stat-value">{{ friend.special_power }}</span>
+            </div>
+            {% endif %}
+            {% if friend.weakness %}
+            <div class="stat-row">
+                <span class="stat-label">💀 WEAK</span>
+                <span class="stat-value">{{ friend.weakness }}</span>
+            </div>
+            {% endif %}
+            {% if friend.signature_dialogue %}
+            <div class="stat-dialogue">
+                <q class="dialogue-text">{{ friend.signature_dialogue }}</q>
+            </div>
+            {% endif %}
+            {% if not friend.special_power and not friend.weakness and not friend.signature_dialogue %}
+            <div class="stat-empty">Stats not filled yet... <a href="{% url 'farewell:edit_friend' friend.pk %}"
+                    style="color:#8b5a2b;">Fill in ✏️</a></div>
+            {% endif %}
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="card-footer-actions">
+            <a href="{% url 'farewell:friend_detail' friend.pk %}" class="card-action-btn card-btn-view">View →</a>
+            <a href="{% url 'farewell:edit_friend' friend.pk %}" class="card-action-btn card-btn-edit">✏️</a>
+            <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
+                onsubmit="return confirm('Delete {{ friend.name }} from the squad?');" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="card-action-btn card-btn-delete" title="Delete">🗑️</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-friends" style="grid-column: 1 / -1;">
+        <p>No friends added yet. <a href="{% url 'farewell:add_friend' %}">Add one now! ✏️</a></p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const cardsSearch = document.getElementById('cardsSearchInput');
+    if (cardsSearch) {
+        cardsSearch.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+            document.querySelectorAll('#cardsGrid .character-card').forEach(card => {
+                const name = card.getAttribute('data-name') || '';
+                const nick = card.getAttribute('data-nickname') || '';
+                card.style.display = (name.includes(query) || nick.includes(query)) ? '' : 'none';
+            });
+        });
+    }
+</script>
+{% endblock %}

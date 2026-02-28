@@ -1,9 +1,9 @@
-/* ================================================
+﻿/* ================================================
    NOSTALGIC SCRAPBOOK & OLD ORKUT THEME
    A handmade memory book, not a digital screen
    ================================================ */
 
-/* Google Fonts Import — Handwriting + Typewriter */
+/* Google Fonts Import â€” Handwriting + Typewriter */
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Special+Elite&family=Indie+Flower&family=Reenie+Beanie&display=swap');
 
 /* ===== Color Palette =====
@@ -35,7 +35,7 @@ img {
     object-fit: cover;
 }
 
-/* ===== Body — Crumpled Notebook Paper ===== */
+/* ===== Body â€” Crumpled Notebook Paper ===== */
 body {
     font-family: 'Patrick Hand', 'Caveat', cursive;
     background-color: #c9a96e;
@@ -71,7 +71,7 @@ body::before {
     z-index: 0;
 }
 
-/* ===== Header — Stamped / Marker Look ===== */
+/* ===== Header â€” Stamped / Marker Look ===== */
 header {
     text-align: center;
     padding: 3rem 1rem 2rem;
@@ -88,7 +88,7 @@ h1 {
     text-transform: uppercase;
     position: relative;
     display: inline-block;
-    /* Stamped look — slight texture via text-shadow */
+    /* Stamped look â€” slight texture via text-shadow */
     text-shadow:
         1px 1px 0 rgba(244, 228, 188, 0.8),
         -1px -1px 0 rgba(44, 24, 16, 0.1);
@@ -122,7 +122,7 @@ h1::after {
     z-index: 10;
 }
 
-/* ===== Card — Polaroid Snapshot ===== */
+/* ===== Card â€” Polaroid Snapshot ===== */
 .card {
     background: #faf3e0;
     border: none;
@@ -305,7 +305,7 @@ h1::after {
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* ===== Button Styles — Washi Tape / Kraft ===== */
+/* ===== Button Styles â€” Washi Tape / Kraft ===== */
 .btn-add {
     font-family: 'Caveat', cursive;
     background: #d4a574;
@@ -358,7 +358,7 @@ h1::after {
     color: #5a4a3a;
 }
 
-/* ===== Footer — Typewriter Strip ===== */
+/* ===== Footer â€” Typewriter Strip ===== */
 footer {
     text-align: center;
     padding: 2.5rem;
@@ -372,7 +372,7 @@ footer {
 }
 
 footer::before {
-    content: '~ · ~ · ~ · ~ · ~ · ~ · ~ · ~ · ~';
+    content: '~ Â· ~ Â· ~ Â· ~ Â· ~ Â· ~ Â· ~ Â· ~ Â· ~';
     display: block;
     margin-bottom: 1rem;
     color: #d4a574;
@@ -471,7 +471,7 @@ footer::before {
 }
 
 /* ================================================
-   GALLERY GRID (Event Cards — Scrapbook Albums)
+   GALLERY GRID (Event Cards â€” Scrapbook Albums)
    ================================================ */
 .gallery-grid {
     max-width: 1400px;
@@ -644,7 +644,7 @@ footer::before {
 }
 
 /* ================================================
-   MASONRY GRID (Event Photos — Pinned Polaroids)
+   MASONRY GRID (Event Photos â€” Pinned Polaroids)
    ================================================ */
 .masonry-container {
     max-width: 1400px;
@@ -913,7 +913,7 @@ footer::before {
     border-color: #2c1810;
 }
 
-/* ===== Navbar Music Toggle — Spinning Vinyl ===== */
+/* ===== Navbar Music Toggle â€” Spinning Vinyl ===== */
 .navbar-music-toggle {
     background: rgba(244, 228, 188, 0.85);
     border: 2px solid #b5895a;
@@ -1731,7 +1731,7 @@ body.dark-theme .masonry-item:hover img {
     justify-content: flex-end;
 }
 
-/* ===== Content Card — Torn Paper Note ===== */
+/* ===== Content Card â€” Torn Paper Note ===== */
 .timeline-content {
     width: 42%;
     background: rgba(244, 228, 188, 0.85);
@@ -1817,7 +1817,7 @@ body.dark-theme .masonry-item:hover img {
     box-shadow: 0 0 0 2px rgba(44, 24, 16, 0.3);
 }
 
-/* ===== Connector Lines — Dashed Ink ===== */
+/* ===== Connector Lines â€” Dashed Ink ===== */
 .timeline-item:nth-child(odd) .timeline-content::after {
     content: '';
     position: absolute;
@@ -1893,7 +1893,7 @@ body.dark-theme .masonry-item:hover img {
     transform: scale(1.15) rotate(3deg);
 }
 
-/* ===== "+ Add Milestone" Button — Vintage Red Tape ===== */
+/* ===== "+ Add Milestone" Button â€” Vintage Red Tape ===== */
 .add-milestone-wrap {
     text-align: center;
     margin-bottom: 2.5rem;
@@ -1927,7 +1927,7 @@ body.dark-theme .masonry-item:hover img {
 }
 
 .btn-add-milestone::before {
-    content: '📌';
+    content: 'ðŸ“Œ';
     position: absolute;
     top: -14px;
     left: 50%;
@@ -2013,7 +2013,7 @@ body.dark-theme .masonry-item:hover img {
     z-index: 10;
 }
 
-/* ===== Award Card — Vintage Paper Note ===== */
+/* ===== Award Card â€” Vintage Paper Note ===== */
 .award-card {
     background-color: #fdf6e3;
     border: 2px dashed #8b5a2b;
@@ -2088,7 +2088,7 @@ body.dark-theme .masonry-item:hover img {
     padding-bottom: 0.8rem;
 }
 
-/* ===== Winner Photo — Polaroid Style ===== */
+/* ===== Winner Photo â€” Polaroid Style ===== */
 .award-photo {
     max-height: 300px;
     max-width: 100%;
@@ -2195,7 +2195,7 @@ body.dark-theme .awards-header-sub {
 }
 
 /* ================================================
-   FORM PAGES — Shared Styles
+   FORM PAGES â€” Shared Styles
    (add_friend, add_event, upload_photos)
    ================================================ */
 
@@ -2305,7 +2305,7 @@ body.dark-theme .awards-header-sub {
 }
 
 /* ================================================
-   NOTEBOOK FORM — add_milestone & edit_milestone
+   NOTEBOOK FORM â€” add_milestone & edit_milestone
    ================================================ */
 
 .notebook-container {
@@ -2563,7 +2563,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   DELETE MILESTONE — Torn Paper Confirm Box
+   DELETE MILESTONE â€” Torn Paper Confirm Box
    ================================================ */
 
 .confirm-wrapper {
@@ -2672,7 +2672,7 @@ textarea.scrapbook-input {
     flex-wrap: wrap;
 }
 
-/* Red Warning Stamp — Delete Button */
+/* Red Warning Stamp â€” Delete Button */
 .btn-stamp-delete {
     font-family: 'Special Elite', monospace;
     background: #c0392b;
@@ -2737,7 +2737,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   UPLOAD PHOTOS — Upload Zone & Preview Grid
+   UPLOAD PHOTOS â€” Upload Zone & Preview Grid
    ================================================ */
 
 .upload-zone {
@@ -2798,7 +2798,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   FRIEND DETAIL — Profile, Memory, Scrapbook
+   FRIEND DETAIL â€” Profile, Memory, Scrapbook
    ================================================ */
 
 .scrapbook-page {
@@ -2810,7 +2810,7 @@ textarea.scrapbook-input {
     gap: 2.5rem;
 }
 
-/* Profile Section — Polaroid + Details */
+/* Profile Section â€” Polaroid + Details */
 .profile-section {
     background: rgba(244, 228, 188, 0.7);
     border: 2px dashed #d4a574;
@@ -2886,7 +2886,7 @@ textarea.scrapbook-input {
     font-weight: 500;
 }
 
-/* Right Column — Details */
+/* Right Column â€” Details */
 .right-col {
     display: flex;
     flex-direction: column;
@@ -2931,7 +2931,7 @@ textarea.scrapbook-input {
     border-radius: 2px;
 }
 
-/* Memory — Handwritten Note */
+/* Memory â€” Handwritten Note */
 .memory-note-container {
     margin-top: 1rem;
 }
@@ -3085,7 +3085,7 @@ textarea.scrapbook-input {
 }
 
 .scrap-note::before {
-    content: '📌';
+    content: 'ðŸ“Œ';
     position: absolute;
     top: -8px;
     right: 12px;
@@ -3270,7 +3270,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   GALLERY — Event Card Actions
+   GALLERY â€” Event Card Actions
    ================================================ */
 
 .event-card-actions {
@@ -3314,7 +3314,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   EVENT DETAIL — Photo Delete/Download Buttons
+   EVENT DETAIL â€” Photo Delete/Download Buttons
    ================================================ */
 
 .photo-delete-btn {
@@ -3413,7 +3413,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   RETRO TRADING CHARACTER CARDS — Squad / Home
+   RETRO TRADING CHARACTER CARDS â€” Squad / Home
    ================================================ */
 
 .character-cards-grid {
@@ -3519,7 +3519,7 @@ textarea.scrapbook-input {
     letter-spacing: 1px;
 }
 
-/* ===== Photo — Polaroid ===== */
+/* ===== Photo â€” Polaroid ===== */
 .card-photo-wrap {
     padding: 10px 10px 0;
     position: relative;
@@ -3761,7 +3761,7 @@ textarea.scrapbook-input {
 }
 
 /* ================================================
-   VINTAGE NEWSPAPER PAGE — The Anti-Gravity Times
+   VINTAGE NEWSPAPER PAGE â€” The Anti-Gravity Times
    ================================================ */
 
 .newspaper-container {
@@ -4035,4 +4035,71 @@ textarea.scrapbook-input {
     .classifieds-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ===== Spin the Bottle Fixes ===== */
+.spin-game-container { text-align: center; }
+
+.roulette-board { 
+    width: 320px; 
+    height: 320px; 
+    border: 5px dashed #8b5a2b; 
+    border-radius: 50%; 
+    position: relative; 
+    margin: 40px auto; 
+    background-color: #fdf6e3; 
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1); 
+}
+
+#spinning-bottle { 
+    position: absolute; 
+    top: 10%; 
+    left: 10%; 
+    width: 80%; 
+    height: 80%; 
+    object-fit: contain; 
+    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+    z-index: 10; 
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3)); 
+}
+
+/* Custom Result Modal */
+.result-modal { 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 320px; 
+    background: #fdf6e3; 
+    padding: 30px; 
+    border: 3px dashed #8b5a2b; 
+    box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.4); 
+    z-index: 1000; 
+    text-align: center; 
+    border-radius: 2px; 
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+@keyframes modalPop { 
+    from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; } 
+    to { transform: translate(-50%, -50%) scale(1); opacity: 1; } 
+}
+
+.result-modal h3 { 
+    font-family: 'Caveat', cursive; 
+    font-size: 2.2rem; 
+    color: #2c1810; 
+    margin-bottom: 15px; 
+}
+
+.result-modal p { 
+    font-family: 'Indie Flower', cursive; 
+    font-size: 1.3rem; 
+    color: #4a6fa5; 
+    margin-bottom: 25px; 
+    line-height: 1.4; 
+}
+
+.hidden { 
+    display: none !important; 
 }

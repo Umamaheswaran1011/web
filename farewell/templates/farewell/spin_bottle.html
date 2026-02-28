@@ -1,0 +1,86 @@
+{% extends "farewell/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="spin-game-container">
+    <h2 class="game-title">Thabithal's Pink Bottle Roulette</h2>
+    <p class="game-subtitle">Spin to reveal a deep squad secret...</p>
+
+    <div class="roulette-board">
+        <img src="{% static 'images/pink_bottle.png' %}" id="spinning-bottle" alt="Pink Bottle">
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="spin-btn" class="retro-btn">Spin the Bottle!</button>
+    </div>
+
+    <!-- Hidden Custom Result Modal -->
+    <div id="result-modal" class="hidden result-modal">
+        <h3 id="winner-name"></h3>
+        <p id="funny-secret"></p>
+        <button id="close-modal-btn" class="retro-btn" style="font-size: 1rem; padding: 8px 15px;">Close</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const spinBtn = document.getElementById('spin-btn');
+        const bottle = document.getElementById('spinning-bottle');
+        const modal = document.getElementById('result-modal');
+        const winnerName = document.getElementById('winner-name');
+        const funnySecret = document.getElementById('funny-secret');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        const squad = [
+            { name: "Uma Maheswaran", secret: "எப்பவும் கிளாஸ்ல தூங்கிட்டே இருப்பான், ஆனா பாஸ் ஆகிடுவான்!" },
+            { name: "Veera Pandi", secret: "King maker! கிளாஸ் கட் அடிக்கிறதுல ஸ்பெஷலிஸ்ட்." },
+            { name: "Sakthi Kumar", secret: "எல்லா சேட்டைகளிலும் கடைசியா மாட்டிக்கிற அப்பாவி ஜீவன்." },
+            { name: "Renjen", secret: "கேன்டீன்லயே பாதி காலேஜ் லைஃப் முடிச்சவரு." },
+            { name: "Marisamy", secret: "அசைன்மென்ட் காப்பி அடிக்கிறதுல இவரை அடிச்சுக்க ஆளே இல்லை." },
+            { name: "Muniyandi", secret: "எக்ஸாம் ஹால்ல போய்தான் இன்னைக்கு என்ன எக்ஸாம்னு கேப்பான்!" },
+            { name: "Keerthana Sree", secret: "பசங்க மாட்டிக்கும்போது காப்பாத்துற ஏஞ்சல்ஸ்ல ஒருத்தர்." },
+            { name: "Thabithal", secret: "இந்த பாட்டिलोட ஓனர்! எல்லாரோட தாகத்தையும் தீர்த்த புண்ணியவதி." },
+            { name: "Manjula", secret: "எப்பவும் சைலண்டா இருந்துட்டே சில்மிஷம் பண்றதுல கில்லாடி." },
+            { name: "Malar", secret: "ரெக்கார்ட் நோட்டு எழுதி பசங்க உசுர காப்பாத்துற தெய்வம்." },
+            { name: "Ilamathi", secret: "கேங்கோட ரகசியங்களை வெளிய சொல்லாம காப்பாத்துறது இவங்கதான்." },
+            { name: "Rohit Raja (VIP)", secret: "காலேஜுக்கே கெஸ்ட் ரோல்ல வந்துட்டு போற விஐபி!" }
+        ];
+
+        let currentRotation = 0;
+
+        spinBtn.addEventListener('click', function () {
+            if (spinBtn.disabled) return;
+
+            // Pick a random winner
+            const randomIndex = Math.floor(Math.random() * squad.length);
+            const winner = squad[randomIndex];
+
+            // Generate a random rotation (at least 5 full spins + extra)
+            let randomDeg = Math.floor(Math.random() * 360) + 1800;
+            currentRotation += randomDeg;
+
+            // Apply the rotation
+            bottle.style.transform = "translate(-50%, -50%) rotate(" + currentRotation + "deg)";
+
+            spinBtn.disabled = true;
+            spinBtn.textContent = "Spinning...";
+
+            setTimeout(function () {
+                // Update modal content
+                winnerName.textContent = winner.name;
+                funnySecret.textContent = winner.secret;
+
+                // Show modal
+                modal.classList.remove('hidden');
+
+                spinBtn.disabled = false;
+                spinBtn.textContent = "Spin the Bottle!";
+            }, 4000);
+        });
+
+        closeModalBtn.addEventListener('click', function () {
+            modal.classList.add('hidden');
+        });
+    });
+</script>
+{% endblock %}
