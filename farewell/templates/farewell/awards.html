@@ -8,10 +8,26 @@
 {% endblock %}
 
 {% block content %}
+{# ── Add Award button ── #}
+<div class="awards-toolbar">
+    <a href="{% url 'farewell:add_award' %}" class="btn-add">
+        🏆 Add New Award
+    </a>
+</div>
+
 <div class="awards-grid">
     {% if awards %}
     {% for award in awards %}
     <div class="award-card animate-on-scroll slide-up">
+
+        {# ── CRUD action buttons (top-right corner) ── #}
+        <div class="award-actions">
+            <a href="{% url 'farewell:edit_award' award.pk %}" class="award-action-btn award-edit-btn"
+                title="Edit award">✏️</a>
+            <a href="{% url 'farewell:delete_award' award.pk %}" class="award-action-btn award-delete-btn"
+                title="Delete award">🗑️</a>
+        </div>
+
         <span class="award-icon">🏆</span>
         <div class="award-title">{{ award.title }}</div>
 
@@ -27,7 +43,7 @@
     {% endfor %}
     {% else %}
     <div class="awards-empty">
-        <p>No awards yet — add some from the <a href="/admin/">Admin Panel</a>! 🏆</p>
+        <p>No awards yet — <a href="{% url 'farewell:add_award' %}">add the first one!</a> 🏆</p>
     </div>
     {% endif %}
 </div>

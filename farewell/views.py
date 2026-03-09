@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
-from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage
-from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm, MilestoneForm
+from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage, Staff
+from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm, MilestoneForm, FunAwardForm, StaffForm
 
 
 def farewell_index(request):
@@ -11,7 +11,7 @@ def farewell_index(request):
     friends = Friend.objects.all()
     context = {
         'friends': friends,
-        'page_title': 'Farewell Batch 2026 - The Anti-Gravity Squad',
+        'page_title': 'Farewell Batch 2026 - The Unbreakable Squad',
     }
     return render(request, 'farewell/index.html', context)
 
@@ -245,6 +245,64 @@ def awards_view(request):
     })
 
 
+def add_award(request):
+    """
+    View to add a new Fun Award from the frontend.
+    """
+    if request.method == 'POST':
+        form = FunAwardForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:awards') + '?msg=Award added! 🏆')
+    else:
+        form = FunAwardForm()
+
+    return render(request, 'farewell/add_award.html', {
+        'form': form,
+        'page_title': '🏆 Add New Award',
+        'button_text': 'Add Award',
+    })
+
+
+def edit_award(request, pk):
+    """
+    View to edit an existing Fun Award.
+    """
+    award = get_object_or_404(FunAward, pk=pk)
+    if request.method == 'POST':
+        form = FunAwardForm(request.POST, request.FILES, instance=award)
+        if form.is_valid():
+            form.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:awards') + '?msg=Award updated! ✏️')
+    else:
+        form = FunAwardForm(instance=award)
+
+    return render(request, 'farewell/add_award.html', {
+        'form': form,
+        'page_title': f'✏️ Edit Award',
+        'button_text': 'Update Award',
+        'award': award,
+    })
+
+
+def delete_award(request, pk):
+    """
+    View to delete a Fun Award after POST confirmation.
+    """
+    award = get_object_or_404(FunAward, pk=pk)
+    if request.method == 'POST':
+        award.delete()
+        from django.urls import reverse
+        return redirect(reverse('farewell:awards') + '?msg=Award removed 🗑️')
+
+    return render(request, 'farewell/delete_award.html', {
+        'award': award,
+        'page_title': f'Delete Award',
+    })
+
+
 def add_milestone(request):
     """
     View to add a new timeline milestone from the frontend.
@@ -319,6 +377,119 @@ def spin_bottle(request):
     return render(request, 'farewell/spin_bottle.html', {
         'page_title': '🍾 Spin the Bottle',
         'friends': friends,
+    })
+
+
+# ===================== STAFF CRUD VIEWS =====================
+
+def staff_list(request):
+    """
+    View to display all staff members with Guru Awards and Department Voices.
+    """
+    staff = Staff.objects.all()
+    return render(request, 'farewell/staff_list.html', {
+        'staff': staff,
+        'page_title': '👨‍🏫 Our Beloved Staff',
+    })
+
+
+def add_staff(request):
+    """
+    View to add a new staff member from the frontend.
+    """
+    if request.method == 'POST':
+        form = StaffForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:staff_list') + '?msg=Staff member added! 👨‍🏫')
+    else:
+        form = StaffForm()
+
+    return render(request, 'farewell/staff_form.html', {
+        'form': form,
+        'page_title': '✨ Add New Staff',
+        'button_text': 'Add Staff',
+    })
+
+
+def edit_staff(request, pk):
+    """
+    View to edit an existing staff member.
+    """
+    staff_member = get_object_or_404(Staff, pk=pk)
+    if request.method == 'POST':
+        form = StaffForm(request.POST, request.FILES, instance=staff_member)
+        if form.is_valid():
+            form.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:staff_list') + '?msg=Staff updated! ✏️')
+    else:
+        form = StaffForm(instance=staff_member)
+
+    return render(request, 'farewell/staff_form.html', {
+        'form': form,
+        'page_title': f'✏️ Edit {staff_member.name}',
+        'button_text': 'Update Staff',
+        'staff_member': staff_member,
+    })
+
+
+def delete_staff(request, pk):
+    """
+    View to delete a staff member after POST confirmation.
+    """
+    staff_member = get_object_or_404(Staff, pk=pk)
+    if request.method == 'POST':
+        staff_member.delete()
+        from django.urls import reverse
+        return redirect(reverse('farewell:staff_list') + '?msg=Staff removed 🗑️')
+
+    return render(request, 'farewell/staff_confirm_delete.html', {
+        'staff_member': staff_member,
+        'page_title': 'Delete Staff Member',
+    })
+
+
+# ===================== SCRAPS CRUD VIEWS =====================
+
+def edit_scrap(request, scrap_id):
+    """
+    View to edit an existing scrap (SlamMessage).
+    """
+    scrap = get_object_or_404(SlamMessage, pk=scrap_id)
+    if request.method == 'POST':
+        form = SlamBookForm(request.POST)
+        if form.is_valid():
+            scrap.sender_name = form.cleaned_data['sender_name']
+            scrap.message = form.cleaned_data['message']
+            scrap.save()
+            from django.urls import reverse
+            return redirect(reverse('farewell:friend_detail', args=[scrap.friend.pk]) + '?msg=Scrap updated! ✏️')
+    else:
+        form = SlamBookForm(initial={'sender_name': scrap.sender_name, 'message': scrap.message})
+
+    return render(request, 'farewell/edit_scrap.html', {
+        'form': form,
+        'scrap': scrap,
+        'page_title': f'✏️ Edit Scrap for {scrap.friend.name}',
+    })
+
+
+def delete_scrap(request, scrap_id):
+    """
+    View to delete a scrap (SlamMessage) after POST confirmation.
+    """
+    scrap = get_object_or_404(SlamMessage, pk=scrap_id)
+    friend_id = scrap.friend.pk
+    if request.method == 'POST':
+        scrap.delete()
+        from django.urls import reverse
+        return redirect(reverse('farewell:friend_detail', args=[friend_id]) + '?msg=Scrap removed 🗑️')
+
+    return render(request, 'farewell/delete_scrap_confirm.html', {
+        'scrap': scrap,
+        'page_title': 'Delete Scrap',
     })
 
 

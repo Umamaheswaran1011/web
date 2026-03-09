@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page_title }}</title>
     <meta name="description"
-        content="{% block meta_description %}A farewell tribute to the Anti-Gravity Squad - Batch 2026{% endblock %}">
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=11.0">
+        content="{% block meta_description %}A farewell tribute to The Unbreakable Squad - Batch 2026{% endblock %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=13.0">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Special+Elite&family=Indie+Flower&family=Reenie+Beanie&display=swap">
     <!-- ===== HTMX for seamless page transitions ===== -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- canvas-confetti for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -20,19 +22,20 @@
     <!-- ===== Toast Notification Container ===== -->
     <div id="toast-container"></div>
 
-    <!-- ===== Loading Splash ===== -->
-    <div class="splash-screen" id="splashScreen">
-        <div class="splash-content">
-            <div class="splash-title">The Anti-Gravity Squad</div>
-            <div class="splash-subtitle">Batch 2026 · Forever in Our Hearts</div>
-            <div class="splash-loader"></div>
+    <!-- ===== Cinematic Preloader ===== -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-inner">
+            <p class="typewriter-text" id="typewriterText"></p>
+            <div class="preloader-dots">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </div>
 
     <!-- ===== Persistent Navigation ===== -->
     <nav class="scrapbook-nav" id="mainNav">
         <div class="nav-inner">
-            <a href="{% url 'farewell:index' %}" class="nav-brand">🚀 Anti-Gravity Squad</a>
+            <a href="{% url 'farewell:index' %}" class="nav-brand">♾️The Unbreakable Squad</a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
                 <span></span><span></span><span></span>
             </button>
@@ -56,6 +59,9 @@
                 <a href="{% url 'farewell:spin_bottle' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'spin_bottle' %}active{% endif %}">🍾
                     Spin</a>
+                <a href="{% url 'farewell:staff_list' %}"
+                    class="nav-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">👨‍🏫
+                    Staffs</a>
                 <button class="navbar-music-toggle" id="navbar-music-toggle" title="Toggle Music">🎵</button>
                 <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
             </div>
@@ -74,7 +80,7 @@
 
         <!-- ===== Footer ===== -->
         <footer>
-            <p>&copy; 2026 The Anti-Gravity Squad | Forever in Our Hearts ❤️</p>
+            <p>&copy; 2026 The Unbreakable Squad | Forever in Our Hearts ❤️</p>
         </footer>
     </div>
 
@@ -85,16 +91,88 @@
 
     <!-- ===== Global JS: Splash, Nav, Animations, Theme, Toast ===== -->
     <script>
-        // === Splash Screen ===
-        window.addEventListener('load', function () {
-            const splash = document.getElementById('splashScreen');
-            if (splash) {
+        // === Cinematic Preloader — Two-Text Sequence (runs once per session) ===
+        try {
+            (function () {
+                var preloader = document.getElementById('preloader');
+                var el = document.getElementById('typewriterText');
+
+                // ── Guard: skip entirely if already played this session ──
+                if (sessionStorage.getItem('introPlayed')) {
+                    if (preloader) { preloader.style.display = 'none'; preloader.remove(); }
+                    document.body.style.overflow = '';
+                    return;
+                }
+
+                // ── If preloader element is missing for any reason, bail cleanly ──
+                if (!preloader) return;
+
+                // Lock body scroll while preloader is visible
+                document.body.style.overflow = 'hidden';
+
+                // ── Typewriter helper ──
+                function typeText(message, callback) {
+                    if (!el) { if (callback) callback(); return; }
+                    el.textContent = '';
+                    var index = 0;
+                    function next() {
+                        if (index < message.length) {
+                            el.textContent += message.charAt(index++);
+                            setTimeout(next, 60);
+                        } else {
+                            if (callback) callback();
+                        }
+                    }
+                    next();
+                }
+
+                // ── Text fade helpers ──
+                if (el) el.style.transition = 'opacity 0.5s ease'; // null-guarded
+
+                function fadeOut(elem, done) {
+                    if (!elem) { done(); return; }
+                    elem.style.opacity = '0';
+                    setTimeout(done, 500);
+                }
+                function fadeIn(elem) {
+                    if (!elem) return;
+                    elem.style.opacity = '1';
+                }
+
+                // ── STEP 1: Type first message ──
+                fadeIn(el);
+                typeText('Welcome to The Unbreakable Squad...');
+
+                // ── STEP 2: After 2.5 s, fade text out, swap, fade back in ──
                 setTimeout(function () {
-                    splash.classList.add('splash-hide');
-                    setTimeout(function () { splash.style.display = 'none'; }, 600);
-                }, 800);
-            }
-        });
+                    fadeOut(el, function () {
+                        typeText('நமது கல்லூரியின் காதல் நினைவுகள்...', function () {
+                            fadeIn(el);
+                        });
+                        fadeIn(el);
+                    });
+
+                    // ── STEP 3: After another 3 s, fade out the full backdrop ──
+                    setTimeout(function () {
+                        if (preloader) {
+                            preloader.classList.add('preloader-hide');
+                            setTimeout(function () {
+                                preloader.remove();
+                                document.body.style.overflow = '';
+                                sessionStorage.setItem('introPlayed', 'true');
+                            }, 900);
+                        }
+                    }, 3000);
+
+                }, 2500);
+            })();
+        } catch (e) {
+            // Preloader error must never block the rest of the page scripts
+            console.warn('Preloader error (non-fatal):', e);
+            var _p = document.getElementById('preloader');
+            if (_p) { _p.style.display = 'none'; _p.remove(); }
+            document.body.style.overflow = '';
+        }
 
         // === Mobile Nav Toggle ===
         const navToggle = document.getElementById('navToggle');

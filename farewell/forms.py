@@ -1,5 +1,5 @@
 from django import forms
-from .models import Friend, Event, EventPhoto, TimelineEvent
+from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, Staff
 
 
 class FriendForm(forms.ModelForm):
@@ -131,4 +131,59 @@ class MilestoneForm(forms.ModelForm):
             'image': forms.FileInput(attrs={
                 'class': 'scrapbook-input scrapbook-file',
             }),
+        }
+
+
+class FunAwardForm(forms.ModelForm):
+    """Form for adding or editing a Fun Award."""
+    class Meta:
+        model = FunAward
+        fields = ['title', 'winner', 'icon_or_image']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. Sothu Mootai Award, Silent Killer Trophy...',
+            }),
+            'winner': forms.Select(attrs={
+                'class': 'scrapbook-input',
+            }),
+            'icon_or_image': forms.FileInput(attrs={
+                'class': 'scrapbook-input scrapbook-file',
+            }),
+        }
+        labels = {
+            'title': '🏆 Award Title',
+            'winner': '🎖️ Winner',
+            'icon_or_image': '🖼️ Award Image (optional)',
+        }
+
+
+class StaffForm(forms.ModelForm):
+    """Form for adding or editing a Staff member."""
+    class Meta:
+        model = Staff
+        fields = ['name', 'award_title', 'famous_quote', 'photo']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. Mr. Arjun Kumar',
+            }),
+            'award_title': forms.TextInput(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. Walking Encyclopedia, Deadline Whisperer...',
+            }),
+            'famous_quote': forms.Textarea(attrs={
+                'class': 'scrapbook-input',
+                'placeholder': 'e.g. "Attendance is 75%. No exceptions." 😄',
+                'rows': 4,
+            }),
+            'photo': forms.FileInput(attrs={
+                'class': 'scrapbook-input scrapbook-file',
+            }),
+        }
+        labels = {
+            'name': '👨‍🏫 Staff Name',
+            'award_title': '🎓 Guru Award Title',
+            'famous_quote': '💬 Famous Quote / Department Voice',
+            'photo': '🖼️ Photo (optional)',
         }

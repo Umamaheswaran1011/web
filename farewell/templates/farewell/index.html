@@ -48,47 +48,44 @@
 {% block content %}
 <div class="container" id="friendsGrid">
     {% for friend in friends %}
-    <div class="card animate-on-scroll slide-up" data-name="{{ friend.name|lower }}"
+    <div class="flip-card animate-on-scroll slide-up" data-name="{{ friend.name|lower }}"
         data-nickname="{{ friend.nickname|lower }}" style="animation-delay: {{ forloop.counter0 }}00ms;">
 
-        <div class="card-image">
-            <a href="{% url 'farewell:friend_detail' friend.pk %}">
-                {% if friend.photo %}
-                <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" loading="lazy">
-                {% else %}
-                <img src="https://via.placeholder.com/350x400" alt="{{ friend.name }}" loading="lazy">
-                {% endif %}
-            </a>
-        </div>
-
-        <div class="card-content">
-            <div>
-                <h3>{{ friend.name }}</h3>
-                {% if friend.nickname %}
-                <p class="nickname">"{{ friend.nickname }}"</p>
-                {% endif %}
-
-                {% if friend.memory_text %}
-                <div class="memory">
-                    <p>{{ friend.memory_text }}</p>
+        <!-- Static polaroid card — no flip effect on home page -->
+        <div class="card">
+            <div class="card-image">
+                <a href="{% url 'farewell:friend_detail' friend.pk %}">
+                    {% if friend.photo %}
+                    <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" loading="lazy">
+                    {% else %}
+                    <img src="https://via.placeholder.com/350x400" alt="{{ friend.name }}" loading="lazy">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="card-content">
+                <div>
+                    <h3>{{ friend.name }}</h3>
+                    {% if friend.nickname %}
+                    <p class="nickname">"{{ friend.nickname }}"</p>
+                    {% endif %}
+                    {% if friend.memory_text %}
+                    <div class="memory">
+                        <p>{{ friend.memory_text }}</p>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
+                <div style="display:flex; gap:0.8rem; margin-top:auto; flex-wrap:wrap; align-items:center;">
+                    <a href="{% url 'farewell:friend_detail' friend.pk %}" class="btn-view-album">View Profile</a>
+                    <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
+                        onsubmit="return confirm('Delete {{ friend.name }} from the squad?');" style="margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete" title="Delete Friend">🗑️</button>
+                    </form>
+                </div>
             </div>
-
-            {% if friend.future_goal %}
-            <div class="future-goal">
-                <span>🚀 {{ friend.future_goal }}</span>
-            </div>
-            {% endif %}
-
-            <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
-                onsubmit="return confirm('Delete {{ friend.name }} from the squad?');"
-                style="margin-top: 0.8rem; align-self: flex-end;">
-                {% csrf_token %}
-                <button type="submit" class="btn-delete" title="Delete Friend">🗑️</button>
-            </form>
         </div>
-    </div>
+
+    </div><!-- /.flip-card (kept for JS search/highlight compatibility) -->
     {% empty %}
     <div class="no-friends">
         <p>No friends added yet. Grab a pen and start adding! ✏️</p>
@@ -96,6 +93,7 @@
     {% endfor %}
 </div>
 {% endblock %}
+
 
 {% block extra_js %}
 <script>
@@ -127,7 +125,7 @@
     if (searchInput) {
         searchInput.addEventListener('input', function () {
             const query = this.value.toLowerCase().trim();
-            const cards = document.querySelectorAll('#friendsGrid .card');
+            const cards = document.querySelectorAll('#friendsGrid .flip-card');
             cards.forEach(function (card) {
                 const name = card.getAttribute('data-name') || '';
                 const nick = card.getAttribute('data-nickname') || '';
@@ -136,9 +134,33 @@
         });
     }
 
+    // === Confetti burst helper ===
+    function squadConfetti() {
+        if (typeof confetti === 'undefined') return;
+        var end = Date.now() + 1800;
+        var colors = ['#d4a574', '#4a6fa5', '#faf3e0', '#2c1810', '#f4e4bc'];
+        (function burst() {
+            confetti({
+                particleCount: 6,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: colors
+            });
+            confetti({
+                particleCount: 6,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: colors
+            });
+            if (Date.now() < end) requestAnimationFrame(burst);
+        }());
+    }
+
     // === Random Memory ===
     function randomMemory() {
-        const cards = document.querySelectorAll('#friendsGrid .card');
+        const cards = document.querySelectorAll('#friendsGrid .flip-card');
         const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
         if (visibleCards.length === 0) return;
         cards.forEach(c => c.classList.remove('card-highlight'));
@@ -146,6 +168,19 @@
         random.classList.add('card-highlight');
         random.scrollIntoView({ behavior: 'smooth', block: 'center' });
         setTimeout(() => random.classList.remove('card-highlight'), 3000);
+        // 🎉 Confetti!
+        squadConfetti();
     }
+
+    // === Mobile: tap to flip cards ===
+    if ('ontouchstart' in window) {
+        document.querySelectorAll('.flip-card').forEach(function (card) {
+            card.addEventListener('click', function (e) {
+                if (e.target.closest('a, button, form')) return;
+                card.classList.toggle('flipped');
+            });
+        });
+    }
+
 </script>
 {% endblock %}

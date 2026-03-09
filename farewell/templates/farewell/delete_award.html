@@ -1,0 +1,40 @@
+{% extends 'farewell/base.html' %}
+{% load static %}
+
+{% block meta_description %}Confirm deletion of Fun Award{% endblock %}
+
+{% block content %}
+<div class="form-page-wrapper">
+    <div class="scrapbook-form-card animate-on-scroll fade-in" style="max-width: 520px;">
+
+        <div class="form-tape form-tape-top"></div>
+
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <span style="font-size: 3rem;">🗑️</span>
+        </div>
+
+        <h2 class="form-heading" style="color: #c0392b;">Delete Award?</h2>
+        <p class="form-subheading">This action cannot be undone!</p>
+
+        <div class="delete-confirm-box">
+            <p>You are about to permanently delete:</p>
+            <p class="delete-target-name">🏆 {{ award.title }}</p>
+            <p class="delete-target-sub">🎖️ Won by: <strong>{{ award.winner.name }}</strong></p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-actions" style="justify-content: center; gap: 1rem;">
+                <button type="submit" class="btn-scrapbook btn-danger">
+                    🗑️ Yes, Delete It
+                </button>
+                <a href="{% url 'farewell:awards' %}" class="btn-scrapbook btn-secondary">
+                    ← Keep It
+                </a>
+            </div>
+        </form>
+
+        <div class="form-tape form-tape-bottom"></div>
+    </div>
+</div>
+{% endblock %}

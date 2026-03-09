@@ -209,3 +209,36 @@ class SlamMessage(models.Model):
 
     def __str__(self):
         return f"{self.sender_name} → {self.friend.name}"
+
+
+class Staff(models.Model):
+    """
+    Model for Staff members — combines 'Guru Awards' and 'Department Voices'.
+    Celebrates teachers with their unique titles and legendary advice.
+    """
+    name = models.CharField(
+        max_length=100,
+        help_text="Full name of the staff member"
+    )
+    award_title = models.CharField(
+        max_length=200,
+        help_text="Their legendary title (e.g., 'Walking Encyclopedia', 'The Deadline Whisperer')"
+    )
+    famous_quote = models.TextField(
+        help_text="Their most iconic dialogue, advice, or signature quote"
+    )
+    photo = models.ImageField(
+        upload_to='staff_photos/',
+        blank=True,
+        null=True,
+        help_text="Optional photo of the staff member"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Staff'
+        verbose_name_plural = 'Staff'
+
+    def __str__(self):
+        return f"{self.name} — {self.award_title}"

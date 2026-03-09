@@ -1,0 +1,40 @@
+{% extends 'farewell/base.html' %}
+{% load static %}
+
+{% block meta_description %}Confirm deletion of Staff member{% endblock %}
+
+{% block content %}
+<div class="form-page-wrapper">
+    <div class="scrapbook-form-card animate-on-scroll fade-in" style="max-width: 520px;">
+
+        <div class="form-tape form-tape-top"></div>
+
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <span style="font-size: 3rem;">🗑️</span>
+        </div>
+
+        <h2 class="form-heading" style="color: #c0392b;">Remove Staff Member?</h2>
+        <p class="form-subheading">This action cannot be undone!</p>
+
+        <div class="delete-confirm-box">
+            <p>You are about to permanently remove:</p>
+            <p class="delete-target-name">👨‍🏫 {{ staff_member.name }}</p>
+            <p class="delete-target-sub">🎓 <em>{{ staff_member.award_title }}</em></p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-actions" style="justify-content: center; gap: 1rem;">
+                <button type="submit" class="btn-scrapbook btn-danger">
+                    🗑️ Yes, Remove
+                </button>
+                <a href="{% url 'farewell:staff_list' %}" class="btn-scrapbook btn-secondary">
+                    ← Keep Them
+                </a>
+            </div>
+        </form>
+
+        <div class="form-tape form-tape-bottom"></div>
+    </div>
+</div>
+{% endblock %}

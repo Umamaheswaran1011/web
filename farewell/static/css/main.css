@@ -4038,68 +4038,851 @@ textarea.scrapbook-input {
 }
 
 /* ===== Spin the Bottle Fixes ===== */
-.spin-game-container { text-align: center; }
-
-.roulette-board { 
-    width: 320px; 
-    height: 320px; 
-    border: 5px dashed #8b5a2b; 
-    border-radius: 50%; 
-    position: relative; 
-    margin: 40px auto; 
-    background-color: #fdf6e3; 
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1); 
+.spin-game-container {
+    text-align: center;
 }
 
-#spinning-bottle { 
-    position: absolute; 
-    top: 10%; 
-    left: 10%; 
-    width: 80%; 
-    height: 80%; 
-    object-fit: contain; 
-    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-    z-index: 10; 
-    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3)); 
+.roulette-board {
+    width: 320px;
+    height: 320px;
+    border: 5px dashed #8b5a2b;
+    border-radius: 50%;
+    position: relative;
+    margin: 40px auto;
+    background-color: #fdf6e3;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+#spinning-bottle {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    z-index: 10;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
 }
 
 /* Custom Result Modal */
-.result-modal { 
-    position: fixed; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    width: 320px; 
-    background: #fdf6e3; 
-    padding: 30px; 
-    border: 3px dashed #8b5a2b; 
-    box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.4); 
-    z-index: 1000; 
-    text-align: center; 
-    border-radius: 2px; 
-    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+.result-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    background: #fdf6e3;
+    padding: 30px;
+    border: 3px dashed #8b5a2b;
+    box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    text-align: center;
+    border-radius: 2px;
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes modalPop { 
-    from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; } 
-    to { transform: translate(-50%, -50%) scale(1); opacity: 1; } 
+@keyframes modalPop {
+    from {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
 }
 
-.result-modal h3 { 
-    font-family: 'Caveat', cursive; 
-    font-size: 2.2rem; 
-    color: #2c1810; 
-    margin-bottom: 15px; 
+.result-modal h3 {
+    font-family: 'Caveat', cursive;
+    font-size: 2.2rem;
+    color: #2c1810;
+    margin-bottom: 15px;
 }
 
-.result-modal p { 
-    font-family: 'Indie Flower', cursive; 
-    font-size: 1.3rem; 
-    color: #4a6fa5; 
-    margin-bottom: 25px; 
-    line-height: 1.4; 
+.result-modal p {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.3rem;
+    color: #4a6fa5;
+    margin-bottom: 25px;
+    line-height: 1.4;
 }
 
-.hidden { 
-    display: none !important; 
+.hidden {
+    display: none !important;
 }
+
+
+/* ================================================
+   MOBILE RESPONSIVE — max-width: 768px
+   ================================================ */
+@media (max-width: 768px) {
+
+    /* 1. Prevent horizontal scrolling globally */
+    html,
+    body {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    /* 2. Main container: single-column, no overflow */
+    .container {
+        max-width: 100%;
+        padding: 1rem;
+        gap: 2rem;
+        grid-template-columns: 1fr;
+    }
+
+    /* 3. Friend profile cards: stack one per row */
+    .card {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        transform: none !important;
+    }
+
+    .card:hover {
+        transform: scale(1.01) translateY(-3px) !important;
+    }
+
+    .card-image {
+        height: 220px;
+    }
+
+    .card h3 {
+        font-size: 1.5rem;
+    }
+
+    /* 4. Spin-the-Bottle game */
+    .spin-game-container {
+        padding: 1rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        text-align: center;
+    }
+
+    .game-title {
+        font-size: 1.5rem !important;
+        word-wrap: break-word;
+    }
+
+    .game-subtitle {
+        font-size: 1rem !important;
+    }
+
+    .roulette-board {
+        width: 220px !important;
+        height: 220px !important;
+        margin: 0 auto !important;
+        position: relative !important;
+    }
+
+    #spinning-bottle {
+        width: 140px !important;
+        height: 140px !important;
+    }
+
+    .retro-btn {
+        font-size: 1rem !important;
+        padding: 10px 20px !important;
+        max-width: 90% !important;
+    }
+
+    .result-modal {
+        width: 90% !important;
+        max-width: 90% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        top: 10% !important;
+        padding: 1.5rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .result-modal h3 {
+        font-size: 1.6rem !important;
+    }
+
+    .result-modal p {
+        font-size: 1rem !important;
+    }
+
+    /* 5. Header & nav */
+    h1 {
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .nav-bar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .btn-nav {
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
+    }
+
+    footer {
+        font-size: 0.9rem;
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* ================================================
+   CINEMATIC PRELOADER — Typewriter Style
+   ================================================ */
+
+/* Full-screen black overlay */
+.preloader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.9s ease;
+}
+
+/* Fade-out class added by JS */
+.preloader.preloader-hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Centred content wrapper */
+.preloader-inner {
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Typewriter text */
+.typewriter-text {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    color: #d4a574;
+    letter-spacing: 3px;
+    margin: 0 0 2.5rem 0;
+    min-height: 2.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    /* Blinking caret using border-right */
+    border-right: 2px solid #d4a574;
+    animation: blink-caret 0.75s step-end infinite;
+    display: inline-block;
+}
+
+/* Caret blink */
+@keyframes blink-caret {
+
+    0%,
+    100% {
+        border-color: #d4a574;
+    }
+
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Animated dots below the text */
+.preloader-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.preloader-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d4a574;
+    opacity: 0.3;
+    animation: dot-pulse 1.4s infinite ease-in-out;
+}
+
+.preloader-dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.preloader-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.preloader-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dot-pulse {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+/* ================================================
+   3D FLIP PROFILE CARDS
+   Scoped under .flip-card-container so the effect
+   ONLY activates on pages that opt in (squad_cards).
+   Home page cards remain static polaroids.
+   ================================================ */
+
+/* Opt-in wrapper: add this div around your cards grid
+   on any page where you want the 3D flip effect.      */
+.flip-card-container .flip-card {
+    perspective: 1200px;
+    cursor: pointer;
+}
+
+/* Inner wrapper — the element that flips */
+.flip-card-container .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+/* Flip on hover (desktop) */
+.flip-card-container .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Both faces — stack on top of each other */
+.flip-card-container .flip-card-front,
+.flip-card-container .flip-card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+/* Front sits flat in 3D space */
+.flip-card-container .flip-card-front {
+    transform: rotateY(0deg);
+}
+
+/* Back starts rotated 180 so it's hidden until flipped */
+.flip-card-container .flip-card-back {
+    transform: rotateY(180deg);
+    background: #faf3e0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 12px 16px 12px;
+    box-shadow:
+        2px 3px 10px rgba(0, 0, 0, 0.15),
+        0 0 1px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #d4a574;
+}
+
+/* Back face tape accent (top strip) */
+.flip-card-container .flip-card-back::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1deg);
+    width: 80px;
+    height: 26px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.55) 0%,
+            rgba(255, 255, 200, 0.35) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    border-radius: 1px;
+    z-index: 5;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+}
+
+/* "Hover to flip" hint — only shown inside container */
+.flip-card-container .flip-hint {
+    font-family: 'Indie Flower', cursive;
+    font-size: 0.85rem;
+    color: #b5895a;
+    margin-top: auto;
+    text-align: right;
+    letter-spacing: 0.5px;
+    opacity: 0.75;
+}
+
+/* Mobile: tap to toggle flip instead of hover */
+@media (max-width: 768px) {
+    .flip-card-container .flip-card-inner {
+        height: auto;
+        min-height: 420px;
+    }
+
+    /* Touch-toggle: JS adds .flipped class on tap */
+    .flip-card-container .flip-card.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    /* Disable pure-CSS hover flip on mobile */
+    .flip-card-container .flip-card:hover .flip-card-inner {
+        transform: rotateY(0deg);
+    }
+
+    .flip-card-container .flip-card-front,
+    .flip-card-container .flip-card-back {
+        position: absolute;
+    }
+}
+
+/* ================================================
+   SPIN THE BOTTLE GAME
+   ================================================ */
+
+/* Page wrapper */
+.spin-game-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.game-title {
+    font-family: 'Caveat', cursive;
+    font-size: 2.6rem;
+    color: #2c1810;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.game-subtitle {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.2rem;
+    color: #5a4a3a;
+    margin-bottom: 2rem;
+    opacity: 0.85;
+}
+
+/* ── Roulette Board ── */
+.roulette-board {
+    width: 320px;
+    height: 320px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(244, 228, 188, 0.6) 40%, rgba(212, 165, 116, 0.3) 100%);
+    border: 4px dashed #d4a574;
+    box-shadow:
+        0 0 0 8px rgba(244, 228, 188, 0.5),
+        0 8px 30px rgba(0, 0, 0, 0.15),
+        inset 0 0 40px rgba(181, 137, 90, 0.15);
+}
+
+/* Center-dot target indicator */
+.roulette-board::before {
+    content: '▼';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    color: #c0392b;
+    z-index: 20;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Bottle Image ── */
+#spinning-bottle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    width: 180px;
+    height: auto;
+    transform-origin: center center;
+    /* THIS is the key — smooth deceleration spin */
+    transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.25));
+    z-index: 10;
+}
+
+/* Glow while spinning */
+#spinning-bottle.is-spinning {
+    filter: drop-shadow(0 0 18px rgba(212, 165, 116, 0.6));
+}
+
+/* ── Themed Spin Button ── */
+.spin-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #faf3e0;
+    background: linear-gradient(145deg, #d4a574, #b5895a);
+    border: 3px solid #8b5a2b;
+    border-radius: 50px;
+    padding: 0.9rem 2.8rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow:
+        0 4px 15px rgba(139, 90, 43, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1.8rem;
+}
+
+.spin-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.spin-btn:hover:not(:disabled)::before {
+    left: 100%;
+}
+
+.spin-btn:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+        0 6px 25px rgba(139, 90, 43, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(145deg, #c9965e, #a07548);
+}
+
+.spin-btn:active:not(:disabled) {
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 2px 8px rgba(139, 90, 43, 0.3);
+}
+
+.spin-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    animation: pulse-glow 1s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 15px rgba(139, 90, 43, 0.35);
+    }
+
+    50% {
+        box-shadow: 0 4px 25px rgba(212, 165, 116, 0.6);
+    }
+}
+
+/* ── Result Modal ── */
+.result-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: #faf3e0;
+    border: 3px double #d4a574;
+    border-radius: 12px;
+    padding: 2.5rem 2rem 2rem;
+    min-width: 340px;
+    max-width: 90vw;
+    z-index: 1000;
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.35),
+        0 0 0 6px rgba(244, 228, 188, 0.5);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.result-modal.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Tape accent on top of modal */
+.result-modal::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(1deg);
+    width: 90px;
+    height: 26px;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 220, 0.6) 0%,
+            rgba(255, 255, 200, 0.35) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    border-radius: 1px;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.result-modal #winner-name {
+    font-family: 'Caveat', cursive;
+    font-size: 2.2rem;
+    color: #2c1810;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+}
+
+.result-modal #funny-secret {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.15rem;
+    color: #5a4a3a;
+    line-height: 1.6;
+    padding: 0.8rem 1rem;
+    background: rgba(244, 228, 188, 0.5);
+    border-left: 3px solid #d4a574;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Backdrop overlay */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 24, 16, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ── Spinning state text ── */
+.spin-status {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.1rem;
+    color: #b5895a;
+    margin-top: 1rem;
+    min-height: 1.5em;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.spin-status.visible {
+    opacity: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .roulette-board {
+        width: 260px;
+        height: 260px;
+    }
+
+    #spinning-bottle {
+        width: 140px;
+    }
+
+    .game-title {
+        font-size: 2rem;
+    }
+
+    .spin-btn {
+        font-size: 1.3rem;
+        padding: 0.7rem 2rem;
+    }
+
+    .result-modal {
+        min-width: 280px;
+        padding: 2rem 1.2rem 1.5rem;
+    }
+}
+/* ================================================
+   AWARDS CRUD - Toolbar, Action Buttons, Form Card
+   ================================================ */
+
+/* Add Award toolbar */
+.awards-toolbar {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 10;
+}
+
+/* Per-card edit/delete icon buttons */
+.award-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 15;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.award-card:hover .award-actions { opacity: 1; }
+
+.award-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(250,243,224,0.92);
+    border: 1px solid #d4a574;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, background 0.2s ease;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.12);
+}
+.award-action-btn:hover    { transform: scale(1.15); }
+.award-edit-btn:hover      { background: #d4e8f5; }
+.award-delete-btn:hover    { background: #fde8e8; }
+
+/* Form page wrapper */
+.form-page-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* Vintage notebook form card */
+.scrapbook-form-card {
+    background: #faf3e0;
+    background-image: linear-gradient(rgba(139,109,56,0.06) 1px, transparent 1px);
+    background-size: 100% 30px;
+    border: 1px solid #e0d0b0;
+    border-radius: 3px;
+    padding: 2.5rem 2rem;
+    box-shadow: 3px 4px 14px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: visible;
+}
+.scrapbook-form-card::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 48px;
+    width: 2px;
+    background: rgba(220,80,80,0.18);
+    pointer-events: none;
+}
+
+/* Tape decorations */
+.form-tape {
+    position: absolute;
+    left: 50%;
+    width: 90px; height: 26px;
+    background: linear-gradient(180deg, rgba(255,255,220,0.55) 0%, rgba(255,255,200,0.35) 100%);
+    border: 1px solid rgba(200,180,120,0.3);
+    border-radius: 1px; z-index: 5;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.08);
+}
+.form-tape-top    { top: -13px;    transform: translateX(-50%) rotate(-1deg); }
+.form-tape-bottom { bottom: -13px; transform: translateX(-50%) rotate(1deg); }
+
+.form-heading {
+    font-family: 'Special Elite', monospace;
+    font-size: 1.6rem; color: #2c1810;
+    margin-bottom: 0.3rem; letter-spacing: 1px;
+}
+.form-subheading {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.1rem; color: #5a4a3a; margin-bottom: 1.8rem;
+}
+.form-label {
+    display: block; margin-bottom: 0.4rem;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem; color: #5a4a3a; font-weight: 600;
+}
+.form-hint  { display: block; font-size: 0.9rem; color: #8a7a6a; margin-top: 0.3rem; }
+.form-error { display: block; color: #c0392b; font-size: 0.9rem; margin-top: 0.3rem; }
+.form-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+
+/* Scrapbook button system */
+.btn-scrapbook {
+    font-family: 'Caveat', cursive;
+    font-size: 1.25rem; font-weight: 700;
+    padding: 0.7rem 1.8rem;
+    border-radius: 3px; border: 2px solid transparent;
+    cursor: pointer; text-decoration: none;
+    display: inline-block;
+    transition: all 0.25s ease;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.1);
+}
+.btn-scrapbook.btn-primary  { background: #d4a574; color: #2c1810; border-color: #b5895a; }
+.btn-scrapbook.btn-primary:hover  { background: #c9965e; transform: translateY(-2px) rotate(-1deg); }
+.btn-scrapbook.btn-secondary { background: transparent; color: #5a4a3a; border-color: #b5895a; }
+.btn-scrapbook.btn-secondary:hover { background: rgba(244,228,188,0.7); transform: translateY(-2px); }
+.btn-scrapbook.btn-danger   { background: #c0392b; color: #fff; border-color: #922b21; }
+.btn-scrapbook.btn-danger:hover  { background: #922b21; transform: translateY(-2px); }
+
+/* Delete confirm box */
+.delete-confirm-box {
+    background: rgba(244,228,188,0.7);
+    border: 1px dashed #d4a574;
+    border-radius: 4px;
+    padding: 1.2rem 1.5rem; margin-bottom: 2rem;
+    font-family: 'Patrick Hand', cursive;
+    color: #5a4a3a; text-align: center;
+}
+.delete-target-name {
+    font-family: 'Special Elite', monospace;
+    font-size: 1.3rem; color: #2c1810;
+    letter-spacing: 1px; margin: 0.5rem 0 0.2rem;
+}
+.delete-target-sub { font-size: 1rem; color: #5a4a3a; }
+
+/* Dark theme */
+body.dark-theme .scrapbook-form-card { background: #1a1a2e; border-color: #3d3d6e; }
+body.dark-theme .form-heading { color: #e0d8c8; }
+body.dark-theme .form-label, body.dark-theme .form-subheading { color: #a0a0c0; }
+body.dark-theme .delete-confirm-box { background: rgba(42,42,74,0.7); border-color: #3d3d6e; color: #b0a8c0; }
+
+/* scrapbook-input: handwritten-style field used across forms */
+.scrapbook-input {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    background: rgba(255, 255, 255, 0.45);
+    border: none;
+    border-bottom: 2px solid #d4a574;
+    border-radius: 0;
+    color: #2c1810;
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    transition: border-color 0.3s ease, background 0.3s ease;
+    box-sizing: border-box;
+}
+.scrapbook-input:focus {
+    outline: none;
+    border-bottom-color: #4a6fa5;
+    background: rgba(255, 255, 255, 0.75);
+}
+.scrapbook-input::placeholder { color: #b5a58a; }
+.scrapbook-input option { font-family: sans-serif; }
