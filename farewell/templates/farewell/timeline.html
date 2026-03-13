@@ -23,8 +23,8 @@
             <div class="timeline-content">
                 <!-- Edit / Delete Actions -->
                 <div class="card-actions">
-                    <a href="{% url 'farewell:edit_milestone' event.pk %}" title="Edit this memory">✏️</a>
-                    <a href="{% url 'farewell:delete_milestone' event.pk %}" class="btn-action-delete"
+                    <a href="{% url 'farewell:edit_milestone' pk=event.pk %}" title="Edit this memory">✏️</a>
+                    <a href="{% url 'farewell:delete_milestone' pk=event.pk %}" class="btn-action-delete"
                         title="Remove this memory">🗑️</a>
                 </div>
 

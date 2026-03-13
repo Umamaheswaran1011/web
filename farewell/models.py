@@ -31,6 +31,14 @@ class Friend(models.Model):
         null=True
     )
 
+    roll_number = models.CharField(
+        max_length=20,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="Secret roll number for the Vault"
+    )
+
     # ===== Trading Card Stats =====
     special_power = models.CharField(
         max_length=100,
@@ -227,6 +235,14 @@ class Staff(models.Model):
     famous_quote = models.TextField(
         help_text="Their most iconic dialogue, advice, or signature quote"
     )
+    
+    roll_number = models.CharField(
+        max_length=20,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="Secret roll number for the Vault"
+    )
     photo = models.ImageField(
         upload_to='staff_photos/',
         blank=True,
@@ -242,3 +258,45 @@ class Staff(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.award_title}"
+
+
+class StaffSecretMessage(models.Model):
+    """
+    Model for storing Secret Messages added inside the staff vault.
+    """
+    staff = models.ForeignKey(
+        Staff, 
+        on_delete=models.CASCADE, 
+        related_name='secret_messages'
+    )
+    text = models.TextField(help_text="The confidential message logged")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Staff Secret Message'
+        verbose_name_plural = 'Staff Secret Messages'
+
+    def __str__(self):
+        return f"Secret Message for {self.staff.name}"
+
+
+class SecretIntel(models.Model):
+    """
+    Model for storing Secret Intel added inside the student vault.
+    """
+    friend = models.ForeignKey(
+        Friend, 
+        on_delete=models.CASCADE, 
+        related_name='secret_intels'
+    )
+    text = models.TextField(help_text="The confidential intel logged")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Secret Intel'
+        verbose_name_plural = 'Secret Intels'
+
+    def __str__(self):
+        return f"Secret Intel for {self.friend.name}"

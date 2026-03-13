@@ -33,4 +33,7 @@ urlpatterns = [
     path('staffs/<int:pk>/delete/', views.delete_staff, name='delete_staff'),
     path('scrap/<int:scrap_id>/edit/', views.edit_scrap, name='edit_scrap'),
     path('scrap/<int:scrap_id>/delete/', views.delete_scrap, name='delete_scrap'),
+    path('vault/', views.vault_login, name='vault_login'),
+    path('vault/student/<int:pk>/', views.student_vault, name='student_vault'),
+    path('vault/staff/<int:pk>/', views.staff_vault, name='staff_vault'),
 ]

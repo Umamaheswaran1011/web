@@ -27,7 +27,7 @@
                 <button type="submit" class="btn-scrapbook btn-primary" style="background-color: #e74c3c;">
                     🗑️ Yes, Delete Scrap
                 </button>
-                <a href="{% url 'farewell:friend_detail' scrap.friend.pk %}" class="btn-scrapbook btn-secondary">
+                <a href="{% url 'farewell:friend_detail' pk=scrap.friend.pk %}" class="btn-scrapbook btn-secondary">
                     ✕ Cancel
                 </a>
             </div>

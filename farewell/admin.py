@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage
+from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage, Staff
 
 
 @admin.register(Friend)
@@ -7,14 +7,14 @@ class FriendAdmin(admin.ModelAdmin):
     """
     Admin interface for managing Friend objects.
     """
-    list_display = ('name', 'nickname', 'special_power', 'created_at')
-    search_fields = ('name', 'nickname')
+    list_display = ('name', 'nickname', 'roll_number', 'special_power', 'created_at')
+    search_fields = ('name', 'nickname', 'roll_number')
     list_filter = ('created_at',)
     readonly_fields = ('created_at', 'updated_at')
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('name', 'nickname', 'photo')
+            'fields': ('name', 'nickname', 'photo', 'roll_number')
         }),
         ('Memory', {
             'fields': ('memory_text', 'future_goal')
@@ -77,3 +77,27 @@ class SlamMessageAdmin(admin.ModelAdmin):
     search_fields = ('sender_name', 'message')
     list_filter = ('friend', 'created_at')
     readonly_fields = ('created_at',)
+
+
+@admin.register(Staff)
+class StaffAdmin(admin.ModelAdmin):
+    """
+    Admin interface for managing Staff objects.
+    """
+    list_display = ('name', 'award_title', 'roll_number', 'created_at')
+    search_fields = ('name', 'award_title', 'roll_number')
+    list_filter = ('created_at',)
+    readonly_fields = ('created_at',)
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'photo', 'roll_number')
+        }),
+        ('Award Details', {
+            'fields': ('award_title', 'famous_quote')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )

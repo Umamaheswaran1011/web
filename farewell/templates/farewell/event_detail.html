@@ -14,7 +14,7 @@
 </p>
 <div class="nav-bar">
     <a href="{% url 'farewell:gallery' %}" class="btn-nav">← Back to Gallery</a>
-    <a href="{% url 'farewell:add_photos' event.pk %}" class="btn-add"
+    <a href="{% url 'farewell:add_photos' pk=event.pk %}" class="btn-add"
         style="font-size: 1.2rem; padding: 0.7rem 1.5rem;">📸 Upload Photos</a>
 </div>
 {% endblock %}
@@ -33,7 +33,7 @@
             <!-- Download Button -->
             <a href="{{ photo.image.url }}" download class="photo-download-btn" title="Download Photo">💾</a>
             <!-- Delete Button -->
-            <form action="{% url 'farewell:delete_photo' photo.pk %}" method="post"
+            <form action="{% url 'farewell:delete_photo' pk=photo.pk %}" method="post"
                 onsubmit="return confirm('Delete this photo?');" style="margin:0;">
                 {% csrf_token %}
                 <button type="submit" class="photo-delete-btn" title="Delete Photo">🗑️</button>

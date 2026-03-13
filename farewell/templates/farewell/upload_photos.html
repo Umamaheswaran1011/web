@@ -27,7 +27,7 @@
             <button type="submit" class="btn-submit">📸 {{ button_text|default:"Upload" }}</button>
         </form>
         <div style="text-align: center;">
-            <a href="{% url 'farewell:event_detail' event.pk %}" class="back-link">← Back to {{ event.title }}</a>
+            <a href="{% url 'farewell:event_detail' pk=event.pk %}" class="back-link">← Back to {{ event.title }}</a>
         </div>
     </div>
 </div>

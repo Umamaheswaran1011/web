@@ -41,9 +41,9 @@
                 {% endif %}
 
                 <div class="action-buttons">
-                    <a href="{% url 'farewell:edit_friend' friend.pk %}" class="btn-edit">✏️ Edit Info</a>
+                    <a href="{% url 'farewell:edit_friend' pk=friend.pk %}" class="btn-edit">✏️ Edit Info</a>
 
-                    <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
+                    <form action="{% url 'farewell:delete_friend' pk=friend.pk %}" method="post"
                         onsubmit="return confirm('Are you sure you want to delete this friend?');">
                         {% csrf_token %}
                         <button type="submit" class="btn-delete" title="Delete Friend"
@@ -70,10 +70,10 @@
                         <div class="scrap-time">{{ msg.created_at|date:"M j, Y · g:i A" }}</div>
                         <div class="scrap-actions"
                             style="margin-top: 10px; display: flex; gap: 10px; font-size: 0.9em; justify-content: flex-end;">
-                            <a href="{% url 'farewell:edit_scrap' msg.pk %}"
+                            <a href="{% url 'farewell:edit_scrap' pk=msg.pk %}"
                                 style="text-decoration: none; color: #555; font-weight: bold;" title="Edit Scrap">✏️
                                 Edit</a>
-                            <a href="{% url 'farewell:delete_scrap' msg.pk %}"
+                            <a href="{% url 'farewell:delete_scrap' pk=msg.pk %}"
                                 style="text-decoration: none; color: #c0392b; font-weight: bold;"
                                 title="Delete Scrap">🗑️ Delete</a>
                         </div>

@@ -28,7 +28,7 @@
 
         <!-- Photo — Polaroid Style -->
         <div class="card-photo-wrap">
-            <a href="{% url 'farewell:friend_detail' friend.pk %}" class="card-photo-link">
+            <a href="{% url 'farewell:friend_detail' pk=friend.pk %}" class="card-photo-link">
                 <div class="card-polaroid">
                     {% if friend.photo %}
                     <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" loading="lazy">
@@ -70,16 +70,16 @@
             </div>
             {% endif %}
             {% if not friend.special_power and not friend.weakness and not friend.signature_dialogue %}
-            <div class="stat-empty">Stats not filled yet... <a href="{% url 'farewell:edit_friend' friend.pk %}"
+            <div class="stat-empty">Stats not filled yet... <a href="{% url 'farewell:edit_friend' pk=friend.pk %}"
                     style="color:#8b5a2b;">Fill in ✏️</a></div>
             {% endif %}
         </div>
 
         <!-- Footer Actions -->
         <div class="card-footer-actions">
-            <a href="{% url 'farewell:friend_detail' friend.pk %}" class="card-action-btn card-btn-view">View →</a>
-            <a href="{% url 'farewell:edit_friend' friend.pk %}" class="card-action-btn card-btn-edit">✏️</a>
-            <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
+            <a href="{% url 'farewell:friend_detail' pk=friend.pk %}" class="card-action-btn card-btn-view">View →</a>
+            <a href="{% url 'farewell:edit_friend' pk=friend.pk %}" class="card-action-btn card-btn-edit">✏️</a>
+            <form action="{% url 'farewell:delete_friend' pk=friend.pk %}" method="post"
                 onsubmit="return confirm('Delete {{ friend.name }} from the squad?');" style="margin: 0;">
                 {% csrf_token %}
                 <button type="submit" class="card-action-btn card-btn-delete" title="Delete">🗑️</button>

@@ -16,6 +16,44 @@
     <!-- canvas-confetti for celebrations -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     {% block extra_css %}{% endblock %}
+    <style>
+        /* Mini Music Player Styles */
+        .music-player-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .music-btn {
+            background: transparent;
+            border: 2px dashed #666;
+            color: inherit;
+            font-size: 1.2rem;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .music-btn:hover {
+            background: rgba(0,0,0,0.05);
+            transform: scale(1.05) rotate(-2deg);
+        }
+        .music-btn.playing {
+            animation: record-spin 3s linear infinite;
+        }
+        @keyframes record-spin {
+            100% { transform: rotate(360deg); }
+        }
+        .dark-theme .music-btn {
+            border-color: #aaa;
+            color: #eee;
+        }
+        .dark-theme .music-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+    </style>
 </head>
 
 <body hx-boost="true" hx-select="#main-content" hx-target="#main-content" hx-swap="innerHTML">
@@ -62,7 +100,13 @@
                 <a href="{% url 'farewell:staff_list' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">👨‍🏫
                     Staffs</a>
-                <button class="navbar-music-toggle" id="navbar-music-toggle" title="Toggle Music">🎵</button>
+                <a href="{% url 'farewell:vault_login' %}"
+                    class="nav-link {% if 'vault' in request.resolver_match.url_name %}active{% endif %}">🔐
+                    Vault</a>
+                <div class="music-player-controls">
+                    <button class="music-btn" id="music-play-pause" title="Play/Pause">🎵</button>
+                    <button class="music-btn" id="music-next" title="Next Song">⏭️</button>
+                </div>
                 <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
             </div>
         </div>
@@ -271,7 +315,8 @@
             window.musicPlayerInitialized = true;
             (function () {
                 const audio = document.getElementById('bg-music');
-                const musicBtn = document.getElementById('navbar-music-toggle');
+                const playPauseBtn = document.getElementById('music-play-pause');
+                const nextBtn = document.getElementById('music-next');
 
                 // Playlist — update these paths to your actual static mp3 files
                 const playlist = [
@@ -298,7 +343,7 @@
                     }
                     audio.play().then(function () {
                         isPlaying = true;
-                        if (musicBtn) musicBtn.classList.add('playing');
+                        if (playPauseBtn) playPauseBtn.classList.add('playing');
                     }).catch(function () {
                         // Browser blocked autoplay — user needs to interact first
                     });
@@ -308,7 +353,7 @@
                     if (!audio) return;
                     audio.pause();
                     isPlaying = false;
-                    if (musicBtn) musicBtn.classList.remove('playing');
+                    if (playPauseBtn) playPauseBtn.classList.remove('playing');
                 }
 
                 function togglePlayPause() {
@@ -319,21 +364,23 @@
                     }
                 }
 
-                // Auto-advance to next song when current one ends
-                if (audio) {
-                    audio.addEventListener('ended', function () {
-                        currentIndex = (currentIndex + 1) % playlist.length;
-                        loadTrack(currentIndex);
-                        audio.play().then(function () {
-                            isPlaying = true;
-                            if (musicBtn) musicBtn.classList.add('playing');
-                        }).catch(function () { });
-                    });
+                function playNext() {
+                    currentIndex = (currentIndex + 1) % playlist.length;
+                    loadTrack(currentIndex);
+                    play(); // Automatically start playing the next track
                 }
 
-                // Click handler on the navbar toggle
-                if (musicBtn) {
-                    musicBtn.addEventListener('click', togglePlayPause);
+                // Auto-advance to next song when current one ends
+                if (audio) {
+                    audio.addEventListener('ended', playNext);
+                }
+
+                // Click handlers on the navbar toggles
+                if (playPauseBtn) {
+                    playPauseBtn.addEventListener('click', togglePlayPause);
+                }
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', playNext);
                 }
             })();
         }

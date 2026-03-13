@@ -500,3 +500,85 @@ def custom_page_not_found(request, exception):
     return render(request, 'farewell/404.html', {
         'page_title': 'Page Not Found',
     }, status=404)
+
+
+# ===================== SECRET VAULT VIEWS =====================
+
+def vault_login(request):
+    """
+    Login page for the Secret Vault using roll_number.
+    """
+    if request.method == 'POST':
+        roll_number = request.POST.get('roll_number', '').strip()
+        
+        # Check Friend model first
+        friend = Friend.objects.filter(roll_number=roll_number).first()
+        if friend:
+            return redirect('farewell:student_vault', pk=friend.pk)
+            
+        # Check Staff model
+        staff_member = Staff.objects.filter(roll_number=roll_number).first()
+        if staff_member:
+            return redirect('farewell:staff_vault', pk=staff_member.pk)
+            
+        # If neither found, return error message
+        return render(request, 'farewell/vault_login.html', {
+            'page_title': '🔐 Secret Vault Portal',
+            'error': 'Access Denied: Invalid Roll Number. The vault remains sealed.'
+        })
+        
+    return render(request, 'farewell/vault_login.html', {
+        'page_title': '🔐 Secret Vault Portal',
+    })
+
+def student_vault(request, pk):
+    """
+    Surprise page for students.
+    """
+    friend = get_object_or_404(Friend, pk=pk)
+    
+    if request.method == 'POST':
+        intel_text = request.POST.get('intel', '').strip()
+        if intel_text:
+            from .models import SecretIntel
+            SecretIntel.objects.create(
+                friend=friend,
+                text=intel_text
+            )
+        # Redirect to prevent form resubmission
+        return redirect('farewell:student_vault', pk=pk)
+            
+    # Fetch all Secret Intel related to this friend
+    secret_intels = friend.secret_intels.all()
+    
+    return render(request, 'farewell/student_vault.html', {
+        'page_title': f"{friend.nickname or friend.name}'s Secret Vault",
+        'friend': friend,
+        'secret_intels': secret_intels,
+    })
+
+def staff_vault(request, pk):
+    """
+    Surprise page for staff.
+    """
+    staff_member = get_object_or_404(Staff, pk=pk)
+    
+    if request.method == 'POST':
+        message_text = request.POST.get('message', '').strip()
+        if message_text:
+            from .models import StaffSecretMessage
+            StaffSecretMessage.objects.create(
+                staff=staff_member,
+                text=message_text
+            )
+        # Redirect to prevent form resubmission
+        return redirect('farewell:staff_vault', pk=pk)
+            
+    # Fetch all Secret Messages related to this staff member
+    secret_messages = staff_member.secret_messages.all()
+    
+    return render(request, 'farewell/staff_vault.html', {
+        'page_title': f"Top Secret: {staff_member.name}",
+        'staff_member': staff_member,
+        'secret_messages': secret_messages,
+    })

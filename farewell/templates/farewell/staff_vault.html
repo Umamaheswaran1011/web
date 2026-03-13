@@ -1,0 +1,280 @@
+{% extends 'farewell/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .scroll-container {
+        overflow-x: hidden;
+    }
+
+    .scroll-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        perspective: 1200px;
+        padding: 40px 20px;
+    }
+
+    .vintage-letter {
+        background: #fdf6e3;
+        background-image: url('https://www.transparenttextures.com/patterns/old-wall.png');
+        max-width: 650px;
+        width: 100%;
+        padding: 60px 50px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(139, 69, 19, 0.2);
+        color: #3b2f2f;
+        position: relative;
+
+        /* Folded state */
+        transform-origin: top;
+        transform: rotateX(-90deg);
+        opacity: 0;
+        transition: transform 2.5s cubic-bezier(0.25, 0.8, 0.25, 1) 0.8s, opacity 1s 0.8s;
+        border-bottom: 5px solid #d4c4a8;
+        border-top: 5px solid #d4c4a8;
+    }
+
+    .vault-open .vintage-letter {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+
+    /* Wax Seal */
+    .wax-seal-wrapper {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .vault-open .wax-seal-wrapper {
+        opacity: 0;
+        transform: translateX(-50%) scale(1.5) translateY(-50px);
+        pointer-events: none;
+    }
+
+    .wax-seal {
+        width: 80px;
+        height: 80px;
+        background: #8e1b1b;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #d4af37;
+        font-family: 'Georgia', serif;
+        font-size: 2rem;
+        font-style: italic;
+        border: 4px solid #6b1010;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .wax-seal::before {
+        content: '';
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        background: #8e1b1b;
+        border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%;
+        z-index: -1;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .letter-content {
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem;
+        line-height: 1.7;
+    }
+
+    .letter-header {
+        text-align: center;
+        font-family: 'Cinzel', serif;
+        font-size: 2rem;
+        color: #8b0000;
+        margin-bottom: 40px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #8b0000;
+        padding-bottom: 10px;
+        position: relative;
+    }
+
+    .letter-header::after {
+        content: '❖';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fdf6e3;
+        padding: 0 10px;
+        color: #8b0000;
+        font-size: 1.5rem;
+    }
+
+    .highlight-name {
+        font-family: 'Special Elite', monospace;
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #111;
+        background: rgba(212, 175, 55, 0.2);
+        padding: 2px 8px;
+    }
+
+    .highlight-quote {
+        display: block;
+        text-align: center;
+        font-size: 2.2rem;
+        color: #5a3a22;
+        margin: 30px 0;
+        position: relative;
+    }
+
+    .signature {
+        margin-top: 50px;
+        text-align: right;
+        font-family: 'Herr Von Muellerhoff', cursive;
+        font-size: 3rem;
+        color: #2c1e16;
+        transform: rotate(-5deg);
+    }
+
+    /* Secret Messages Styles */
+    .secret-messages-section {
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px dashed #d4c4a8;
+    }
+
+    .secret-message-note {
+        font-family: 'Caveat', cursive;
+        font-size: 1.6rem;
+        color: #4a362a;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px 15px;
+        border-radius: 5px;
+        border-left: 3px solid #8b0000;
+    }
+
+    .secret-message-date {
+        font-size: 1.1rem;
+        color: #7a5c4a;
+        display: block;
+        text-align: right;
+        font-family: 'Special Elite', monospace;
+    }
+
+    .secret-form-container {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .secret-textarea {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 2px dashed #8b0000;
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem;
+        color: #2c1e16;
+        padding: 10px;
+        resize: vertical;
+        outline: none;
+        min-height: 80px;
+    }
+    
+    .secret-textarea::placeholder {
+        color: rgba(139, 0, 0, 0.4);
+    }
+
+    .submit-note-btn {
+        background: transparent;
+        border: 2px solid #8b0000;
+        color: #8b0000;
+        font-family: 'Cinzel', serif;
+        font-size: 1.2rem;
+        padding: 8px 20px;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: all 0.3s;
+        border-radius: 3px;
+        text-transform: uppercase;
+    }
+
+    .submit-note-btn:hover {
+        background: #8b0000;
+        color: #fdf6e3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="scroll-container">
+    <div class="wax-seal-wrapper">
+        <div class="wax-seal">Honos</div>
+    </div>
+
+    <div class="vintage-letter">
+        <div class="letter-header">
+            A Token of Infinite Gratitude
+        </div>
+
+        <div class="letter-content">
+            <p>Dearest <span class="highlight-name">{{ staff_member.name }}</span>,</p>
+
+            <p>இந்த ரகசிய பெட்டகம் எதையோ மறைப்பதற்காக அல்ல, உங்கள் மீது நாங்கள் வைத்துள்ள அளவற்ற அன்பையும் மரியாதையையும் என்றென்றும் பத்திரப்படுத்தவே! எங்கள் கல்லூரிப் பயணம் முடிந்து நாங்கள் பல தூரம் சென்றாலும், நீங்கள் எங்களுக்குக் கொடுத்த வழிகாட்டுதலும், அந்த அன்பான கண்டிப்பும் எங்கள் வாழ்நாள் முழுவதும் நினைவிலிருக்கும். The Unbreakable Squad-ன் நெஞ்சார்ந்த நன்றிகள்!</p>
+
+            <p>We will never forget your legendary title as the venerable <strong>"{{ staff_member.award_title }}"</strong>.</p>
+
+            <p>And those profound words you always shared...</p>
+
+            <span class="highlight-quote">"{{ staff_member.famous_quote }}"</span>
+
+            <div class="signature">
+                Ever yours,<br>
+                <span style="font-family: 'Caveat', cursive; font-size: 1.5rem; transform: rotate(0);">The Unbreakable Squad '26</span>
+            </div>
+
+            <!-- Secret Messages Display Section -->
+            <div class="secret-messages-section">
+                {% if secret_messages %}
+                    {% for msg in secret_messages %}
+                    <div class="secret-message-note">
+                        P.S. {{ msg.text }}
+                        <span class="secret-message-date">- Added on {{ msg.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Secret Messages Form -->
+            <div class="secret-form-container">
+                <form method="POST">
+                    {% csrf_token %}
+                    <textarea name="message" class="secret-textarea" placeholder="Write a secret message..." required></textarea>
+                    <button type="submit" class="submit-note-btn">Add Note 🖋️</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.addEventListener('load', function () {
+        setTimeout(function () {
+            document.body.classList.add('vault-open');
+            if (typeof confetti === 'function') {
+                setTimeout(function () {
+                    confetti({ particleCount: 100, spread: 60, origin: { y: 0.2 } });
+                }, 3000);
+            }
+        }, 800);
+    });
+</script>
+{% endblock %}

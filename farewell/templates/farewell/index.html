@@ -54,7 +54,7 @@
         <!-- Static polaroid card — no flip effect on home page -->
         <div class="card">
             <div class="card-image">
-                <a href="{% url 'farewell:friend_detail' friend.pk %}">
+                <a href="{% url 'farewell:friend_detail' pk=friend.pk %}">
                     {% if friend.photo %}
                     <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" loading="lazy">
                     {% else %}
@@ -75,8 +75,8 @@
                     {% endif %}
                 </div>
                 <div style="display:flex; gap:0.8rem; margin-top:auto; flex-wrap:wrap; align-items:center;">
-                    <a href="{% url 'farewell:friend_detail' friend.pk %}" class="btn-view-album">View Profile</a>
-                    <form action="{% url 'farewell:delete_friend' friend.pk %}" method="post"
+                    <a href="{% url 'farewell:friend_detail' pk=friend.pk %}" class="btn-view-album">View Profile</a>
+                    <form action="{% url 'farewell:delete_friend' pk=friend.pk %}" method="post"
                         onsubmit="return confirm('Delete {{ friend.name }} from the squad?');" style="margin:0;">
                         {% csrf_token %}
                         <button type="submit" class="btn-delete" title="Delete Friend">🗑️</button>

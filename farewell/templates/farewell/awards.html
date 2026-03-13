@@ -22,9 +22,9 @@
 
         {# ── CRUD action buttons (top-right corner) ── #}
         <div class="award-actions">
-            <a href="{% url 'farewell:edit_award' award.pk %}" class="award-action-btn award-edit-btn"
+            <a href="{% url 'farewell:edit_award' pk=award.pk %}" class="award-action-btn award-edit-btn"
                 title="Edit award">✏️</a>
-            <a href="{% url 'farewell:delete_award' award.pk %}" class="award-action-btn award-delete-btn"
+            <a href="{% url 'farewell:delete_award' pk=award.pk %}" class="award-action-btn award-delete-btn"
                 title="Delete award">🗑️</a>
         </div>
 
