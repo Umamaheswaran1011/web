@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<style id="student-vault-css" hx-swap-oob="true">
+<style>
     .dossier-wrapper {
         position: relative;
         min-height: 100vh;
@@ -279,14 +279,11 @@
 
 {% block content %}
 <div class="dossier-wrapper">
-    <!-- Back of the folder (stays at the bottom) -->
     <div class="manila-folder-back"></div>
 
-    <!-- The actual classified document -->
     <div class="classified-document">
         <div class="paperclip"></div>
 
-        <!-- Cleanly positioned stamp without overlapping header text -->
         <div class="confidential-stamp">CONFIDENTIAL</div>
 
         <div class="dossier-header">
@@ -358,14 +355,15 @@
         </div>
     </div>
 
-    <!-- Front of the folder (stays at the bottom, covers bottom part of paper) -->
     <div class="manila-folder-front"></div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
 <script>
-    window.addEventListener('load', function () {
+    (function() {
+        // பழைய vault-open கிளாஸ் இருந்தா அதை க்ளியர் பண்ணிடுறோம்
+        document.body.classList.remove('vault-open');
+        
+        // HTMX லோட் ஆனதும் ஆட்டோமேட்டிக்கா அனிமேஷன் ஸ்டார்ட் ஆகிடும்
         setTimeout(function () {
             document.body.classList.add('vault-open');
             if (typeof confetti === 'function') {
@@ -374,6 +372,6 @@
                 }, 2000);
             }
         }, 500);
-    });
+    })();
 </script>
 {% endblock %}
