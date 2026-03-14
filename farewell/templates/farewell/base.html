@@ -11,11 +11,9 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}?v=13.0">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Special+Elite&family=Indie+Flower&family=Reenie+Beanie&display=swap">
-    <!-- ===== HTMX for seamless page transitions ===== -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <!-- canvas-confetti for celebrations -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    {% block extra_css %}{% endblock %}
+    
     <style>
         /* Mini Music Player Styles */
         .music-player-controls {
@@ -57,10 +55,8 @@
 </head>
 
 <body hx-boost="true" hx-select="#main-content" hx-target="#main-content" hx-swap="innerHTML">
-    <!-- ===== Toast Notification Container ===== -->
     <div id="toast-container"></div>
 
-    <!-- ===== Cinematic Preloader ===== -->
     <div class="preloader" id="preloader">
         <div class="preloader-inner">
             <p class="typewriter-text" id="typewriterText"></p>
@@ -70,7 +66,6 @@
         </div>
     </div>
 
-    <!-- ===== Persistent Navigation ===== -->
     <nav class="scrapbook-nav" id="mainNav">
         <div class="nav-inner">
             <a href="{% url 'farewell:index' %}" class="nav-brand">♾️The Unbreakable Squad</a>
@@ -81,28 +76,21 @@
                 <a href="{% url 'farewell:index' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">🏠 Home</a>
                 <a href="{% url 'farewell:gallery' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'gallery' or request.resolver_match.url_name == 'event_detail' %}active{% endif %}">📸
-                    Gallery</a>
+                    class="nav-link {% if request.resolver_match.url_name == 'gallery' or request.resolver_match.url_name == 'event_detail' %}active{% endif %}">📸 Gallery</a>
                 <a href="{% url 'farewell:timeline' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'timeline' %}active{% endif %}">🎓
-                    Timeline</a>
+                    class="nav-link {% if request.resolver_match.url_name == 'timeline' %}active{% endif %}">🎓 Timeline</a>
                 <a href="{% url 'farewell:awards' %}"
                     class="nav-link {% if request.resolver_match.url_name == 'awards' %}active{% endif %}">🏆 Awards</a>
                 <a href="{% url 'farewell:squad_cards' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'squad_cards' %}active{% endif %}">🃏
-                    Cards</a>
+                    class="nav-link {% if request.resolver_match.url_name == 'squad_cards' %}active{% endif %}">🃏 Cards</a>
                 <a href="{% url 'farewell:newspaper' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'newspaper' %}active{% endif %}">📰
-                    Times</a>
+                    class="nav-link {% if request.resolver_match.url_name == 'newspaper' %}active{% endif %}">📰 Times</a>
                 <a href="{% url 'farewell:spin_bottle' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'spin_bottle' %}active{% endif %}">🍾
-                    Spin</a>
+                    class="nav-link {% if request.resolver_match.url_name == 'spin_bottle' %}active{% endif %}">🍾 Spin</a>
                 <a href="{% url 'farewell:staff_list' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">👨‍🏫
-                    Staffs</a>
+                    class="nav-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">👨‍🏫 Staffs</a>
                 <a href="{% url 'farewell:vault_login' %}"
-                    class="nav-link {% if 'vault' in request.resolver_match.url_name %}active{% endif %}">🔐
-                    Vault</a>
+                    class="nav-link {% if 'vault' in request.resolver_match.url_name %}active{% endif %}">🔐 Vault</a>
                 <div class="music-player-controls">
                     <button class="music-btn" id="music-play-pause" title="Play/Pause">🎵</button>
                     <button class="music-btn" id="music-next" title="Next Song">⏭️</button>
@@ -112,9 +100,9 @@
         </div>
     </nav>
 
-    <!-- ===== Main Content Area (HTMX swaps only this) ===== -->
     <div id="main-content">
-        <!-- ===== Header ===== -->
+        {% block extra_css %}{% endblock %}
+
         <header>
             <h1 class="animate-on-scroll fade-in">{{ page_title }}</h1>
             {% block header_extra %}{% endblock %}
@@ -122,39 +110,31 @@
 
         {% block content %}{% endblock %}
 
-        <!-- ===== Footer ===== -->
         <footer>
             <p>&copy; 2026 The Unbreakable Squad | Forever in Our Hearts ❤️</p>
         </footer>
     </div>
 
-    <!-- ===== Audio element — outside #main-content so HTMX won't touch it ===== -->
     <audio id="bg-music"></audio>
 
     {% block extra_js %}{% endblock %}
 
-    <!-- ===== Global JS: Splash, Nav, Animations, Theme, Toast ===== -->
     <script>
-        // === Cinematic Preloader — Two-Text Sequence (runs once per session) ===
+        // === Cinematic Preloader ===
         try {
             (function () {
                 var preloader = document.getElementById('preloader');
                 var el = document.getElementById('typewriterText');
 
-                // ── Guard: skip entirely if already played this session ──
                 if (sessionStorage.getItem('introPlayed')) {
                     if (preloader) { preloader.style.display = 'none'; preloader.remove(); }
                     document.body.style.overflow = '';
                     return;
                 }
 
-                // ── If preloader element is missing for any reason, bail cleanly ──
                 if (!preloader) return;
-
-                // Lock body scroll while preloader is visible
                 document.body.style.overflow = 'hidden';
 
-                // ── Typewriter helper ──
                 function typeText(message, callback) {
                     if (!el) { if (callback) callback(); return; }
                     el.textContent = '';
@@ -170,8 +150,7 @@
                     next();
                 }
 
-                // ── Text fade helpers ──
-                if (el) el.style.transition = 'opacity 0.5s ease'; // null-guarded
+                if (el) el.style.transition = 'opacity 0.5s ease';
 
                 function fadeOut(elem, done) {
                     if (!elem) { done(); return; }
@@ -183,36 +162,31 @@
                     elem.style.opacity = '1';
                 }
 
-                // ── STEP 1: Type first message ──
                 fadeIn(el);
-                typeText('Welcome to The Unbreakable Squad...');
-
-                // ── STEP 2: After 2.5 s, fade text out, swap, fade back in ──
-                setTimeout(function () {
-                    fadeOut(el, function () {
-                        typeText('நமது கல்லூரியின் காதல் நினைவுகள்...', function () {
+                typeText('Welcome to The Unbreakable Squad...', function () {
+                    setTimeout(function () {
+                        fadeOut(el, function () {
+                            typeText('நமது கல்லூரியின் காதல் நினைவுகள்...', function () {
+                                fadeIn(el);
+                            });
                             fadeIn(el);
                         });
-                        fadeIn(el);
-                    });
 
-                    // ── STEP 3: After another 3 s, fade out the full backdrop ──
-                    setTimeout(function () {
-                        if (preloader) {
-                            preloader.classList.add('preloader-hide');
-                            setTimeout(function () {
-                                preloader.remove();
-                                document.body.style.overflow = '';
-                                sessionStorage.setItem('introPlayed', 'true');
-                            }, 900);
-                        }
-                    }, 3000);
-
-                }, 2500);
+                        setTimeout(function () {
+                            if (preloader) {
+                                preloader.classList.add('preloader-hide');
+                                setTimeout(function () {
+                                    preloader.remove();
+                                    document.body.style.overflow = '';
+                                    sessionStorage.setItem('introPlayed', 'true');
+                                }, 900);
+                            }
+                        }, 3000);
+                    }, 2500);
+                });
             })();
         } catch (e) {
-            // Preloader error must never block the rest of the page scripts
-            console.warn('Preloader error (non-fatal):', e);
+            console.warn('Preloader error:', e);
             var _p = document.getElementById('preloader');
             if (_p) { _p.style.display = 'none'; _p.remove(); }
             document.body.style.overflow = '';
@@ -242,7 +216,6 @@
             elements.forEach(function (el) { observer.observe(el); });
         }
         document.addEventListener('DOMContentLoaded', initScrollAnimations);
-        // Re-init scroll animations after HTMX swaps new content in
         document.addEventListener('htmx:afterSwap', initScrollAnimations);
 
         // === Dark/Light Theme Toggle ===
@@ -252,7 +225,6 @@
             if (themeToggle) themeToggle.textContent = dark ? '☀️' : '🌙';
             localStorage.setItem('theme', dark ? 'dark' : 'light');
         }
-        // Load saved preference
         applyTheme(localStorage.getItem('theme') === 'dark');
         if (themeToggle) {
             themeToggle.addEventListener('click', function () {
@@ -276,40 +248,35 @@
             }, 3000);
         }
 
-        // Show toast from URL params (after redirect)
         (function () {
             const params = new URLSearchParams(window.location.search);
             const msg = params.get('msg');
             if (msg) {
                 showToast(decodeURIComponent(msg));
-                // Clean URL
                 const url = new URL(window.location);
                 url.searchParams.delete('msg');
                 window.history.replaceState({}, '', url);
             }
         })();
+
         // === Dynamic Navbar Active State for HTMX ===
         function updateNavActiveState() {
             var currentPath = window.location.pathname;
             var navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(function (link) {
                 link.classList.remove('active');
-                // Compare the link's pathname with the current URL pathname
                 var linkPath = new URL(link.href, window.location.origin).pathname;
                 if (currentPath === linkPath) {
                     link.classList.add('active');
                 }
             });
         }
-        // Update on HTMX swap completion
         document.addEventListener('htmx:afterSettle', updateNavActiveState);
-        // Also handle browser back/forward navigation
         window.addEventListener('popstate', function () {
             setTimeout(updateNavActiveState, 50);
         });
     </script>
 
-    <!-- ===== Navbar Music Player JS ===== -->
     <script>
         if (!window.musicPlayerInitialized) {
             window.musicPlayerInitialized = true;
@@ -318,7 +285,6 @@
                 const playPauseBtn = document.getElementById('music-play-pause');
                 const nextBtn = document.getElementById('music-next');
 
-                // Playlist — update these paths to your actual static mp3 files
                 const playlist = [
                     '/static/music/song1.mp3',
                     '/static/music/song2.mp3',
@@ -339,16 +305,13 @@
 
                 function play() {
                     if (!audio) return;
-                    // If no src yet, load the current track
                     if (!audio.src || audio.src === window.location.href) {
                         loadTrack(currentIndex);
                     }
                     audio.play().then(function () {
                         isPlaying = true;
                         if (playPauseBtn) playPauseBtn.classList.add('playing');
-                    }).catch(function () {
-                        // Browser blocked autoplay — user needs to interact first
-                    });
+                    }).catch(function () {});
                 }
 
                 function pause() {
@@ -369,15 +332,13 @@
                 function playNext() {
                     currentIndex = (currentIndex + 1) % playlist.length;
                     loadTrack(currentIndex);
-                    play(); // Automatically start playing the next track
+                    play(); 
                 }
 
-                // Auto-advance to next song when current one ends
                 if (audio) {
                     audio.addEventListener('ended', playNext);
                 }
 
-                // Click handlers on the navbar toggles
                 if (playPauseBtn) {
                     playPauseBtn.addEventListener('click', togglePlayPause);
                 }

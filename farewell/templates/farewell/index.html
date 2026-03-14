@@ -7,7 +7,6 @@
         View Squad Cards</a>
 </div>
 
-<!-- Countdown Timer -->
 <div class="countdown-container animate-on-scroll fade-in" id="countdownContainer">
     <div class="countdown-label">Farewell Day Countdown</div>
     <div class="countdown-timer" id="countdownTimer">
@@ -33,13 +32,11 @@
     </div>
 </div>
 
-<!-- Search Bar -->
 <div class="search-container animate-on-scroll fade-in">
     <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search friends by name or nickname..."
         autocomplete="off">
 </div>
 
-<!-- Random Memory Button -->
 <div style="margin-top: 1rem;">
     <button class="btn-random" id="randomMemoryBtn" onclick="randomMemory()">🎲 Random Memory</button>
 </div>
@@ -51,7 +48,6 @@
     <div class="flip-card animate-on-scroll slide-up" data-name="{{ friend.name|lower }}"
         data-nickname="{{ friend.nickname|lower }}" style="animation-delay: {{ forloop.counter0 }}00ms;">
 
-        <!-- Static polaroid card — no flip effect on home page -->
         <div class="card">
             <div class="card-image">
                 <a href="{% url 'farewell:friend_detail' pk=friend.pk %}">
@@ -85,8 +81,7 @@
             </div>
         </div>
 
-    </div><!-- /.flip-card (kept for JS search/highlight compatibility) -->
-    {% empty %}
+    </div>{% empty %}
     <div class="no-friends">
         <p>No friends added yet. Grab a pen and start adding! ✏️</p>
     </div>
@@ -97,90 +92,114 @@
 
 {% block extra_js %}
 <script>
-    // === Countdown Timer ===
-    const farewellDate = new Date(2026, 3, 15, 10, 0, 0);
+    (function() {
+        // === Countdown Timer ===
+        // ஏப்ரல் 15, 2026 - காலை 10 மணிக்கு ஃபேர்வெல்! (உங்களுக்கு வேணும்னா டைமை மாத்திக்கோங்க)
 
-    function updateCountdown() {
-        const now = new Date();
-        const diff = farewellDate - now;
-        if (diff <= 0) {
-            document.getElementById('countdownContainer').innerHTML =
-                '<div class="countdown-label" style="font-size:1.5rem;">🎉 Farewell Day is Here! 🎉</div>';
-            return;
+        const farewellDate = new Date(2026, 3, 11, 10, 0, 0);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = farewellDate - now;
+            
+            const cdContainer = document.getElementById('countdownContainer');
+            if (!cdContainer) return; // HTMX-ஆல பேஜ் மாறும்போது எரர் வராம தடுக்க
+
+            if (diff <= 0) {
+                cdContainer.innerHTML =
+                    '<div class="countdown-label" style="font-size:1.5rem;">🎉 Farewell Day is Here! 🎉</div>';
+                return;
+            }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            const cdDays = document.getElementById('cdDays');
+            const cdHours = document.getElementById('cdHours');
+            const cdMinutes = document.getElementById('cdMinutes');
+            const cdSeconds = document.getElementById('cdSeconds');
+
+            if (cdDays) cdDays.textContent = String(days).padStart(2, '0');
+            if (cdHours) cdHours.textContent = String(hours).padStart(2, '0');
+            if (cdMinutes) cdMinutes.textContent = String(minutes).padStart(2, '0');
+            if (cdSeconds) cdSeconds.textContent = String(seconds).padStart(2, '0');
         }
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
-        document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
-        document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
-    }
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // பழைய Interval ஓடிட்டு இருந்தா அதை க்ளியர் பண்ணிட்டு புதுசா ஒன்னு ஆரம்பிக்கிறோம்
+        if(window.countdownInterval) clearInterval(window.countdownInterval);
+        window.countdownInterval = setInterval(updateCountdown, 1000);
 
-    // === Search / Filter ===
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            const query = this.value.toLowerCase().trim();
+        // === Search / Filter ===
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            // Remove old listener to avoid duplicates with HTMX
+            const newSearchInput = searchInput.cloneNode(true);
+            searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+            
+            newSearchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase().trim();
+                const cards = document.querySelectorAll('#friendsGrid .flip-card');
+                cards.forEach(function (card) {
+                    const name = card.getAttribute('data-name') || '';
+                    const nick = card.getAttribute('data-nickname') || '';
+                    card.style.display = (name.includes(query) || nick.includes(query)) ? '' : 'none';
+                });
+            });
+        }
+
+        // === Confetti burst helper ===
+        window.squadConfetti = function() {
+            if (typeof confetti === 'undefined') return;
+            var end = Date.now() + 1800;
+            var colors = ['#d4a574', '#4a6fa5', '#faf3e0', '#2c1810', '#f4e4bc'];
+            (function burst() {
+                confetti({
+                    particleCount: 6,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 6,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors
+                });
+                if (Date.now() < end) requestAnimationFrame(burst);
+            }());
+        }
+
+        // === Random Memory ===
+        window.randomMemory = function() {
             const cards = document.querySelectorAll('#friendsGrid .flip-card');
-            cards.forEach(function (card) {
-                const name = card.getAttribute('data-name') || '';
-                const nick = card.getAttribute('data-nickname') || '';
-                card.style.display = (name.includes(query) || nick.includes(query)) ? '' : 'none';
-            });
-        });
-    }
+            const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
+            if (visibleCards.length === 0) return;
+            cards.forEach(c => c.classList.remove('card-highlight'));
+            const random = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+            random.classList.add('card-highlight');
+            random.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => random.classList.remove('card-highlight'), 3000);
+            // 🎉 Confetti!
+            if(typeof window.squadConfetti === 'function') window.squadConfetti();
+        }
 
-    // === Confetti burst helper ===
-    function squadConfetti() {
-        if (typeof confetti === 'undefined') return;
-        var end = Date.now() + 1800;
-        var colors = ['#d4a574', '#4a6fa5', '#faf3e0', '#2c1810', '#f4e4bc'];
-        (function burst() {
-            confetti({
-                particleCount: 6,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors
+        // === Mobile: tap to flip cards ===
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('.flip-card').forEach(function (card) {
+                // Remove old listeners
+                const newCard = card.cloneNode(true);
+                card.parentNode.replaceChild(newCard, card);
+                
+                newCard.addEventListener('click', function (e) {
+                    if (e.target.closest('a, button, form')) return;
+                    newCard.classList.toggle('flipped');
+                });
             });
-            confetti({
-                particleCount: 6,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors
-            });
-            if (Date.now() < end) requestAnimationFrame(burst);
-        }());
-    }
-
-    // === Random Memory ===
-    function randomMemory() {
-        const cards = document.querySelectorAll('#friendsGrid .flip-card');
-        const visibleCards = Array.from(cards).filter(c => c.style.display !== 'none');
-        if (visibleCards.length === 0) return;
-        cards.forEach(c => c.classList.remove('card-highlight'));
-        const random = visibleCards[Math.floor(Math.random() * visibleCards.length)];
-        random.classList.add('card-highlight');
-        random.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => random.classList.remove('card-highlight'), 3000);
-        // 🎉 Confetti!
-        squadConfetti();
-    }
-
-    // === Mobile: tap to flip cards ===
-    if ('ontouchstart' in window) {
-        document.querySelectorAll('.flip-card').forEach(function (card) {
-            card.addEventListener('click', function (e) {
-                if (e.target.closest('a, button, form')) return;
-                card.classList.toggle('flipped');
-            });
-        });
-    }
-
+        }
+    })();
 </script>
 {% endblock %}

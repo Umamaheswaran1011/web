@@ -70,10 +70,10 @@
                         <div class="scrap-time">{{ msg.created_at|date:"M j, Y · g:i A" }}</div>
                         <div class="scrap-actions"
                             style="margin-top: 10px; display: flex; gap: 10px; font-size: 0.9em; justify-content: flex-end;">
-                            <a href="{% url 'farewell:edit_scrap' pk=msg.pk %}"
+                            <a href="{% url 'farewell:edit_scrap' scrap_id=msg.pk %}"
                                 style="text-decoration: none; color: #555; font-weight: bold;" title="Edit Scrap">✏️
                                 Edit</a>
-                            <a href="{% url 'farewell:delete_scrap' pk=msg.pk %}"
+                            <a href="{% url 'farewell:delete_scrap' scrap_id=msg.pk %}"
                                 style="text-decoration: none; color: #c0392b; font-weight: bold;"
                                 title="Delete Scrap">🗑️ Delete</a>
                         </div>

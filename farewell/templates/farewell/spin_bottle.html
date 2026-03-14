@@ -15,10 +15,8 @@
         <p id="spin-status" class="spin-status"></p>
     </div>
 
-    <!-- Backdrop overlay -->
     <div id="modal-backdrop" class="modal-backdrop"></div>
 
-    <!-- Result Modal -->
     <div id="result-modal" class="result-modal">
         <h3 id="winner-name"></h3>
         <p id="funny-secret"></p>
@@ -28,97 +26,93 @@
     </div>
 </div>
 
-{% endblock %}
-
-{% block extra_js %}
 <script>
-    // Initialise the spin game — called on both hard refresh and HTMX navigation
-    function initSpinGame() {
-        var spinBtn = document.getElementById('spin-btn');
-        var bottle = document.getElementById('spinning-bottle');
-        var modal = document.getElementById('result-modal');
-        var backdrop = document.getElementById('modal-backdrop');
-        var winnerName = document.getElementById('winner-name');
-        var funnySecret = document.getElementById('funny-secret');
-        var closeModalBtn = document.getElementById('close-modal-btn');
-        var spinStatus = document.getElementById('spin-status');
+    (function() {
+        function initSpinGame() {
+            var spinBtn = document.getElementById('spin-btn');
+            var bottle = document.getElementById('spinning-bottle');
+            var modal = document.getElementById('result-modal');
+            var backdrop = document.getElementById('modal-backdrop');
+            var winnerName = document.getElementById('winner-name');
+            var funnySecret = document.getElementById('funny-secret');
+            var closeModalBtn = document.getElementById('close-modal-btn');
+            var spinStatus = document.getElementById('spin-status');
 
-        // Only run if the spin page elements are present
-        if (!spinBtn || !bottle) return;
-        // Prevent double-binding if already initialised
-        if (spinBtn.dataset.spinInit) return;
-        spinBtn.dataset.spinInit = 'true';
+            // Only run if the spin page elements are present
+            if (!spinBtn || !bottle) return;
+            // Prevent double-binding if already initialised
+            if (spinBtn.dataset.spinInit) return;
+            spinBtn.dataset.spinInit = 'true';
 
-var squad = [
-    { name: "Uma Maheswaran", secret: "எப்பவும் கூலா இருப்பான், ஃபன் பண்றதுல இவனை அடிச்சுக்க ஆளே இல்லை! 😎" },
-    { name: "Veera Pandi", secret: "நம்ம கிளாஸ் நடமாடும் என்சைக்ளோபீடியா! இவனுக்குத் தெரியாத விஷயமே இல்லை. 📚" },
-    { name: "Sakthi Kumar", secret: "செம ஹெல்ப்பிங் டெண்டன்சி, ஆனா எப்ப பாத்தாலும் ஃபன் பண்ணிட்டு தூங்கிட்டே இருப்பான்! 😴" },
-    { name: "Renjen", secret: "எக்ஸாம் ஹால்ல பிட் அடிக்கிறதுல இவனை அடிச்சுக்க ஆளே இல்லை! செம கில்லாடி. 📄🤫" },
-    { name: "Marisamy", secret: "கேங் ட்ரிப் பிளான் பண்ணா, அதை முதல் ஆளா கேன்சல் பண்றது இவன்தான்! (The Official Trip Canceller) 🚫" },
-    { name: "Muniyandi", secret: "நம்ம கிளாஸ் சிங்கர்! வருஷத்துல 12 மாசமும் சாமி மாலை போட்டுட்டே சுத்துவான். 🎙️📿" },
-    { name: "Keerthana Sree", secret: "படிப்பு, ஃபன், கேங்னு எல்லாத்துலயும் பட்டைய கிளப்புற ஆல்ரவுண்டர்! 🏏" },
-    { name: "Thabithal", secret: "இந்த பிங்க் பாட்டிலோட ஓனர்! எல்லாரோட தாகத்தையும் தீர்த்த புண்ணியவதி. 🍾" },
-    { name: "Manjula", secret: "பாக்க சைலன்ட், ஆனா செம ஃபன்! அதுமட்டுமில்லாம நம்ம கிளாஸ் டாப்பரும் இவங்கதான். 🏆" },
-    { name: "Malar", secret: "பாக்க இவளே ஒரு பேபி மாதிரிதான் இருப்பா, ஆனா இவளுக்கே ஒரு பேபி இருக்கு! கியூட் மாம். 👶❤️" },
-    { name: "Ilamathi", secret: "கிளாஸ்லயே ரொம்ப சைலன்ட்டான, அமைதியான ஹோம்லி கேர்ள். 🤫" },
-    { name: "Rohit Raja (VIP)", secret: "இவன் 1st PG பையன், ஆனா எப்பவும் நம்ம கிளாஸ்லயே தான் டேரா போட்டுருப்பான்! நம்ம VIP. 👑" }
- ];
+            var squad = [
+                { name: "Uma Maheswaran", secret: "எப்பவும் கூலா இருப்பான், ஃபன் பண்றதுல இவனை அடிச்சுக்க ஆளே இல்லை! 😎" },
+                { name: "Veera Pandi", secret: "நம்ம கிளாஸ் நடமாடும் என்சைக்ளோபீடியா! இவனுக்குத் தெரியாத விஷயமே இல்லை. 📚" },
+                { name: "Sakthi Kumar", secret: "செம ஹெல்ப்பிங் டெண்டன்சி, ஆனா எப்ப பாத்தாலும் ஃபன் பண்ணிட்டு தூங்கிட்டே இருப்பான்! 😴" },
+                { name: "Renjen", secret: "எக்ஸாம் ஹால்ல பிட் அடிக்கிறதுல இவனை அடிச்சுக்க ஆளே இல்லை! செம கில்லாடி. 📄🤫" },
+                { name: "Marisamy", secret: "கேங் ட்ரிப் பிளான் பண்ணா, அதை முதல் ஆளா கேன்சல் பண்றது இவன்தான்! (The Official Trip Canceller) 🚫" },
+                { name: "Muniyandi", secret: "நம்ம கிளாஸ் சிங்கர்! வருஷத்துல 12 மாசமும் சாமி மாலை போட்டுட்டே சுத்துவான். 🎙️📿" },
+                { name: "Keerthana Sree", secret: "படிப்பு, ஃபன், கேங்னு எல்லாத்துலயும் பட்டைய கிளப்புற ஆல்ரவுண்டர்! 🏏" },
+                { name: "Thabithal", secret: "இந்த பிங்க் பாட்டிலோட ஓனர்! எல்லாரோட தாகத்தையும் தீர்த்த புண்ணியவதி. 🍾" },
+                { name: "Manjula", secret: "பாக்க சைலன்ட், ஆனா செம ஃபன்! அதுமட்டுமில்லாம நம்ம கிளாஸ் டாப்பரும் இவங்கதான். 🏆" },
+                { name: "Malar", secret: "பாக்க இவளே ஒரு பேபி மாதிரிதான் இருப்பா, ஆனா இவளுக்கே ஒரு பேபி இருக்கு! கியூட் மாம். 👶❤️" },
+                { name: "Ilamathi", secret: "கிளாஸ்லயே ரொம்ப சைலன்ட்டான, அமைதியான ஹோம்லி கேர்ள். 🤫" },
+                { name: "Rohit Raja (VIP)", secret: "இவன் 1st PG பையன், ஆனா எப்பவும் நம்ம கிளாஸ்லயே தான் டேரா போட்டுருப்பான்! நம்ம VIP. 👑" }
+            ];
 
-        var currentDegree = 0;
+            var currentDegree = 0;
 
-        /* ── Spin Logic ── */
-        spinBtn.addEventListener('click', function () {
-            if (spinBtn.disabled) return;
+            /* ── Spin Logic ── */
+            spinBtn.addEventListener('click', function () {
+                if (spinBtn.disabled) return;
 
-            var randomIndex = Math.floor(Math.random() * squad.length);
-            var winner = squad[randomIndex];
+                var randomIndex = Math.floor(Math.random() * squad.length);
+                var winner = squad[randomIndex];
 
-            var extraDeg = Math.floor(Math.random() * 360);
-            currentDegree += 1440 + extraDeg;
+                var extraDeg = Math.floor(Math.random() * 360);
+                currentDegree += 1440 + extraDeg;
 
-            bottle.style.transform = 'translate(-50%, -50%) rotate(' + currentDegree + 'deg)';
-            bottle.classList.add('is-spinning');
+                bottle.style.transform = 'translate(-50%, -50%) rotate(' + currentDegree + 'deg)';
+                bottle.classList.add('is-spinning');
 
-            spinBtn.disabled = true;
-            spinBtn.textContent = '🌀 Spinning...';
-            if (spinStatus) { spinStatus.textContent = 'The bottle is spinning...'; spinStatus.classList.add('visible'); }
+                spinBtn.disabled = true;
+                spinBtn.textContent = '🌀 Spinning...';
+                if (spinStatus) { spinStatus.textContent = 'The bottle is spinning...'; spinStatus.classList.add('visible'); }
 
-            setTimeout(function () {
-                bottle.classList.remove('is-spinning');
-                if (spinStatus) spinStatus.textContent = '🎯 ' + winner.name + "'s secret revealed!";
+                setTimeout(function () {
+                    bottle.classList.remove('is-spinning');
+                    if (spinStatus) spinStatus.textContent = '🎯 ' + winner.name + "'s secret revealed!";
 
-                if (winnerName) winnerName.textContent = '🎉 ' + winner.name;
-                if (funnySecret) funnySecret.textContent = winner.secret;
-                if (modal) modal.classList.add('show');
-                if (backdrop) backdrop.classList.add('show');
+                    if (winnerName) winnerName.textContent = '🎉 ' + winner.name;
+                    if (funnySecret) funnySecret.textContent = winner.secret;
+                    if (modal) modal.classList.add('show');
+                    if (backdrop) backdrop.classList.add('show');
 
-                if (typeof confetti !== 'undefined') {
-                    var colors = ['#d4a574', '#4a6fa5', '#faf3e0', '#f4e4bc', '#ff6b6b', '#ffd93d'];
-                    confetti({ particleCount: 120, spread: 90, origin: { x: 0.5, y: 0.6 }, colors: colors });
-                    setTimeout(function () {
-                        confetti({ particleCount: 60, angle: 60, spread: 70, origin: { x: 0 }, colors: colors });
-                        confetti({ particleCount: 60, angle: 120, spread: 70, origin: { x: 1 }, colors: colors });
-                    }, 300);
-                }
+                    if (typeof confetti !== 'undefined') {
+                        var colors = ['#d4a574', '#4a6fa5', '#faf3e0', '#f4e4bc', '#ff6b6b', '#ffd93d'];
+                        confetti({ particleCount: 120, spread: 90, origin: { x: 0.5, y: 0.6 }, colors: colors });
+                        setTimeout(function () {
+                            confetti({ particleCount: 60, angle: 60, spread: 70, origin: { x: 0 }, colors: colors });
+                            confetti({ particleCount: 60, angle: 120, spread: 70, origin: { x: 1 }, colors: colors });
+                        }, 300);
+                    }
 
-                spinBtn.disabled = false;
-                spinBtn.textContent = '🍾 Spin Again!';
-            }, 3000);
-        });
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = '🍾 Spin Again!';
+                }, 3000);
+            });
 
-        /* ── Close Modal ── */
-        function closeModal() {
-            if (modal) modal.classList.remove('show');
-            if (backdrop) backdrop.classList.remove('show');
-            if (spinStatus) spinStatus.classList.remove('visible');
+            /* ── Close Modal ── */
+            function closeModal() {
+                if (modal) modal.classList.remove('show');
+                if (backdrop) backdrop.classList.remove('show');
+                if (spinStatus) spinStatus.classList.remove('visible');
+            }
+            if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+            if (backdrop) backdrop.addEventListener('click', closeModal);
         }
-        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-        if (backdrop) backdrop.addEventListener('click', closeModal);
-    }
 
-    // Run on hard refresh
-    document.addEventListener('DOMContentLoaded', initSpinGame);
-    // Run after every HTMX page swap (covers normal nav)
-    document.addEventListener('htmx:afterSettle', initSpinGame);
+        // HTMX பேஜை லோட் பண்ண அடுத்த செகண்டே இந்த ஸ்கிரிப்ட் ஆட்டோமேட்டிக்கா ரன் ஆகிடும்!
+        initSpinGame();
+    })();
 </script>
 {% endblock %}
