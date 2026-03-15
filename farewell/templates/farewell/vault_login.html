@@ -24,6 +24,7 @@
         width: 100%;
         border: 2px solid #ccc;
         transform: rotate(-1deg);
+        box-sizing: border-box; /* மொபைல்ல கரெக்டா ஃபிட் ஆக */
     }
 
     .stamp {
@@ -46,15 +47,8 @@
     }
 
     @keyframes stampIn {
-        0% {
-            transform: scale(3) rotate(15deg);
-            opacity: 0;
-        }
-
-        100% {
-            transform: scale(1) rotate(15deg);
-            opacity: 0.8;
-        }
+        0% { transform: scale(3) rotate(15deg); opacity: 0; }
+        100% { transform: scale(1) rotate(15deg); opacity: 0.8; }
     }
 
     .lock-icon {
@@ -65,18 +59,9 @@
     }
 
     @keyframes pulseLock {
-        0% {
-            transform: scale(1);
-        }
-
-        50% {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 10px gold);
-        }
-
-        100% {
-            transform: scale(1);
-        }
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); filter: drop-shadow(0 0 10px gold); }
+        100% { transform: scale(1); }
     }
 
     .classification-box h2 {
@@ -95,7 +80,6 @@
         align-items: center;
     }
 
-    /* Typewriter slot input */
     .typewriter-input {
         width: 100%;
         max-width: 300px;
@@ -114,15 +98,8 @@
         box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5) inset;
     }
 
-    .typewriter-input:focus {
-        border-bottom-color: #d32f2f;
-    }
-
-    .typewriter-input::placeholder {
-        color: #999;
-        letter-spacing: 1px;
-        font-size: 1.2rem;
-    }
+    .typewriter-input:focus { border-bottom-color: #d32f2f; }
+    .typewriter-input::placeholder { color: #999; letter-spacing: 1px; font-size: 1.2rem; }
 
     .unlock-btn {
         background: linear-gradient(to bottom, #d4af37, #aa8c2c);
@@ -146,10 +123,7 @@
         top: 6px;
         box-shadow: 0 0px 0 #6a4c00, 0 4px 10px rgba(0, 0, 0, 0.4);
     }
-
-    .unlock-btn:hover {
-        filter: brightness(1.1);
-    }
+    .unlock-btn:hover { filter: brightness(1.1); }
 
     .error-msg {
         color: #d32f2f;
@@ -161,6 +135,19 @@
         padding: 5px 10px;
         border: 1px dashed #d32f2f;
         border-radius: 3px;
+    }
+
+    /* 👇 மொபைலுக்கான டிசைன் 👇 */
+    @media (max-width: 768px) {
+        .classification-box { padding: 30px 20px; }
+        .stamp { 
+            font-size: 1.1rem; 
+            top: 10px; 
+            right: 5px; 
+            padding: 3px 8px;
+        }
+        .classification-box h2 { font-size: 1.6rem; }
+        .typewriter-input { font-size: 1.2rem; letter-spacing: 3px; }
     }
 </style>
 {% endblock %}
@@ -179,7 +166,7 @@
         <div class="error-msg">{{ error }}</div>
         {% endif %}
 
-        <form method="POST" class="vault-form">
+        <form method="POST" class="vault-form" hx-boost="false">
             {% csrf_token %}
             <input type="password" name="roll_number" class="typewriter-input" placeholder="CODE" required
                 autocomplete="off" maxlength="20">
