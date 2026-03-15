@@ -4,15 +4,15 @@
 {% block content %}
 <div class="container" style="display: block;">
     <div class="form-container animate-on-scroll fade-in">
-        <form method="post" enctype="multipart/form-data">
+        
+        <form method="post" enctype="multipart/form-data" hx-boost="false">
             {% csrf_token %}
 
             <div class="form-group">
                 <label>Select Photos</label>
                 <div class="upload-zone" id="uploadZone">
                     <span class="upload-icon">📸</span>
-                    <p style="color: #5a4a3a; font-family: 'Patrick Hand', cursive;" id="uploadText">Click to select
-                        photos</p>
+                    <p style="color: #5a4a3a; font-family: 'Patrick Hand', cursive;" id="uploadText">Click to select photos</p>
                     <input type="file" name="images" multiple accept="image/*" class="file-input-hidden" id="fileInput">
                     <p class="upload-hint">You can select multiple photos at once</p>
                 </div>
@@ -26,6 +26,7 @@
 
             <button type="submit" class="btn-submit">📸 {{ button_text|default:"Upload" }}</button>
         </form>
+        
         <div style="text-align: center;">
             <a href="{% url 'farewell:event_detail' pk=event.pk %}" class="back-link">← Back to {{ event.title }}</a>
         </div>

@@ -6,7 +6,8 @@
 {% block content %}
 <div class="container" style="display: block;">
     <div class="form-container animate-on-scroll fade-in">
-        <form method="post" enctype="multipart/form-data">
+        
+        <form method="post" enctype="multipart/form-data" hx-boost="false">
             {% csrf_token %}
 
             {% for field in form %}
@@ -25,6 +26,7 @@
 
             <button type="submit" class="btn-submit">📝 {{ button_text|default:"Save" }}</button>
         </form>
+        
         <div style="text-align: center;">
             <a href="{% url 'farewell:index' %}" class="back-link">← Back to Squad</a>
         </div>

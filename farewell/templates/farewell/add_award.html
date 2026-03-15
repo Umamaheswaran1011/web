@@ -12,7 +12,7 @@
         <h2 class="form-heading">{{ page_title }}</h2>
         <p class="form-subheading">Give someone the recognition they deserve! 🏅</p>
 
-        <form method="post" enctype="multipart/form-data" novalidate>
+        <form method="post" enctype="multipart/form-data" novalidate hx-boost="false">
             {% csrf_token %}
 
             {% for field in form %}
