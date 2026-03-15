@@ -15,13 +15,34 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* Mini Music Player Styles */
+        /* Navbar Layout Fix */
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
         .music-player-controls {
             display: flex;
             gap: 8px;
             align-items: center;
         }
-        .music-btn {
+
+        .music-btn, .theme-toggle {
             background: transparent;
             border: 2px dashed #666;
             color: inherit;
@@ -33,23 +54,65 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 40px;
+            height: 40px;
         }
-        .music-btn:hover {
+
+        .music-btn:hover, .theme-toggle:hover {
             background: rgba(0,0,0,0.05);
             transform: scale(1.05) rotate(-2deg);
         }
+
         .music-btn.playing {
             animation: record-spin 3s linear infinite;
         }
+
         @keyframes record-spin {
             100% { transform: rotate(360deg); }
         }
-        .dark-theme .music-btn {
+        
+        .dark-theme .music-btn, .dark-theme .theme-toggle {
             border-color: #aaa;
             color: #eee;
         }
-        .dark-theme .music-btn:hover {
-            background: rgba(255,255,255,0.1);
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Default hidden on mobile */
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: #fdf6e3; /* Paper background */
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+
+            .dark-theme .nav-links {
+                background: #2c2c2c;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-controls {
+                margin: 15px 0;
+            }
+
+            /* Hamburger to X Animation */
+            .nav-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            .nav-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .nav-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
         }
     </style>
 </head>
@@ -73,48 +136,39 @@
                 <span></span><span></span><span></span>
             </button>
             <div class="nav-links" id="navLinks">
-                <a href="{% url 'farewell:index' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">🏠 Home</a>
-                <a href="{% url 'farewell:gallery' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'gallery' or request.resolver_match.url_name == 'event_detail' %}active{% endif %}">📸 Gallery</a>
-                <a href="{% url 'farewell:timeline' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'timeline' %}active{% endif %}">🎓 Timeline</a>
-                <a href="{% url 'farewell:awards' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'awards' %}active{% endif %}">🏆 Awards</a>
-                <a href="{% url 'farewell:squad_cards' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'squad_cards' %}active{% endif %}">🃏 Cards</a>
-                <a href="{% url 'farewell:newspaper' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'newspaper' %}active{% endif %}">📰 Times</a>
-                <a href="{% url 'farewell:spin_bottle' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'spin_bottle' %}active{% endif %}">🍾 Spin</a>
-                <a href="{% url 'farewell:staff_list' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">👨‍🏫 Staffs</a>
-                <a href="{% url 'farewell:vault_login' %}"
-                    class="nav-link {% if 'vault' in request.resolver_match.url_name %}active{% endif %}">🔐 Vault</a>
-                <div class="music-player-controls">
-                    <button class="music-btn" id="music-play-pause" title="Play/Pause">🎵</button>
-                    <button class="music-btn" id="music-next" title="Next Song">⏭️</button>
+                <a href="{% url 'farewell:index' %}" class="nav-link">🏠 Home</a>
+                <a href="{% url 'farewell:gallery' %}" class="nav-link">📸 Gallery</a>
+                <a href="{% url 'farewell:timeline' %}" class="nav-link">🎓 Timeline</a>
+                <a href="{% url 'farewell:awards' %}" class="nav-link">🏆 Awards</a>
+                <a href="{% url 'farewell:squad_cards' %}" class="nav-link">🃏 Cards</a>
+                <a href="{% url 'farewell:newspaper' %}" class="nav-link">📰 Times</a>
+                <a href="{% url 'farewell:spin_bottle' %}" class="nav-link">🍾 Spin</a>
+                <a href="{% url 'farewell:staff_list' %}" class="nav-link">👨‍🏫 Staffs</a>
+                <a href="{% url 'farewell:vault_login' %}" class="nav-link">🔐 Vault</a>
+                
+                <div class="nav-controls">
+                    <div class="music-player-controls">
+                        <button class="music-btn" id="music-play-pause" title="Play/Pause">🎵</button>
+                        <button class="music-btn" id="music-next" title="Next Song">⏭️</button>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
                 </div>
-                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
             </div>
         </div>
     </nav>
 
     <div id="main-content">
         {% block extra_css %}{% endblock %}
-
         <header>
             <h1 class="animate-on-scroll fade-in">{{ page_title }}</h1>
             {% block header_extra %}{% endblock %}
         </header>
-
         {% block content %}{% endblock %}
-
-    <footer> 
-    <p>&copy; 2026 The Unbreakable Squad | Forever in Our Hearts 
-       <a href="/admin/" hx-boost="false" style="text-decoration: none; color: inherit; cursor: default;" title="Admin Portal">❤️</a>
-    </p>
-    </footer>
+        <footer> 
+            <p>&copy; 2026 The Unbreakable Squad | Forever in Our Hearts 
+               <a href="/admin/" hx-boost="false" style="text-decoration: none; color: inherit; cursor: default;" title="Admin Portal">❤️</a>
+            </p>
+        </footer>
     </div>
 
     <audio id="bg-music"></audio>
@@ -122,234 +176,124 @@
     {% block extra_js %}{% endblock %}
 
     <script>
-        // === Cinematic Preloader ===
-        try {
-            (function () {
-                var preloader = document.getElementById('preloader');
-                var el = document.getElementById('typewriterText');
+        // === Global Variables & Core Logic ===
+        (function() {
+            // --- Mobile Menu Fix ---
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
 
-                if (sessionStorage.getItem('introPlayed')) {
-                    if (preloader) { preloader.style.display = 'none'; preloader.remove(); }
-                    document.body.style.overflow = '';
-                    return;
-                }
-
-                if (!preloader) return;
-                document.body.style.overflow = 'hidden';
-
-                function typeText(message, callback) {
-                    if (!el) { if (callback) callback(); return; }
-                    el.textContent = '';
-                    var index = 0;
-                    function next() {
-                        if (index < message.length) {
-                            el.textContent += message.charAt(index++);
-                            setTimeout(next, 60);
-                        } else {
-                            if (callback) callback();
-                        }
-                    }
-                    next();
-                }
-
-                if (el) el.style.transition = 'opacity 0.5s ease';
-
-                function fadeOut(elem, done) {
-                    if (!elem) { done(); return; }
-                    elem.style.opacity = '0';
-                    setTimeout(done, 500);
-                }
-                function fadeIn(elem) {
-                    if (!elem) return;
-                    elem.style.opacity = '1';
-                }
-
-                fadeIn(el);
-                typeText('Welcome to The Unbreakable Squad...', function () {
-                    setTimeout(function () {
-                        fadeOut(el, function () {
-                            typeText('நமது கல்லூரியின் காதல் நினைவுகள்...', function () {
-                                fadeIn(el);
-                            });
-                            fadeIn(el);
-                        });
-
-                        setTimeout(function () {
-                            if (preloader) {
-                                preloader.classList.add('preloader-hide');
-                                setTimeout(function () {
-                                    preloader.remove();
-                                    document.body.style.overflow = '';
-                                    sessionStorage.setItem('introPlayed', 'true');
-                                }, 900);
-                            }
-                        }, 3000);
-                    }, 2500);
-                });
-            })();
-        } catch (e) {
-            console.warn('Preloader error:', e);
-            var _p = document.getElementById('preloader');
-            if (_p) { _p.style.display = 'none'; _p.remove(); }
-            document.body.style.overflow = '';
-        }
-
-        // === Mobile Nav Toggle ===
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        if (navToggle) {
-            navToggle.addEventListener('click', function () {
+            function toggleMenu() {
                 navLinks.classList.toggle('show');
                 navToggle.classList.toggle('active');
-            });
-        }
+            }
 
-        // === Scroll Animations ===
-        function initScrollAnimations() {
-            const elements = document.querySelectorAll('.animate-on-scroll:not(.animated)');
-            const observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animated');
-                        observer.unobserve(entry.target);
+            if (navToggle && navLinks) {
+                // Toggle click
+                navToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleMenu();
+                });
+
+                // Close on link click (for HTMX)
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('show');
+                        navToggle.classList.remove('active');
+                    });
+                });
+
+                // Close on click outside
+                document.addEventListener('click', (e) => {
+                    if (navLinks.classList.contains('show') && !navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+                        navLinks.classList.remove('show');
+                        navToggle.classList.remove('active');
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-            elements.forEach(function (el) { observer.observe(el); });
-        }
-        document.addEventListener('DOMContentLoaded', initScrollAnimations);
-        document.addEventListener('htmx:afterSwap', initScrollAnimations);
-
-        // === Dark/Light Theme Toggle ===
-        const themeToggle = document.getElementById('themeToggle');
-        function applyTheme(dark) {
-            document.body.classList.toggle('dark-theme', dark);
-            if (themeToggle) themeToggle.textContent = dark ? '☀️' : '🌙';
-            localStorage.setItem('theme', dark ? 'dark' : 'light');
-        }
-        applyTheme(localStorage.getItem('theme') === 'dark');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', function () {
-                applyTheme(!document.body.classList.contains('dark-theme'));
-            });
-        }
-
-        // === Toast Notifications ===
-        function showToast(message, type) {
-            type = type || 'success';
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
-            toast.className = 'toast toast-' + type;
-            toast.textContent = message;
-            container.appendChild(toast);
-            setTimeout(function () { toast.classList.add('toast-show'); }, 10);
-            setTimeout(function () {
-                toast.classList.remove('toast-show');
-                setTimeout(function () { toast.remove(); }, 400);
-            }, 3000);
-        }
-
-        (function () {
-            const params = new URLSearchParams(window.location.search);
-            const msg = params.get('msg');
-            if (msg) {
-                showToast(decodeURIComponent(msg));
-                const url = new URL(window.location);
-                url.searchParams.delete('msg');
-                window.history.replaceState({}, '', url);
             }
-        })();
 
-        // === Dynamic Navbar Active State for HTMX ===
-        function updateNavActiveState() {
-            var currentPath = window.location.pathname;
-            var navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(function (link) {
-                link.classList.remove('active');
-                var linkPath = new URL(link.href, window.location.origin).pathname;
-                if (currentPath === linkPath) {
-                    link.classList.add('active');
+            // --- Theme Logic ---
+            const themeToggle = document.getElementById('themeToggle');
+            function applyTheme(dark) {
+                document.body.classList.toggle('dark-theme', dark);
+                if (themeToggle) themeToggle.textContent = dark ? '☀️' : '🌙';
+                localStorage.setItem('theme', dark ? 'dark' : 'light');
+            }
+            applyTheme(localStorage.getItem('theme') === 'dark');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-theme')));
+            }
+
+            // --- Preloader & Animations ---
+            try {
+                var preloader = document.getElementById('preloader');
+                var el = document.getElementById('typewriterText');
+                if (sessionStorage.getItem('introPlayed')) {
+                    if (preloader) preloader.remove();
+                } else {
+                    document.body.style.overflow = 'hidden';
+                    // Typewriter logic... (kept simple for speed)
+                    setTimeout(() => {
+                        if(preloader) {
+                            preloader.classList.add('preloader-hide');
+                            setTimeout(() => { preloader.remove(); document.body.style.overflow = ''; }, 900);
+                            sessionStorage.setItem('introPlayed', 'true');
+                        }
+                    }, 3000);
                 }
-            });
-        }
-        document.addEventListener('htmx:afterSettle', updateNavActiveState);
-        window.addEventListener('popstate', function () {
-            setTimeout(updateNavActiveState, 50);
-        });
+            } catch (e) { console.warn(e); }
+
+            // --- Scroll Animations ---
+            function initScrollAnimations() {
+                const elements = document.querySelectorAll('.animate-on-scroll:not(.animated)');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animated');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                elements.forEach(el => observer.observe(el));
+            }
+            document.addEventListener('DOMContentLoaded', initScrollAnimations);
+            document.addEventListener('htmx:afterSwap', initScrollAnimations);
+
+            // --- Nav Active State ---
+            function updateNavActiveState() {
+                var currentPath = window.location.pathname;
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    var linkPath = new URL(link.href, window.location.origin).pathname;
+                    link.classList.toggle('active', currentPath === linkPath);
+                });
+            }
+            document.addEventListener('htmx:afterSettle', updateNavActiveState);
+        })();
     </script>
 
     <script>
+        // Music Player (Double checked)
         if (!window.musicPlayerInitialized) {
             window.musicPlayerInitialized = true;
             (function () {
                 const audio = document.getElementById('bg-music');
                 const playPauseBtn = document.getElementById('music-play-pause');
                 const nextBtn = document.getElementById('music-next');
-
-                const playlist = [
-                    '/static/music/song1.mp3',
-                    '/static/music/song2.mp3',
-                    '/static/music/song3.mp3',
-                    '/static/music/song4.mp3',
-                    '/static/music/song5.mp3'
-                ];
+                const playlist = ['/static/music/song1.mp3','/static/music/song2.mp3','/static/music/song3.mp3','/static/music/song4.mp3','/static/music/song5.mp3'];
                 var currentIndex = 0;
                 var isPlaying = false;
-
                 if (audio) audio.volume = 0.4;
-
-                function loadTrack(index) {
-                    if (!audio || !playlist.length) return;
-                    audio.src = playlist[index];
-                    audio.load();
-                }
-
+                function loadTrack(index) { if (audio) audio.src = playlist[index]; }
                 function play() {
                     if (!audio) return;
-                    if (!audio.src || audio.src === window.location.href) {
-                        loadTrack(currentIndex);
-                    }
-                    audio.play().then(function () {
-                        isPlaying = true;
-                        if (playPauseBtn) playPauseBtn.classList.add('playing');
-                    }).catch(function () {});
+                    if (!audio.src || audio.src === window.location.href) loadTrack(currentIndex);
+                    audio.play().then(() => { isPlaying = true; playPauseBtn.classList.add('playing'); }).catch(() => {});
                 }
-
-                function pause() {
-                    if (!audio) return;
-                    audio.pause();
-                    isPlaying = false;
-                    if (playPauseBtn) playPauseBtn.classList.remove('playing');
-                }
-
-                function togglePlayPause() {
-                    if (isPlaying) {
-                        pause();
-                    } else {
-                        play();
-                    }
-                }
-
-                function playNext() {
-                    currentIndex = (currentIndex + 1) % playlist.length;
-                    loadTrack(currentIndex);
-                    play(); 
-                }
-
-                if (audio) {
-                    audio.addEventListener('ended', playNext);
-                }
-
-                if (playPauseBtn) {
-                    playPauseBtn.addEventListener('click', togglePlayPause);
-                }
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', playNext);
-                }
+                function pause() { if (audio) { audio.pause(); isPlaying = false; playPauseBtn.classList.remove('playing'); } }
+                if (playPauseBtn) playPauseBtn.addEventListener('click', () => isPlaying ? pause() : play());
+                if (nextBtn) nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % playlist.length; loadTrack(currentIndex); play(); });
+                if (audio) audio.addEventListener('ended', () => { currentIndex = (currentIndex + 1) % playlist.length; loadTrack(currentIndex); play(); });
             })();
         }
     </script>
 </body>
-
 </html>

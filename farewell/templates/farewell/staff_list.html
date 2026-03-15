@@ -31,6 +31,9 @@
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         text-align: center;
         background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+        
+        /* 👇 புதுசு: கார்டுக்குள்ள இருக்குற எல்லா டெக்ஸ்ட்டும் இந்த கலர்ல இருக்கும் 👇 */
+        color: #fdf6e3; 
     }
 
     .staff-card::before {
@@ -143,25 +146,27 @@
         position: relative;
     }
 
+    /* 👇 பெயர்: தங்கம் (Gold) கலர்ல செமையா தெரியும் 👇 */
     .staff-name {
         font-family: 'Caveat', cursive;
         font-size: 2.5rem;
-        color: #2c1810;
+        color: #d4af37; 
         margin: 0;
         letter-spacing: 1px;
         line-height: 1;
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* நிழலை கொஞ்சம் மாத்தியிருக்கேன் */
     }
 
+    /* 👇 பேட்ஜ் (ID): வெளிர் சாண்டல் (Light Sand) கலர் 👇 */
     .staff-award-badge {
         display: inline-block;
         background: transparent;
-        color: #8b6508;
+        color: #eacf88; 
         font-family: 'Special Elite', monospace;
         font-size: 0.9rem;
         font-weight: bold;
         padding: 0.3rem 0;
-        border-bottom: 2px solid #8b6508;
+        border-bottom: 2px solid #eacf88;
         margin: 0.8rem 0 1.2rem;
         letter-spacing: 1px;
         text-transform: uppercase;
@@ -173,27 +178,20 @@
         padding: 0.5rem 1rem;
     }
 
+    /* 👇 கோட் (Quote): ஆஃப்-ஒயிட் கலர்ல நல்லா படிக்க முடியும் 👇 */
     .staff-quote-text {
         font-family: 'Special Elite', monospace;
         font-size: 0.95rem;
         line-height: 1.6;
-        color: #4a3b2c;
+        color: #fdf6e3; 
         font-style: italic;
     }
 
-    .staff-quote-text::before {
-        content: '"';
-        font-size: 1.5rem;
-        color: #c0873a;
-        font-family: Georgia, serif;
-        line-height: 0;
-        vertical-align: bottom;
-    }
-
+    .staff-quote-text::before,
     .staff-quote-text::after {
         content: '"';
         font-size: 1.5rem;
-        color: #c0873a;
+        color: #d4af37; /* கோட்ஸ் சிம்பலும் கோல்டன் கலர்ல இருக்கும் */
         font-family: Georgia, serif;
         line-height: 0;
         vertical-align: bottom;

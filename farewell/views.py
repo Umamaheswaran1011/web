@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
-from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage, Staff
+from django.urls import reverse
+from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage, Staff, SecretIntel, StaffSecretMessage
 from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm, MilestoneForm, FunAwardForm, StaffForm
-
 
 def farewell_index(request):
     """
@@ -36,7 +36,7 @@ def add_friend(request):
         form = FriendForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('farewell:index' + '?msg=Friend added successfully! ✨')
+            return redirect(reverse('farewell:index') + '?msg=Friend added successfully! ✨')
     else:
         form = FriendForm()
     
@@ -54,7 +54,7 @@ def delete_friend(request, pk):
     if request.method == 'POST':
         friend = get_object_or_404(Friend, pk=pk)
         friend.delete()
-    return redirect('farewell:index' + '?msg=Friend removed')
+    return redirect(reverse('farewell:index') + '?msg=Friend removed')
 
 
 def friend_detail(request, pk):
@@ -73,7 +73,6 @@ def friend_detail(request, pk):
                 sender_name=slam_form.cleaned_data['sender_name'],
                 message=slam_form.cleaned_data['message'],
             )
-            from django.urls import reverse
             return redirect(reverse('farewell:friend_detail', args=[pk]) + '?msg=Scrap pinned! 📌')
     else:
         slam_form = SlamBookForm()
@@ -95,7 +94,6 @@ def edit_friend(request, pk):
         form = FriendForm(request.POST, request.FILES, instance=friend)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:friend_detail', args=[pk]) + '?msg=Friend updated! ✨')
     else:
         form = FriendForm(instance=friend)
@@ -134,12 +132,14 @@ def event_detail_view(request, pk):
 def add_event(request):
     """
     View to create a new Event album from the frontend.
+    FIXED: Now redirects to gallery to prevent duplicate submissions.
     """
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('farewell:gallery' + '?msg=Event created! 📸')
+            # 👇 Redirect added to stop multiple entries on refresh
+            return redirect(reverse('farewell:gallery') + '?msg=Event created! 📸')
     else:
         form = EventForm()
 
@@ -159,7 +159,7 @@ def edit_event(request, pk):
         form = EventForm(request.POST, request.FILES, instance=event)
         if form.is_valid():
             form.save()
-            return redirect('farewell:event_detail', pk=pk)
+            return redirect(reverse('farewell:event_detail', args=[pk]) + '?msg=Event updated!')
     else:
         form = EventForm(instance=event)
 
@@ -178,27 +178,25 @@ def delete_event(request, pk):
     if request.method == 'POST':
         event = get_object_or_404(Event, pk=pk)
         event.delete()
-    return redirect('farewell:gallery')
+    return redirect(reverse('farewell:gallery') + '?msg=Event deleted')
 
 
 def add_photos(request, pk):
     """
     View to upload multiple photos to a specific Event.
-    Images come from raw HTML input, caption from the Django form.
     """
     event = get_object_or_404(Event, pk=pk)
     if request.method == 'POST':
         form = PhotoUploadForm(request.POST)
         files = request.FILES.getlist('images')
         if files:
-            caption = form.data.get('caption', '').strip()
+            caption = request.POST.get('caption', '').strip()
             for f in files:
                 EventPhoto.objects.create(
                     event=event,
                     image=f,
                     caption=caption if caption else None,
                 )
-            from django.urls import reverse
             return redirect(reverse('farewell:event_detail', args=[pk]) + '?msg=Photos uploaded! 📸')
     else:
         form = PhotoUploadForm()
@@ -219,8 +217,8 @@ def delete_photo(request, pk):
         photo = get_object_or_404(EventPhoto, pk=pk)
         event_pk = photo.event.pk
         photo.delete()
-        return redirect('farewell:event_detail', pk=event_pk)
-    return redirect('farewell:gallery')
+        return redirect(reverse('farewell:event_detail', args=[event_pk]) + '?msg=Photo removed')
+    return redirect(reverse('farewell:gallery'))
 
 
 def timeline_view(request):
@@ -246,14 +244,10 @@ def awards_view(request):
 
 
 def add_award(request):
-    """
-    View to add a new Fun Award from the frontend.
-    """
     if request.method == 'POST':
         form = FunAwardForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:awards') + '?msg=Award added! 🏆')
     else:
         form = FunAwardForm()
@@ -266,15 +260,11 @@ def add_award(request):
 
 
 def edit_award(request, pk):
-    """
-    View to edit an existing Fun Award.
-    """
     award = get_object_or_404(FunAward, pk=pk)
     if request.method == 'POST':
         form = FunAwardForm(request.POST, request.FILES, instance=award)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:awards') + '?msg=Award updated! ✏️')
     else:
         form = FunAwardForm(instance=award)
@@ -288,13 +278,9 @@ def edit_award(request, pk):
 
 
 def delete_award(request, pk):
-    """
-    View to delete a Fun Award after POST confirmation.
-    """
     award = get_object_or_404(FunAward, pk=pk)
     if request.method == 'POST':
         award.delete()
-        from django.urls import reverse
         return redirect(reverse('farewell:awards') + '?msg=Award removed 🗑️')
 
     return render(request, 'farewell/delete_award.html', {
@@ -304,14 +290,10 @@ def delete_award(request, pk):
 
 
 def add_milestone(request):
-    """
-    View to add a new timeline milestone from the frontend.
-    """
     if request.method == 'POST':
         form = MilestoneForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:timeline') + '?msg=Memory saved! ✨')
     else:
         form = MilestoneForm()
@@ -323,15 +305,11 @@ def add_milestone(request):
 
 
 def edit_milestone(request, pk):
-    """
-    View to edit an existing timeline milestone.
-    """
     milestone = get_object_or_404(TimelineEvent, pk=pk)
     if request.method == 'POST':
         form = MilestoneForm(request.POST, request.FILES, instance=milestone)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:timeline') + '?msg=Memory updated! ✏️')
     else:
         form = MilestoneForm(instance=milestone)
@@ -344,13 +322,9 @@ def edit_milestone(request, pk):
 
 
 def delete_milestone(request, pk):
-    """
-    View to delete a timeline milestone after POST confirmation.
-    """
     milestone = get_object_or_404(TimelineEvent, pk=pk)
     if request.method == 'POST':
         milestone.delete()
-        from django.urls import reverse
         return redirect(reverse('farewell:timeline') + '?msg=Memory removed 🗑️')
 
     return render(request, 'farewell/delete_milestone.html', {
@@ -359,20 +333,13 @@ def delete_milestone(request, pk):
     })
 
 
-
 def newspaper(request):
-    """
-    Static Vintage Newspaper page — no database, just HTML/CSS.
-    """
     return render(request, 'farewell/newspaper.html', {
         'page_title': '📰 The Anti-Gravity Times',
     })
 
 
 def spin_bottle(request):
-    """
-    Dynamic Spin the Bottle mini-game page.
-    """
     friends = Friend.objects.all()
     return render(request, 'farewell/spin_bottle.html', {
         'page_title': '🍾 Spin the Bottle',
@@ -383,9 +350,6 @@ def spin_bottle(request):
 # ===================== STAFF CRUD VIEWS =====================
 
 def staff_list(request):
-    """
-    View to display all staff members with Guru Awards and Department Voices.
-    """
     staff = Staff.objects.all()
     return render(request, 'farewell/staff_list.html', {
         'staff': staff,
@@ -394,14 +358,10 @@ def staff_list(request):
 
 
 def add_staff(request):
-    """
-    View to add a new staff member from the frontend.
-    """
     if request.method == 'POST':
         form = StaffForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:staff_list') + '?msg=Staff member added! 👨‍🏫')
     else:
         form = StaffForm()
@@ -414,15 +374,11 @@ def add_staff(request):
 
 
 def edit_staff(request, pk):
-    """
-    View to edit an existing staff member.
-    """
     staff_member = get_object_or_404(Staff, pk=pk)
     if request.method == 'POST':
         form = StaffForm(request.POST, request.FILES, instance=staff_member)
         if form.is_valid():
             form.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:staff_list') + '?msg=Staff updated! ✏️')
     else:
         form = StaffForm(instance=staff_member)
@@ -436,13 +392,9 @@ def edit_staff(request, pk):
 
 
 def delete_staff(request, pk):
-    """
-    View to delete a staff member after POST confirmation.
-    """
     staff_member = get_object_or_404(Staff, pk=pk)
     if request.method == 'POST':
         staff_member.delete()
-        from django.urls import reverse
         return redirect(reverse('farewell:staff_list') + '?msg=Staff removed 🗑️')
 
     return render(request, 'farewell/staff_confirm_delete.html', {
@@ -454,9 +406,6 @@ def delete_staff(request, pk):
 # ===================== SCRAPS CRUD VIEWS =====================
 
 def edit_scrap(request, scrap_id):
-    """
-    View to edit an existing scrap (SlamMessage).
-    """
     scrap = get_object_or_404(SlamMessage, pk=scrap_id)
     if request.method == 'POST':
         form = SlamBookForm(request.POST)
@@ -464,7 +413,6 @@ def edit_scrap(request, scrap_id):
             scrap.sender_name = form.cleaned_data['sender_name']
             scrap.message = form.cleaned_data['message']
             scrap.save()
-            from django.urls import reverse
             return redirect(reverse('farewell:friend_detail', args=[scrap.friend.pk]) + '?msg=Scrap updated! ✏️')
     else:
         form = SlamBookForm(initial={'sender_name': scrap.sender_name, 'message': scrap.message})
@@ -477,14 +425,10 @@ def edit_scrap(request, scrap_id):
 
 
 def delete_scrap(request, scrap_id):
-    """
-    View to delete a scrap (SlamMessage) after POST confirmation.
-    """
     scrap = get_object_or_404(SlamMessage, pk=scrap_id)
     friend_id = scrap.friend.pk
     if request.method == 'POST':
         scrap.delete()
-        from django.urls import reverse
         return redirect(reverse('farewell:friend_detail', args=[friend_id]) + '?msg=Scrap removed 🗑️')
 
     return render(request, 'farewell/delete_scrap_confirm.html', {
@@ -494,9 +438,6 @@ def delete_scrap(request, scrap_id):
 
 
 def custom_page_not_found(request, exception):
-    """
-    Custom 404 error page with scrapbook theme.
-    """
     return render(request, 'farewell/404.html', {
         'page_title': 'Page Not Found',
     }, status=404)
@@ -505,52 +446,31 @@ def custom_page_not_found(request, exception):
 # ===================== SECRET VAULT VIEWS =====================
 
 def vault_login(request):
-    """
-    Login page for the Secret Vault using roll_number.
-    """
     if request.method == 'POST':
         roll_number = request.POST.get('roll_number', '').strip()
-        
-        # Check Friend model first
         friend = Friend.objects.filter(roll_number=roll_number).first()
         if friend:
             return redirect('farewell:student_vault', pk=friend.pk)
-            
-        # Check Staff model
         staff_member = Staff.objects.filter(roll_number=roll_number).first()
         if staff_member:
             return redirect('farewell:staff_vault', pk=staff_member.pk)
-            
-        # If neither found, return error message
         return render(request, 'farewell/vault_login.html', {
             'page_title': '🔐 Secret Vault Portal',
             'error': 'Access Denied: Invalid Roll Number. The vault remains sealed.'
         })
-        
     return render(request, 'farewell/vault_login.html', {
         'page_title': '🔐 Secret Vault Portal',
     })
 
 def student_vault(request, pk):
-    """
-    Surprise page for students.
-    """
     friend = get_object_or_404(Friend, pk=pk)
-    
     if request.method == 'POST':
         intel_text = request.POST.get('intel', '').strip()
         if intel_text:
-            from .models import SecretIntel
-            SecretIntel.objects.create(
-                friend=friend,
-                text=intel_text
-            )
-        # Redirect to prevent form resubmission
+            SecretIntel.objects.create(friend=friend, text=intel_text)
         return redirect('farewell:student_vault', pk=pk)
             
-    # Fetch all Secret Intel related to this friend
     secret_intels = friend.secret_intels.all()
-    
     return render(request, 'farewell/student_vault.html', {
         'page_title': f"{friend.nickname or friend.name}'s Secret Vault",
         'friend': friend,
@@ -558,25 +478,14 @@ def student_vault(request, pk):
     })
 
 def staff_vault(request, pk):
-    """
-    Surprise page for staff.
-    """
     staff_member = get_object_or_404(Staff, pk=pk)
-    
     if request.method == 'POST':
         message_text = request.POST.get('message', '').strip()
         if message_text:
-            from .models import StaffSecretMessage
-            StaffSecretMessage.objects.create(
-                staff=staff_member,
-                text=message_text
-            )
-        # Redirect to prevent form resubmission
+            StaffSecretMessage.objects.create(staff=staff_member, text=message_text)
         return redirect('farewell:staff_vault', pk=pk)
             
-    # Fetch all Secret Messages related to this staff member
     secret_messages = staff_member.secret_messages.all()
-    
     return render(request, 'farewell/staff_vault.html', {
         'page_title': f"Top Secret: {staff_member.name}",
         'staff_member': staff_member,
