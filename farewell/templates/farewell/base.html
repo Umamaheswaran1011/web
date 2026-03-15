@@ -188,13 +188,11 @@
             }
 
             if (navToggle && navLinks) {
-                // Toggle click
                 navToggle.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleMenu();
                 });
 
-                // Close on link click (for HTMX)
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         navLinks.classList.remove('show');
@@ -202,7 +200,6 @@
                     });
                 });
 
-                // Close on click outside
                 document.addEventListener('click', (e) => {
                     if (navLinks.classList.contains('show') && !navLinks.contains(e.target) && !navToggle.contains(e.target)) {
                         navLinks.classList.remove('show');
@@ -223,24 +220,76 @@
                 themeToggle.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-theme')));
             }
 
-            // --- Preloader & Animations ---
+            // --- ORIGINAL PRELOADER & TYPEWRITER RESTORED ---
             try {
                 var preloader = document.getElementById('preloader');
                 var el = document.getElementById('typewriterText');
+
                 if (sessionStorage.getItem('introPlayed')) {
-                    if (preloader) preloader.remove();
+                    if (preloader) { preloader.style.display = 'none'; preloader.remove(); }
+                    document.body.style.overflow = '';
                 } else {
-                    document.body.style.overflow = 'hidden';
-                    // Typewriter logic... (kept simple for speed)
-                    setTimeout(() => {
-                        if(preloader) {
-                            preloader.classList.add('preloader-hide');
-                            setTimeout(() => { preloader.remove(); document.body.style.overflow = ''; }, 900);
-                            sessionStorage.setItem('introPlayed', 'true');
+                    if (preloader) {
+                        document.body.style.overflow = 'hidden';
+
+                        function typeText(message, callback) {
+                            if (!el) { if (callback) callback(); return; }
+                            el.textContent = '';
+                            var index = 0;
+                            function next() {
+                                if (index < message.length) {
+                                    el.textContent += message.charAt(index++);
+                                    setTimeout(next, 60);
+                                } else {
+                                    if (callback) callback();
+                                }
+                            }
+                            next();
                         }
-                    }, 3000);
+
+                        if (el) el.style.transition = 'opacity 0.5s ease';
+
+                        function fadeOut(elem, done) {
+                            if (!elem) { done(); return; }
+                            elem.style.opacity = '0';
+                            setTimeout(done, 500);
+                        }
+                        
+                        function fadeIn(elem) {
+                            if (!elem) return;
+                            elem.style.opacity = '1';
+                        }
+
+                        fadeIn(el);
+                        typeText('Welcome to The Unbreakable Squad...', function () {
+                            setTimeout(function () {
+                                fadeOut(el, function () {
+                                    typeText('நமது rajus கல்லூரியின் காதல் நினைவுகள்...', function () {
+                                        fadeIn(el);
+                                    });
+                                    fadeIn(el);
+                                });
+
+                                setTimeout(function () {
+                                    if (preloader) {
+                                        preloader.classList.add('preloader-hide');
+                                        setTimeout(function () {
+                                            preloader.remove();
+                                            document.body.style.overflow = '';
+                                            sessionStorage.setItem('introPlayed', 'true');
+                                        }, 900);
+                                    }
+                                }, 3000);
+                            }, 2500);
+                        });
+                    }
                 }
-            } catch (e) { console.warn(e); }
+            } catch (e) {
+                console.warn('Preloader error:', e);
+                var _p = document.getElementById('preloader');
+                if (_p) { _p.style.display = 'none'; _p.remove(); }
+                document.body.style.overflow = '';
+            }
 
             // --- Scroll Animations ---
             function initScrollAnimations() {
@@ -271,7 +320,7 @@
     </script>
 
     <script>
-        // Music Player (Double checked)
+        // Music Player Script
         if (!window.musicPlayerInitialized) {
             window.musicPlayerInitialized = true;
             (function () {
@@ -286,9 +335,9 @@
                 function play() {
                     if (!audio) return;
                     if (!audio.src || audio.src === window.location.href) loadTrack(currentIndex);
-                    audio.play().then(() => { isPlaying = true; playPauseBtn.classList.add('playing'); }).catch(() => {});
+                    audio.play().then(() => { isPlaying = true; if(playPauseBtn) playPauseBtn.classList.add('playing'); }).catch(() => {});
                 }
-                function pause() { if (audio) { audio.pause(); isPlaying = false; playPauseBtn.classList.remove('playing'); } }
+                function pause() { if (audio) { audio.pause(); isPlaying = false; if(playPauseBtn) playPauseBtn.classList.remove('playing'); } }
                 if (playPauseBtn) playPauseBtn.addEventListener('click', () => isPlaying ? pause() : play());
                 if (nextBtn) nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % playlist.length; loadTrack(currentIndex); play(); });
                 if (audio) audio.addEventListener('ended', () => { currentIndex = (currentIndex + 1) % playlist.length; loadTrack(currentIndex); play(); });
