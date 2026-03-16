@@ -378,4 +378,12 @@
         
         setTimeout(function () {
             document.body.classList.add('vault-open');
-            if (typeof confetti ===
+            if (typeof confetti === 'function') {
+                setTimeout(function () {
+                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+                }, 2000);
+            }
+        }, 500);
+    })();
+</script>
+{% endblock %}
