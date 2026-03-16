@@ -5,7 +5,7 @@
 <div class="container" style="display: block;">
     <div class="form-container animate-on-scroll fade-in">
         
-        <form id="uploadForm" method="post" enctype="multipart/form-data" hx-boost="false">
+        <form id="uploadForm" method="post" enctype="multipart/form-data" hx-boost="false" onsubmit="showLoading()">
             {% csrf_token %}
 
             <div class="form-group">
@@ -13,7 +13,7 @@
                 <div class="upload-zone" id="uploadZone">
                     <span class="upload-icon">📸</span>
                     <p style="color: #5a4a3a; font-family: 'Patrick Hand', cursive;" id="uploadText">Click to select photos</p>
-                    <input type="file" name="images" multiple accept="image/*" class="file-input-hidden" id="fileInput">
+                    <input type="file" name="images" multiple accept="image/*" class="file-input-hidden" id="fileInput" required>
                     <p class="upload-hint">You can select multiple photos at once</p>
                 </div>
                 <div class="preview-grid" id="previewGrid"></div>
@@ -39,10 +39,7 @@
     const input = document.getElementById('fileInput');
     const previewGrid = document.getElementById('previewGrid');
     const uploadText = document.getElementById('uploadText');
-    const uploadForm = document.getElementById('uploadForm');
-    const submitBtn = document.getElementById('submitBtn');
 
-    // போட்டோ செலக்ட் பண்ணும்போது ப்ரிவியூ காட்ட
     input.addEventListener('change', function () {
         previewGrid.innerHTML = '';
         if (this.files && this.files.length > 0) {
@@ -59,13 +56,13 @@
         }
     });
 
-    // 👇 ஃபார்ம் சப்மிட் ஆகும்போது பட்டனை மாத்துற லாஜிக் 👇
-    if(uploadForm && submitBtn) {
-        uploadForm.addEventListener('submit', function() {
-            submitBtn.innerHTML = '⏳ Uploading... Please Wait...';
-            submitBtn.style.opacity = '0.7';
-            submitBtn.style.pointerEvents = 'none'; // ரெண்டாவது முறை க்ளிக் பண்ணாம தடுக்க
-        });
+    // 👇 பட்டன் டெக்ஸ்ட் மாறும் 100% கேரண்டி லாஜிக் 👇
+    function showLoading() {
+        const btn = document.getElementById('submitBtn');
+        btn.innerHTML = '⏳ Uploading... Please Wait...';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+        return true;
     }
 </script>
 {% endblock %}
