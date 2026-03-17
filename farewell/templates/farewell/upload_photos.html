@@ -5,7 +5,7 @@
 <div class="container" style="display: block;">
     <div class="form-container animate-on-scroll fade-in">
         
-        <form id="uploadForm" method="post" enctype="multipart/form-data" hx-boost="false" onsubmit="showLoading()">
+        <form id="uploadForm" method="post" enctype="multipart/form-data" hx-boost="false" onsubmit="document.getElementById('submitBtn').innerHTML='⏳ Uploading... Please Wait...'; document.getElementById('submitBtn').style.opacity='0.7'; document.getElementById('submitBtn').style.pointerEvents='none';">
             {% csrf_token %}
 
             <div class="form-group">
@@ -24,7 +24,7 @@
                 {{ form.caption }}
             </div>
 
-            <button type="submit" id="submitBtn" class="btn-submit">📸 {{ button_text|default:"Upload" }}</button>
+            <button type="submit" id="submitBtn" class="btn-submit">📸 {{ button_text|default:"Upload Photos" }}</button>
         </form>
         
         <div style="text-align: center;">
@@ -55,14 +55,5 @@
             });
         }
     });
-
-    // 👇 பட்டன் டெக்ஸ்ட் மாறும் 100% கேரண்டி லாஜிக் 👇
-    function showLoading() {
-        const btn = document.getElementById('submitBtn');
-        btn.innerHTML = '⏳ Uploading... Please Wait...';
-        btn.style.opacity = '0.7';
-        btn.style.pointerEvents = 'none';
-        return true;
-    }
 </script>
 {% endblock %}

@@ -5,24 +5,25 @@
 <div class="container" style="display: block;">
     <div class="form-container animate-on-scroll fade-in">
         
-        <form method="post" enctype="multipart/form-data" hx-boost="false">
+        <form method="post" enctype="multipart/form-data" hx-boost="false" onsubmit="document.getElementById('submitBtn').innerHTML='⏳ Saving... Please Wait...'; document.getElementById('submitBtn').style.opacity='0.7'; document.getElementById('submitBtn').style.pointerEvents='none';">
             {% csrf_token %}
 
             {% for field in form %}
             <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
+                
                 {% if field.help_text %}
-                <small style="color: #8a7a6a; display: block; margin-top: 5px; font-family: 'Patrick Hand', cursive;">{{
-                    field.help_text|safe }}</small>
+                <small style="color: #8a7a6a; display: block; margin-top: 5px; font-family: 'Patrick Hand', cursive;">{{ field.help_text|safe }}</small>
                 {% endif %}
+                
                 {% for error in field.errors %}
                 <div style="color: #c0392b; font-size: 0.9em; margin-top: 5px;">{{ error }}</div>
                 {% endfor %}
             </div>
             {% endfor %}
 
-            <button type="submit" class="btn-submit">📝 {{ button_text|default:"Save" }}</button>
+            <button type="submit" id="submitBtn" class="btn-submit">📝 {{ button_text|default:"Save" }}</button>
         </form>
         
         <div style="text-align: center;">
