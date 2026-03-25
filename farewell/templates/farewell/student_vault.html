@@ -308,7 +308,7 @@
         <div class="dossier-grid">
             <div class="photo-area">
                 {% if friend.photo %}
-                <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" class="dossier-photo">
+                <img src="{{ friend.photo.url }}" alt="{{ friend.name }}" class="dossier-photo" loading="lazy">
                 {% endif %}
             </div>
 
@@ -365,7 +365,7 @@
         <div class="auth-signature">
             AUTHORIZED BY:<br>
             <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Signature_of_John_Hancock.png" alt="Signature"
-                style="height: 60px; filter: opacity(0.7); margin-top: 10px;">
+                style="height: 60px; filter: opacity(0.7); margin-top: 10px;" loading="lazy">
         </div>
     </div>
 

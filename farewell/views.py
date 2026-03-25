@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 from django.urls import reverse
+from django.core.paginator import Paginator
 from .models import Friend, Event, EventPhoto, TimelineEvent, FunAward, SlamMessage, Staff, SecretIntel, StaffSecretMessage
 from .forms import FriendForm, EventForm, PhotoUploadForm, SlamBookForm, MilestoneForm, FunAwardForm, StaffForm
 
@@ -35,7 +36,11 @@ def add_friend(request):
     if request.method == 'POST':
         form = FriendForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'photo' in request.FILES:
+                instance.photo = request.FILES['photo']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:index') + '?msg=Friend added successfully! ✨')
     else:
         form = FriendForm()
@@ -93,7 +98,11 @@ def edit_friend(request, pk):
     if request.method == 'POST':
         form = FriendForm(request.POST, request.FILES, instance=friend)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'photo' in request.FILES:
+                instance.photo = request.FILES['photo']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:friend_detail', args=[pk]) + '?msg=Friend updated! ✨')
     else:
         form = FriendForm(instance=friend)
@@ -109,9 +118,12 @@ def gallery_view(request):
     """
     View to list all events as album cards with photo counts.
     """
-    events = Event.objects.annotate(photo_count=Count('photos')).order_by('-date')
+    events_qs = Event.objects.annotate(photo_count=Count('photos')).order_by('-date')
+    paginator = Paginator(events_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'farewell/gallery.html', {
-        'events': events,
+        'events': page_obj,
+        'page_obj': page_obj,
         'page_title': '📸 Memories Gallery',
     })
 
@@ -121,10 +133,13 @@ def event_detail_view(request, pk):
     View to display all photos inside a specific event album.
     """
     event = get_object_or_404(Event, pk=pk)
-    photos = event.photos.all()
+    photos_qs = event.photos.select_related('event').all()
+    paginator = Paginator(photos_qs, 15)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'farewell/event_detail.html', {
         'event': event,
-        'photos': photos,
+        'photos': page_obj,
+        'page_obj': page_obj,
         'page_title': event.title,
     })
 
@@ -137,7 +152,11 @@ def add_event(request):
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'cover_image' in request.FILES:
+                instance.cover_image = request.FILES['cover_image']
+            instance.save()
+            form.save_m2m()
             # 👇 Redirect added to stop multiple entries on refresh
             return redirect(reverse('farewell:gallery') + '?msg=Event created! 📸')
     else:
@@ -158,7 +177,11 @@ def edit_event(request, pk):
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES, instance=event)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'cover_image' in request.FILES:
+                instance.cover_image = request.FILES['cover_image']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:event_detail', args=[pk]) + '?msg=Event updated!')
     else:
         form = EventForm(instance=event)
@@ -225,9 +248,12 @@ def timeline_view(request):
     """
     View to display the college timeline journey.
     """
-    events = TimelineEvent.objects.all()
+    events_qs = TimelineEvent.objects.all()
+    paginator = Paginator(events_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'farewell/timeline.html', {
-        'events': events,
+        'events': page_obj,
+        'page_obj': page_obj,
         'page_title': '🎓 Our College Journey',
     })
 
@@ -236,9 +262,12 @@ def awards_view(request):
     """
     View to display all fun awards.
     """
-    awards = FunAward.objects.select_related('winner').all()
+    awards_qs = FunAward.objects.select_related('winner').all()
+    paginator = Paginator(awards_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'farewell/awards.html', {
-        'awards': awards,
+        'awards': page_obj,
+        'page_obj': page_obj,
         'page_title': '🏆 Fun Awards',
     })
 
@@ -247,7 +276,11 @@ def add_award(request):
     if request.method == 'POST':
         form = FunAwardForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'icon_or_image' in request.FILES:
+                instance.icon_or_image = request.FILES['icon_or_image']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:awards') + '?msg=Award added! 🏆')
     else:
         form = FunAwardForm()
@@ -264,7 +297,11 @@ def edit_award(request, pk):
     if request.method == 'POST':
         form = FunAwardForm(request.POST, request.FILES, instance=award)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'icon_or_image' in request.FILES:
+                instance.icon_or_image = request.FILES['icon_or_image']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:awards') + '?msg=Award updated! ✏️')
     else:
         form = FunAwardForm(instance=award)
@@ -293,7 +330,11 @@ def add_milestone(request):
     if request.method == 'POST':
         form = MilestoneForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'image' in request.FILES:
+                instance.image = request.FILES['image']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:timeline') + '?msg=Memory saved! ✨')
     else:
         form = MilestoneForm()
@@ -309,7 +350,11 @@ def edit_milestone(request, pk):
     if request.method == 'POST':
         form = MilestoneForm(request.POST, request.FILES, instance=milestone)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'image' in request.FILES:
+                instance.image = request.FILES['image']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:timeline') + '?msg=Memory updated! ✏️')
     else:
         form = MilestoneForm(instance=milestone)
@@ -350,9 +395,12 @@ def spin_bottle(request):
 # ===================== STAFF CRUD VIEWS =====================
 
 def staff_list(request):
-    staff = Staff.objects.all()
+    staff_qs = Staff.objects.all()
+    paginator = Paginator(staff_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'farewell/staff_list.html', {
-        'staff': staff,
+        'staff': page_obj,
+        'page_obj': page_obj,
         'page_title': '👨‍🏫 Our Beloved Staff',
     })
 
@@ -361,7 +409,11 @@ def add_staff(request):
     if request.method == 'POST':
         form = StaffForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'photo' in request.FILES:
+                instance.photo = request.FILES['photo']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:staff_list') + '?msg=Staff member added! 👨‍🏫')
     else:
         form = StaffForm()
@@ -378,7 +430,11 @@ def edit_staff(request, pk):
     if request.method == 'POST':
         form = StaffForm(request.POST, request.FILES, instance=staff_member)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if 'photo' in request.FILES:
+                instance.photo = request.FILES['photo']
+            instance.save()
+            form.save_m2m()
             return redirect(reverse('farewell:staff_list') + '?msg=Staff updated! ✏️')
     else:
         form = StaffForm(instance=staff_member)

@@ -17,7 +17,7 @@
                 {{ field }}
                 {% if field.name == 'image' and milestone.image %}
                 <div class="current-image-preview">
-                    <img src="{{ milestone.image.url }}" alt="Current photo">
+                    <img src="{{ milestone.image.url }}" alt="Current photo" loading="lazy">
                     <span>Current photo — upload new to replace</span>
                 </div>
                 {% elif field.name == 'image' %}

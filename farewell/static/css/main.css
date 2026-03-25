@@ -1,4 +1,4 @@
-﻿/* ================================================
+/* ================================================
    NOSTALGIC SCRAPBOOK & OLD ORKUT THEME
    A handmade memory book, not a digital screen
    ================================================ */
@@ -4886,3 +4886,84 @@ body.dark-theme .delete-confirm-box { background: rgba(42,42,74,0.7); border-col
 }
 .scrapbook-input::placeholder { color: #b5a58a; }
 .scrapbook-input option { font-family: sans-serif; }
+
+/* ================================================
+   PAGINATION CONTROLS
+   ================================================ */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2.5rem 1rem 1rem;
+    font-family: 'Special Elite', monospace;
+    position: relative;
+    z-index: 10;
+}
+
+.pagination-btn {
+    font-family: 'Caveat', cursive;
+    background: #d4a574;
+    color: #2c1810;
+    padding: 0.7rem 1.8rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 2px solid #b5895a;
+    letter-spacing: 0.5px;
+}
+
+.pagination-btn:hover {
+    transform: translateY(-2px) rotate(-1deg);
+    box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.2);
+    background: #c9965e;
+}
+
+.pagination-info {
+    font-family: 'Special Elite', monospace;
+    font-size: 1rem;
+    color: #5a4a3a;
+    letter-spacing: 1px;
+    background: rgba(244, 228, 188, 0.7);
+    padding: 0.5rem 1rem;
+    border: 1px dashed #d4a574;
+    border-radius: 2px;
+}
+
+/* Dark mode */
+.dark-theme .pagination-btn {
+    background: #3a3a3a;
+    color: #fdf6e3;
+    border-color: #d4af37;
+}
+
+.dark-theme .pagination-btn:hover {
+    background: #4a4a4a;
+    color: #d4af37;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.dark-theme .pagination-info {
+    color: #ddd;
+    background: rgba(60, 60, 60, 0.7);
+    border-color: #666;
+}
+
+@media (max-width: 768px) {
+    .pagination-controls {
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .pagination-info {
+        font-size: 0.85rem;
+    }
+}

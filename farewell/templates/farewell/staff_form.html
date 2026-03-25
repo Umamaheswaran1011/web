@@ -33,7 +33,7 @@
             <div class="form-group">
                 <p class="form-hint">Current photo:</p>
                 <img src="{{ staff_member.photo.url }}" alt="Current photo of {{ staff_member.name }}"
-                    style="max-width: 130px; border-radius: 8px; border: 2px solid var(--accent-warm); margin: 0.5rem 0;">
+                    style="max-width: 130px; border-radius: 8px; border: 2px solid var(--accent-warm); margin: 0.5rem 0;" loading="lazy">
             </div>
             {% endif %}
 
