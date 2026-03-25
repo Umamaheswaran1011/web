@@ -4888,82 +4888,385 @@ body.dark-theme .delete-confirm-box { background: rgba(42,42,74,0.7); border-col
 .scrapbook-input option { font-family: sans-serif; }
 
 /* ================================================
-   PAGINATION CONTROLS
+   PAGINATION CONTROLS — Scrapbook Page Flip
    ================================================ */
 .pagination-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1.5rem;
-    padding: 2.5rem 1rem 1rem;
-    font-family: 'Special Elite', monospace;
+    gap: 1rem;
+    padding: 2.5rem 1rem 2rem;
     position: relative;
     z-index: 10;
+    margin-top: 1rem;
+}
+
+/* Decorative torn-paper strip behind pagination */
+.pagination-controls::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(90%, 420px);
+    height: 100%;
+    background: rgba(244, 228, 188, 0.5);
+    border-radius: 4px;
+    border: 1px dashed rgba(212, 165, 116, 0.4);
+    z-index: -1;
+    clip-path: polygon(
+        0% 8%, 4% 0%, 10% 6%, 18% 2%, 26% 7%, 34% 0%, 42% 5%, 50% 1%,
+        58% 4%, 66% 0%, 74% 6%, 82% 2%, 90% 7%, 96% 0%, 100% 8%,
+        100% 92%, 96% 100%, 90% 94%, 82% 100%, 74% 95%, 66% 100%, 58% 96%,
+        50% 100%, 42% 95%, 34% 100%, 26% 94%, 18% 100%, 10% 96%, 4% 100%, 0% 92%
+    );
 }
 
 .pagination-btn {
     font-family: 'Caveat', cursive;
     background: #d4a574;
     color: #2c1810;
-    padding: 0.7rem 1.8rem;
+    padding: 0.75rem 1.8rem;
     border-radius: 3px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1.2rem;
-    box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
+    font-size: 1.25rem;
+    box-shadow:
+        2px 3px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: 2px solid #b5895a;
     letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Washi tape shimmer on hover */
+.pagination-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        transparent 100%
+    );
+    transition: left 0.5s ease;
+}
+
+.pagination-btn:hover::after {
+    left: 100%;
 }
 
 .pagination-btn:hover {
-    transform: translateY(-2px) rotate(-1deg);
-    box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px) rotate(-1.5deg);
+    box-shadow:
+        3px 6px 18px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
     background: #c9965e;
+    color: #1a0e06;
+}
+
+.pagination-btn:active {
+    transform: translateY(0px) rotate(0deg);
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.15);
+    transition-duration: 0.1s;
 }
 
 .pagination-info {
     font-family: 'Special Elite', monospace;
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: #5a4a3a;
-    letter-spacing: 1px;
-    background: rgba(244, 228, 188, 0.7);
-    padding: 0.5rem 1rem;
-    border: 1px dashed #d4a574;
+    letter-spacing: 1.5px;
+    background: rgba(244, 228, 188, 0.85);
+    padding: 0.6rem 1.2rem;
+    border: 2px dashed #d4a574;
     border-radius: 2px;
+    position: relative;
+    text-align: center;
+    min-width: 140px;
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Dark mode */
-.dark-theme .pagination-btn {
-    background: #3a3a3a;
-    color: #fdf6e3;
-    border-color: #d4af37;
+/* Tiny tape on the page counter */
+.pagination-info::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    width: 50px;
+    height: 14px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 220, 0.55) 0%,
+        rgba(255, 255, 200, 0.35) 100%);
+    border: 1px solid rgba(200, 180, 120, 0.3);
+    border-radius: 1px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
-.dark-theme .pagination-btn:hover {
-    background: #4a4a4a;
-    color: #d4af37;
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+/* ===== Pagination — Dark Theme ===== */
+body.dark-theme .pagination-controls::before {
+    background: rgba(26, 26, 46, 0.6);
+    border-color: rgba(80, 80, 160, 0.3);
 }
 
-.dark-theme .pagination-info {
-    color: #ddd;
-    background: rgba(60, 60, 60, 0.7);
-    border-color: #666;
+body.dark-theme .pagination-btn {
+    background: linear-gradient(135deg, #2a2a4a, #3d3d6e);
+    color: #e0d8c8;
+    border: 2px solid #5050a0;
+    box-shadow:
+        0 0 10px rgba(80, 80, 160, 0.2),
+        2px 3px 8px rgba(0, 0, 0, 0.3);
 }
 
+body.dark-theme .pagination-btn:hover {
+    background: linear-gradient(135deg, #3d3d6e, #5050a0);
+    color: #ffd700;
+    border-color: #7070c0;
+    box-shadow:
+        0 0 18px rgba(80, 80, 160, 0.35),
+        3px 5px 15px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
+}
+
+body.dark-theme .pagination-btn:active {
+    box-shadow: 0 0 5px rgba(80, 80, 160, 0.2);
+}
+
+body.dark-theme .pagination-info {
+    color: #b0a8c0;
+    background: rgba(26, 26, 46, 0.85);
+    border-color: #3d3d6e;
+    box-shadow: 0 0 8px rgba(80, 80, 160, 0.1);
+}
+
+body.dark-theme .pagination-info::before {
+    background: linear-gradient(180deg,
+        rgba(100, 100, 140, 0.4) 0%,
+        rgba(80, 80, 120, 0.2) 100%);
+    border-color: rgba(100, 100, 140, 0.3);
+}
+
+/* ===== Pagination — Responsive ===== */
 @media (max-width: 768px) {
     .pagination-controls {
-        gap: 0.8rem;
+        gap: 0.6rem;
+        padding: 2rem 0.8rem 1.5rem;
         flex-wrap: wrap;
     }
 
+    .pagination-controls::before {
+        width: 95%;
+        border-radius: 3px;
+    }
+
     .pagination-btn {
-        padding: 0.5rem 1.2rem;
-        font-size: 1rem;
+        padding: 0.65rem 1.4rem;
+        font-size: 1.1rem;
     }
 
     .pagination-info {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        min-width: 120px;
+        padding: 0.5rem 1rem;
+        /* Full width on very small screens for readability */
+        order: -1;
+        width: 100%;
+    }
+
+    .pagination-info::before {
+        width: 40px;
+        height: 12px;
     }
 }
+
+@media (max-width: 400px) {
+    .pagination-controls {
+        gap: 0.5rem;
+        padding: 1.5rem 0.5rem 1rem;
+    }
+
+    .pagination-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+        flex: 1;
+        text-align: center;
+    }
+}
+
+/* ================================================
+   EVENT CARD FOOTER & ACTIONS
+   ================================================ */
+.event-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.8rem;
+    border-top: 1px dashed rgba(212, 165, 116, 0.4);
+    gap: 0.5rem;
+}
+
+.event-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.event-card:hover .event-card-actions {
+    opacity: 1;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1rem;
+    border: 1px dashed #d4a574;
+    background: rgba(244, 228, 188, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-icon:hover,
+.btn-icon-edit:hover {
+    background: rgba(74, 111, 165, 0.15);
+    border-color: #4a6fa5;
+    transform: scale(1.15) rotate(-5deg);
+    box-shadow: 0 2px 8px rgba(74, 111, 165, 0.2);
+}
+
+.btn-icon-delete,
+.btn-icon-delete:hover {
+    border: none;
+    background: transparent;
+}
+
+.btn-icon-delete:hover {
+    background: rgba(192, 57, 43, 0.12);
+    border: 1px dashed #c0392b;
+    transform: scale(1.2) rotate(5deg);
+    box-shadow: 0 2px 8px rgba(192, 57, 43, 0.2);
+}
+
+/* Dark theme event card footer */
+body.dark-theme .event-card-footer {
+    border-top-color: rgba(80, 80, 160, 0.3);
+}
+
+body.dark-theme .btn-icon {
+    border-color: #3d3d6e;
+    background: rgba(42, 42, 74, 0.6);
+}
+
+body.dark-theme .btn-icon:hover {
+    background: rgba(80, 80, 160, 0.3);
+    border-color: #5050a0;
+}
+
+/* ================================================
+   PHOTO ACTION BUTTONS (Download & Delete)
+   ================================================ */
+.photo-download-btn,
+.photo-delete-btn {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    z-index: 10;
+    text-decoration: none;
+    border: none;
+    line-height: 1;
+    padding: 0;
+}
+
+.masonry-item:hover .photo-download-btn,
+.masonry-item:hover .photo-delete-btn {
+    opacity: 1;
+}
+
+.photo-download-btn {
+    bottom: 52px;
+    right: 14px;
+    background: rgba(244, 228, 188, 0.9);
+    border: 1px solid #b5895a;
+    color: #2c1810;
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.photo-download-btn:hover {
+    background: #d4a574;
+    transform: scale(1.15) translateY(-2px);
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.photo-delete-btn {
+    bottom: 52px;
+    right: 52px;
+    background: rgba(255, 205, 210, 0.9);
+    border: 1px solid rgba(192, 57, 43, 0.4);
+    color: #c0392b;
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.photo-delete-btn:hover {
+    background: rgba(231, 76, 60, 0.85);
+    color: #fff;
+    transform: scale(1.15) translateY(-2px);
+    box-shadow: 0 0 12px rgba(231, 76, 60, 0.3), 2px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark theme photo buttons */
+body.dark-theme .photo-download-btn {
+    background: rgba(42, 42, 74, 0.9);
+    border-color: #5050a0;
+    color: #e0d8c8;
+}
+
+body.dark-theme .photo-download-btn:hover {
+    background: #3d3d6e;
+    box-shadow: 0 0 10px rgba(80, 80, 160, 0.3);
+}
+
+body.dark-theme .photo-delete-btn {
+    background: rgba(42, 42, 74, 0.9);
+    border-color: rgba(192, 57, 43, 0.5);
+}
+
+body.dark-theme .photo-delete-btn:hover {
+    background: rgba(192, 57, 43, 0.7);
+    box-shadow: 0 0 12px rgba(192, 57, 43, 0.3);
+}
+
+/* Responsive photo buttons — always visible on touch */
+@media (max-width: 768px) {
+    .photo-download-btn,
+    .photo-delete-btn {
+        opacity: 0.85;
+        width: 36px;
+        height: 36px;
+        font-size: 1.05rem;
+    }
+}
+
