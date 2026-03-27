@@ -121,7 +121,9 @@
     .staff-photo {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        /* 👇 மாத்தியிருக்கேன்: cover-க்கு பதிலா contain போட்டாச்சு! 👇 */
+        object-fit: contain; 
+        background-color: #eee; /* கேப் தெரிஞ்சா அசிங்கமா இருக்காம பேக்ரவுண்ட் மேட்ச் ஆகும் */
         filter: sepia(0.3) contrast(1.1);
         transition: filter 0.4s;
     }

@@ -8,9 +8,54 @@
     first day to the last ✨</p>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* 👇 புதுசா சேர்த்த பேஜினேஷன் (Pagination) CSS 👇 */
+    .pagination-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin: 3rem auto 2rem auto; /* சென்டர்ல கொண்டு வர */
+        padding: 1rem;
+        width: 100%;
+        clear: both; /* டைம்லைன் டிசைனுக்கு கீழ கரெக்டா வர */
+    }
+
+    .pagination-btn {
+        background: #fdfbf7;
+        color: #5a4a3a;
+        padding: 8px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-family: 'Special Elite', monospace;
+        font-size: 1rem;
+        font-weight: bold;
+        border: 2px solid #8a7a6a;
+        box-shadow: 3px 3px 0px #8a7a6a; /* ஒரு விண்டேஜ் பட்டன் ஃபீல் கொடுக்கும் */
+        transition: all 0.2s ease;
+    }
+
+    .pagination-btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0px #d4af37;
+        background: #fff;
+        color: #d4af37; 
+        border-color: #d4af37;
+    }
+
+    .pagination-info {
+        font-family: 'Caveat', cursive;
+        font-size: 1.8rem; /* நம்பர் கொஞ்சம் பெருசா காட்ட */
+        color: #5a4a3a;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div>
-    <!-- Add Milestone Button — Vintage Red Tape -->
     <div class="add-milestone-wrap">
         <a href="{% url 'farewell:add_milestone' %}" class="btn-add-milestone">+ Add Milestone</a>
     </div>
@@ -21,7 +66,6 @@
         <div class="timeline-item animate-on-scroll slide-up">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
-                <!-- Edit / Delete Actions -->
                 <div class="card-actions">
                     <a href="{% url 'farewell:edit_milestone' pk=event.pk %}" title="Edit this memory">✏️</a>
                     <a href="{% url 'farewell:delete_milestone' pk=event.pk %}" class="btn-action-delete"
@@ -50,7 +94,9 @@
     {% if page_obj.has_previous %}
     <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn">← Previous</a>
     {% endif %}
+    
     <span class="pagination-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    
     {% if page_obj.has_next %}
     <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn">Next →</a>
     {% endif %}
