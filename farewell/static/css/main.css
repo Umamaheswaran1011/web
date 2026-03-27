@@ -28,11 +28,26 @@
     box-sizing: border-box;
 }
 
-/* ===== Global Image Constraint ===== */
+/* ===== Global Image Constraint =====*/
 img {
     max-width: 100%;
     height: auto;
-    object-fit: cover;
+    /* No global object-fit — each context sets its own */
+}
+
+/*
+ * Reusable utility: ensures every pixel of a photo is visible.
+ * Apply to any <img> that must NOT be cropped.
+ * The parent container should have a defined width; height will
+ * expand naturally to respect the image's original aspect ratio.
+ */
+.img-contain {
+    display: block;
+    width: 100%;
+    height: auto;          /* grows to fit full image height        */
+    object-fit: contain;   /* never crops — letterboxes if needed   */
+    object-position: center;
+    background-color: #fdf6e3; /* aged-paper tone fills any letterbox  */
 }
 
 /* ===== Body â€” Crumpled Notebook Paper ===== */
@@ -558,9 +573,10 @@ footer::before {
 
 .event-card-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: 100%;          /* fills the 250px container             */
+    object-fit: contain;   /* shows full image, never cropped       */
     object-position: center;
+    background-color: #fdf6e3; /* aged-paper fills any letterbox area  */
     transition: transform 0.5s ease;
     filter: sepia(8%) saturate(92%);
 }
@@ -1793,10 +1809,12 @@ body.dark-theme .masonry-item:hover img {
 }
 
 .timeline-content img {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 2px;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 4px;
     margin-top: 1rem;
     border: 1px solid #e0d0b0;
     filter: sepia(8%) saturate(92%);
